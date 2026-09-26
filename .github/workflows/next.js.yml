@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   check:
-    name: Lint, typecheck, and build
+    name: Lint, typecheck, check formatting and build
     runs-on: ubuntu-latest
 
     steps:
