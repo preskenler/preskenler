@@ -34,10 +34,13 @@ jobs:
         run: npm run lint
 
       - name: Generate Next.js types
-        run: npx next typegen
+        run: npx next type:gen
 
       - name: Typecheck
-        run: npm run typecheck
+        run: npm run type:check
+
+      - name: Check formatting
+        run: npm run format:check
 
       - name: Build
         run: npm run build
