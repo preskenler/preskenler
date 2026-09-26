@@ -2,7 +2,12 @@
   "$schema": "https://opencode.ai/config.json",
   "formatter": true,
   "watcher": {
-    "ignore": [".next/**", "node_modules/**", "next-env.d.ts", "tsconfig.tsbuildinfo"]
+    "ignore": [
+      ".next/**",
+      "node_modules/**",
+      "next-env.d.ts",
+      "tsconfig.tsbuildinfo"
+    ]
   },
   "permissions": [
     { "action": "shell", "resource": "git push *", "effect": "ask" },
