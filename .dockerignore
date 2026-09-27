@@ -1,0 +1,21 @@
+# Dependencies and build output are installed/created inside the image.
+node_modules
+.next
+
+# Keep the generated Prisma client produced during the image build.
+src/generated
+
+# Version control and local env files.
+.git
+.gitignore
+.env*
+
+# Docker metadata (avoid invalidating the build cache).
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Logs and editor cruft.
+npm-debug.log*
+.DS_Store
+*.tsbuildinfo
