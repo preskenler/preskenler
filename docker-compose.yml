@@ -33,18 +33,36 @@ services:
       DATABASE_URL: mysql://root:root@db:3306/preskenler
       HOSTNAME: 0.0.0.0
       PORT: '3000'
-    volumes:
-      # Bind-mount the sources for hot reload...
-      - .:/app
-      # ...but keep container-owned node_modules, build output and generated
-      # Prisma client so they survive the bind mount and stay in sync with the
-      # Linux image rather than the host.
-      - /app/node_modules
-      - /app/.next
-      - /app/src/generated
     depends_on:
       db:
         condition: service_healthy
+    develop:
+      watch:
+        # Source changes are synced straight into the running container.
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - generated/
+        - action: sync
+          path: ./public
+          target: /app/public
+        # Next.js config changes require a restart to take effect.
+        - action: sync+restart
+          path: ./next.config.mjs
+          target: /app/next.config.mjs
+        - action: sync
+          path: ./tsconfig.json
+          target: /app/tsconfig.json
+        # Dependency, Dockerfile and Prisma changes require a full rebuild.
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./package-lock.json
+        - action: rebuild
+          path: ./Dockerfile
+        - action: rebuild
+          path: ./prisma
 
 volumes:
   db_data:
