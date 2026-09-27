@@ -6,15 +6,17 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
+// TODO(copy): replace with the real product name and description at launch.
 export const metadata: Metadata = {
-  title: 'PreskEnLer',
-  description: 'PreskEnLer',
+  title: 'PreskEnLer — bientôt disponible',
+  description:
+    'PreskEnLer arrive bientôt. Laisse ton email pour être prévenu·e du lancement.',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={cn('h-full antialiased', 'font-sans', inter.variable)}
     >
       <body className="min-h-full flex flex-col">
