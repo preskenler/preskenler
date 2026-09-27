@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7.0.0
         with:
-          node-version: '26.10.0'
+          node-version: "26.10.0"
           cache: npm
 
       - name: Install dependencies
@@ -44,65 +44,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  deploy:
-    name: Build and deploy to cPanel
-    needs: check
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    concurrency:
-      group: deploy-production
-      cancel-in-progress: false
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v7.0.1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7.0.0
-        with:
-          node-version: '24'
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Assemble standalone artifact
-        run: |
-          cp -r .next/static .next/standalone/.next/static
-          cp -r public .next/standalone/public
-          tar czf deploy.tar.gz -C .next/standalone .
-
-      - name: Upload artifact
-        uses: appleboy/scp-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_KEY_PASSWORD }}
-          source: deploy.tar.gz
-          target: /home/preskenlair/deploy
-          overwrite: true
-
-      - name: Extract and restart
-        uses: appleboy/ssh-action@v1.2.5
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT || '22' }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_KEY_PASSWORD }}
-          script: |
-            set -e
-            APP="$HOME/preskenler"
-            mkdir -p "$APP/tmp"
-            rm -rf "$APP/.next" "$APP/node_modules" "$APP/public" "$APP/server.js" "$APP/package.json"
-            tar xzf "$HOME/deploy/deploy.tar.gz" -C "$APP"
-            rm -f "$HOME/deploy/deploy.tar.gz"
-            touch "$APP/tmp/restart.txt"
-            echo "Deployed at $(date -u +%Y-%m-%dT%H:%M:%SZ) to $APP"
