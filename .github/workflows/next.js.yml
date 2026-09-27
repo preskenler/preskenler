@@ -12,10 +12,32 @@ on:
 permissions:
   contents: read
 
+env:
+  # Placeholder values so `prisma generate` (postinstall) and `next build` can
+  # initialize Prisma/Better Auth. Steps that hit the database use the service
+  # container below.
+  DATABASE_URL: mysql://root:root@127.0.0.1:3306/preskenler
+  BETTER_AUTH_SECRET: ci-not-a-real-secret-000000000000000000000000
+  BETTER_AUTH_URL: http://localhost:3000
+
 jobs:
   check:
     name: Lint, typecheck, check formatting and build
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: preskenler
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
 
     steps:
       - name: Check out repository
@@ -24,11 +46,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7.0.0
         with:
-          node-version: '26.10.0'
+          node-version: '24.21.0'
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Apply database migrations
+        run: npm run db:deploy
+
+      - name: Check for schema drift
+        run: |
+          npx prisma migrate diff \
+            --from-config-datasource \
+            --to-schema prisma/schema.prisma \
+            --exit-code
 
       - name: Lint
         run: npm run lint
