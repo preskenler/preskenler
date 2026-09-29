@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { signInSchema, signUpSchema } from './auth';
+import {
+  changeEmailSchema,
+  changePasswordSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  signInSchema,
+  signUpSchema,
+  verifyEmailSchema,
+} from './auth';
 
 describe('signUpSchema', () => {
   const valid = {
@@ -85,5 +93,122 @@ describe('signInSchema', () => {
     expect(
       signInSchema.safeParse({ email: 'nope', password: 'x' }).success,
     ).toBe(false);
+  });
+});
+
+describe('forgotPasswordSchema', () => {
+  it('accepts and trims a valid email', () => {
+    expect(forgotPasswordSchema.parse({ email: '  ada@example.com ' })).toEqual(
+      { email: 'ada@example.com' },
+    );
+  });
+
+  it('rejects an invalid email', () => {
+    expect(forgotPasswordSchema.safeParse({ email: 'nope' }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe('resetPasswordSchema', () => {
+  it('accepts matching passwords', () => {
+    expect(
+      resetPasswordSchema.safeParse({
+        password: 'password123',
+        confirmPassword: 'password123',
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a short password', () => {
+    const result = resetPasswordSchema.safeParse({
+      password: 'short',
+      confirmPassword: 'short',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe('Au moins 8 caractères.');
+    }
+  });
+
+  it('rejects non-matching passwords on the confirmation field', () => {
+    const result = resetPasswordSchema.safeParse({
+      password: 'password123',
+      confirmPassword: 'password124',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.path).toEqual(['confirmPassword']);
+      expect(result.error.issues[0]?.message).toBe(
+        'Les mots de passe ne correspondent pas.',
+      );
+    }
+  });
+});
+
+describe('changePasswordSchema', () => {
+  const valid = {
+    currentPassword: 'old-password',
+    newPassword: 'new-password-1',
+    confirmPassword: 'new-password-1',
+    revokeOtherSessions: true,
+  };
+
+  it('accepts matching new passwords', () => {
+    expect(changePasswordSchema.parse(valid)).toEqual(valid);
+  });
+
+  it('requires the current password', () => {
+    const result = changePasswordSchema.safeParse({
+      ...valid,
+      currentPassword: '',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe(
+        'Entre ton mot de passe actuel.',
+      );
+    }
+  });
+
+  it('rejects non-matching new passwords', () => {
+    const result = changePasswordSchema.safeParse({
+      ...valid,
+      confirmPassword: 'different',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.path).toEqual(['confirmPassword']);
+    }
+  });
+});
+
+describe('changeEmailSchema', () => {
+  it('accepts and trims a valid new email', () => {
+    expect(changeEmailSchema.parse({ newEmail: ' new@example.com ' })).toEqual({
+      newEmail: 'new@example.com',
+    });
+  });
+
+  it('rejects an invalid new email', () => {
+    expect(changeEmailSchema.safeParse({ newEmail: 'nope' }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe('verifyEmailSchema', () => {
+  it('accepts a valid email', () => {
+    expect(
+      verifyEmailSchema.safeParse({ email: 'ada@example.com' }).success,
+    ).toBe(true);
+  });
+
+  it('rejects an invalid email', () => {
+    expect(verifyEmailSchema.safeParse({ email: 'nope' }).success).toBe(false);
   });
 });

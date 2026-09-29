@@ -63,7 +63,7 @@ describe('SignInForm', () => {
         password: 'password123',
       }),
     );
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
   });
 
   it('shows the server error when credentials are rejected', async () => {

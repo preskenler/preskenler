@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -40,7 +39,7 @@ export function SignUpForm() {
     mode: 'onTouched',
   });
 
-  // The existing form cleared the server error as soon as the user edited a
+  // The previous form cleared the server error as soon as the user edited a
   // field; keep that behaviour by clearing the root error on every change.
   function field(name: keyof SignUpValues): UseFormRegisterReturn {
     const registration = register(name);
@@ -54,7 +53,11 @@ export function SignUpForm() {
   }
 
   async function onSubmit(values: SignUpValues) {
-    const { error } = await authClient.signUp.email(values);
+    const { error } = await authClient.signUp.email({
+      ...values,
+      // Land on the verification page after the user opens the emailed link.
+      callbackURL: `${window.location.origin}/verify-email?verified=1`,
+    });
 
     if (error) {
       setError('root.server', {
@@ -63,14 +66,14 @@ export function SignUpForm() {
       return;
     }
 
-    router.push('/');
+    router.push('/account');
     router.refresh();
   }
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Créer un compte</CardTitle>
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Créer un compte</CardTitle>
         <CardDescription>
           Quelques secondes suffisent pour rejoindre PreskEnLer.
         </CardDescription>
@@ -84,6 +87,7 @@ export function SignUpForm() {
                 id="sign-up-name"
                 type="text"
                 autoComplete="name"
+                placeholder="John Doe"
                 required
                 aria-invalid={errors.name ? true : undefined}
                 aria-describedby={
@@ -101,6 +105,7 @@ export function SignUpForm() {
                 type="email"
                 inputMode="email"
                 autoComplete="email"
+                placeholder="ton@email.com"
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -136,27 +141,23 @@ export function SignUpForm() {
 
             <FieldError id="sign-up-error" errors={[errors.root?.server]} />
 
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Spinner /> : null}
-              Créer mon compte
-            </Button>
+            <Field>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
+                Créer mon compte
+              </Button>
+              <FieldDescription className="text-center">
+                Déjà un compte ? <Link href="/sign-in">Se connecter</Link>
+              </FieldDescription>
+            </Field>
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="justify-center text-sm text-muted-foreground">
-        Déjà un compte ?&nbsp;
-        <Link
-          href="/sign-in"
-          className="text-primary underline-offset-4 hover:underline"
-        >
-          Se connecter
-        </Link>
-      </CardFooter>
     </Card>
   );
 }

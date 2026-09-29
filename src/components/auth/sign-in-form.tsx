@@ -10,12 +10,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -39,7 +39,7 @@ export function SignInForm() {
     mode: 'onTouched',
   });
 
-  // The existing form cleared the server error as soon as the user edited a
+  // The previous form cleared the server error as soon as the user edited a
   // field; keep that behaviour by clearing the root error on every change.
   function field(name: keyof SignInValues): UseFormRegisterReturn {
     const registration = register(name);
@@ -63,14 +63,14 @@ export function SignInForm() {
       return;
     }
 
-    router.push('/');
+    router.push('/account');
     router.refresh();
   }
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Connexion</CardTitle>
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Connexion</CardTitle>
         <CardDescription>
           Entre tes identifiants pour accéder à ton compte.
         </CardDescription>
@@ -85,6 +85,7 @@ export function SignInForm() {
                 type="email"
                 inputMode="email"
                 autoComplete="email"
+                placeholder="ton@email.com"
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -96,7 +97,15 @@ export function SignInForm() {
             </Field>
 
             <Field data-invalid={errors.password ? true : undefined}>
-              <FieldLabel htmlFor="sign-in-password">Mot de passe</FieldLabel>
+              <div className="flex items-center">
+                <FieldLabel htmlFor="sign-in-password">Mot de passe</FieldLabel>
+                <Link
+                  href="/forgot-password"
+                  className="ml-auto text-sm underline-offset-4 hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
               <Input
                 id="sign-in-password"
                 type="password"
@@ -116,27 +125,24 @@ export function SignInForm() {
 
             <FieldError id="sign-in-error" errors={[errors.root?.server]} />
 
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Spinner /> : null}
-              Se connecter
-            </Button>
+            <Field>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
+                Se connecter
+              </Button>
+              <FieldDescription className="text-center">
+                Pas encore de compte ?{' '}
+                <Link href="/sign-up">Créer un compte</Link>
+              </FieldDescription>
+            </Field>
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="justify-center text-sm text-muted-foreground">
-        Pas encore de compte ?&nbsp;
-        <Link
-          href="/sign-up"
-          className="text-primary underline-offset-4 hover:underline"
-        >
-          Créer un compte
-        </Link>
-      </CardFooter>
     </Card>
   );
 }

@@ -84,9 +84,10 @@ describe('SignUpForm', () => {
         name: 'Ada',
         email: 'ada@example.com',
         password: 'password123',
+        callbackURL: expect.stringContaining('/verify-email?verified=1'),
       }),
     );
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
     expect(mocks.refresh).toHaveBeenCalled();
   });
 
@@ -119,6 +120,6 @@ describe('SignUpForm', () => {
     await waitFor(() => expect(button).toBeDisabled());
 
     resolveRequest({ error: null });
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
   });
 });
