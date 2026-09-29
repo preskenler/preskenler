@@ -16,8 +16,35 @@ const connectionString: string = databaseUrl;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+/**
+ * Build the driver-adapter config from `DATABASE_URL`.
+ *
+ * The `mariadb` connector does not use TLS unless asked, whereas the server
+ * requires it — the account is configured to `REQUIRE SSL`, which otherwise
+ * fails with a bare "Access denied" (the same generic error the pool reports
+ * as a timeout). Passing the raw connection string would leave TLS off, so we
+ * parse the URL and enable TLS explicitly. `rejectUnauthorized: false` is
+ * needed because the server presents a self-signed certificate.
+ */
+function buildAdapterConfig(url: string) {
+  const parsed = new URL(url);
+
+  return {
+    host: parsed.hostname.startsWith('[')
+      ? parsed.hostname.slice(1, -1)
+      : parsed.hostname,
+    port: parsed.port ? Number(parsed.port) : 3306,
+    user: parsed.username ? decodeURIComponent(parsed.username) : undefined,
+    password: parsed.password ? decodeURIComponent(parsed.password) : undefined,
+    database: decodeURIComponent(parsed.pathname.replace(/^\//, '')),
+    ssl: { rejectUnauthorized: false },
+    // Match the value the adapter sets when it receives a connection string.
+    prepareCacheLength: 0,
+  };
+}
+
 function createPrismaClient() {
-  const adapter = new PrismaMariaDb(connectionString);
+  const adapter = new PrismaMariaDb(buildAdapterConfig(connectionString));
 
   const client = new PrismaClient({
     adapter,
