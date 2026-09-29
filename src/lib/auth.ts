@@ -9,6 +9,11 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    // Keep the authoritative server-side rules in sync with `signUpSchema`
+    // (`src/lib/schemas/auth.ts`). Better Auth applies the same defaults, but
+    // stating them here makes the server boundary explicit.
+    minPasswordLength: 8,
+    maxPasswordLength: 128,
   },
   logger: {
     // Surface the full auth flow while developing, but keep production quiet

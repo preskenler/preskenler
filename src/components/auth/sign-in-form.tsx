@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,26 +23,43 @@ import {
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { authClient } from '@/lib/auth-client';
+import { signInSchema, type SignInValues } from '@/lib/schemas/auth';
 
 export function SignInForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: { email: '', password: '' },
+    mode: 'onTouched',
+  });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setPending(true);
-    setError(null);
+  // The existing form cleared the server error as soon as the user edited a
+  // field; keep that behaviour by clearing the root error on every change.
+  function field(name: keyof SignInValues): UseFormRegisterReturn {
+    const registration = register(name);
+    return {
+      ...registration,
+      onChange: (event) => {
+        clearErrors('root');
+        return registration.onChange(event);
+      },
+    };
+  }
 
-    const { error } = await authClient.signIn.email({ email, password });
+  async function onSubmit(values: SignInValues) {
+    const { error } = await authClient.signIn.email(values);
 
     if (error) {
-      setError(
-        error.message ?? 'Connexion impossible. Vérifie tes identifiants.',
-      );
-      setPending(false);
+      setError('root.server', {
+        message:
+          error.message ?? 'Connexion impossible. Vérifie tes identifiants.',
+      });
       return;
     }
 
@@ -58,54 +76,53 @@ export function SignInForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
-            <Field data-invalid={error ? true : undefined}>
+            <Field data-invalid={errors.email ? true : undefined}>
               <FieldLabel htmlFor="sign-in-email">Adresse email</FieldLabel>
               <Input
                 id="sign-in-email"
-                name="email"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  setError(null);
-                }}
-                aria-invalid={error ? true : undefined}
-                aria-describedby="sign-in-error"
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={
+                  errors.email ? 'sign-in-email-error' : undefined
+                }
+                {...field('email')}
               />
+              <FieldError id="sign-in-email-error" errors={[errors.email]} />
             </Field>
 
-            <Field data-invalid={error ? true : undefined}>
+            <Field data-invalid={errors.password ? true : undefined}>
               <FieldLabel htmlFor="sign-in-password">Mot de passe</FieldLabel>
               <Input
                 id="sign-in-password"
-                name="password"
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                  setError(null);
-                }}
-                aria-invalid={error ? true : undefined}
-                aria-describedby="sign-in-error"
+                aria-invalid={errors.password ? true : undefined}
+                aria-describedby={
+                  errors.password ? 'sign-in-password-error' : undefined
+                }
+                {...field('password')}
+              />
+              <FieldError
+                id="sign-in-password-error"
+                errors={[errors.password]}
               />
             </Field>
 
-            <FieldError id="sign-in-error">{error}</FieldError>
+            <FieldError id="sign-in-error" errors={[errors.root?.server]} />
 
             <Button
               type="submit"
               size="lg"
               className="w-full"
-              disabled={pending}
+              disabled={isSubmitting}
             >
-              {pending ? <Spinner /> : null}
+              {isSubmitting ? <Spinner /> : null}
               Se connecter
             </Button>
           </FieldGroup>

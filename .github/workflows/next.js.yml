@@ -22,7 +22,7 @@ env:
 
 jobs:
   check:
-    name: Lint, typecheck, check formatting and build
+    name: Lint, typecheck, format, test and build
     runs-on: ubuntu-latest
 
     services:
@@ -74,5 +74,14 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
+      - name: Run unit and component tests
+        run: npm test
+
       - name: Build
         run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run end-to-end tests
+        run: npm run e2e

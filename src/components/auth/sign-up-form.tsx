@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,25 +24,42 @@ import {
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { authClient } from '@/lib/auth-client';
+import { signUpSchema, type SignUpValues } from '@/lib/schemas/auth';
 
 export function SignUpForm() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpValues>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: { name: '', email: '', password: '' },
+    mode: 'onTouched',
+  });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setPending(true);
-    setError(null);
+  // The existing form cleared the server error as soon as the user edited a
+  // field; keep that behaviour by clearing the root error on every change.
+  function field(name: keyof SignUpValues): UseFormRegisterReturn {
+    const registration = register(name);
+    return {
+      ...registration,
+      onChange: (event) => {
+        clearErrors('root');
+        return registration.onChange(event);
+      },
+    };
+  }
 
-    const { error } = await authClient.signUp.email({ name, email, password });
+  async function onSubmit(values: SignUpValues) {
+    const { error } = await authClient.signUp.email(values);
 
     if (error) {
-      setError(error.message ?? 'Création du compte impossible.');
-      setPending(false);
+      setError('root.server', {
+        message: error.message ?? 'Création du compte impossible.',
+      });
       return;
     }
 
@@ -58,76 +76,73 @@ export function SignUpForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
-            <Field data-invalid={error ? true : undefined}>
+            <Field data-invalid={errors.name ? true : undefined}>
               <FieldLabel htmlFor="sign-up-name">Nom</FieldLabel>
               <Input
                 id="sign-up-name"
-                name="name"
                 type="text"
                 autoComplete="name"
                 required
-                value={name}
-                onChange={(event) => {
-                  setName(event.target.value);
-                  setError(null);
-                }}
-                aria-invalid={error ? true : undefined}
-                aria-describedby="sign-up-error"
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={
+                  errors.name ? 'sign-up-name-error' : undefined
+                }
+                {...field('name')}
               />
+              <FieldError id="sign-up-name-error" errors={[errors.name]} />
             </Field>
 
-            <Field data-invalid={error ? true : undefined}>
+            <Field data-invalid={errors.email ? true : undefined}>
               <FieldLabel htmlFor="sign-up-email">Adresse email</FieldLabel>
               <Input
                 id="sign-up-email"
-                name="email"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  setError(null);
-                }}
-                aria-invalid={error ? true : undefined}
-                aria-describedby="sign-up-error"
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={
+                  errors.email ? 'sign-up-email-error' : undefined
+                }
+                {...field('email')}
               />
+              <FieldError id="sign-up-email-error" errors={[errors.email]} />
             </Field>
 
-            <Field data-invalid={error ? true : undefined}>
+            <Field data-invalid={errors.password ? true : undefined}>
               <FieldLabel htmlFor="sign-up-password">Mot de passe</FieldLabel>
               <Input
                 id="sign-up-password"
-                name="password"
                 type="password"
                 autoComplete="new-password"
                 required
                 minLength={8}
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                  setError(null);
-                }}
-                aria-invalid={error ? true : undefined}
-                aria-describedby="sign-up-error sign-up-password-help"
+                aria-invalid={errors.password ? true : undefined}
+                aria-describedby={`sign-up-password-help${
+                  errors.password ? ' sign-up-password-error' : ''
+                }`}
+                {...field('password')}
               />
               <FieldDescription id="sign-up-password-help">
                 Au moins 8 caractères.
               </FieldDescription>
+              <FieldError
+                id="sign-up-password-error"
+                errors={[errors.password]}
+              />
             </Field>
 
-            <FieldError id="sign-up-error">{error}</FieldError>
+            <FieldError id="sign-up-error" errors={[errors.root?.server]} />
 
             <Button
               type="submit"
               size="lg"
               className="w-full"
-              disabled={pending}
+              disabled={isSubmitting}
             >
-              {pending ? <Spinner /> : null}
+              {isSubmitting ? <Spinner /> : null}
               Créer mon compte
             </Button>
           </FieldGroup>

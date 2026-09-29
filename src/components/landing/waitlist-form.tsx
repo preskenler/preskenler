@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import { CheckIcon, MailIcon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,37 +12,26 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { waitlistSchema, type WaitlistValues } from '@/lib/schemas/waitlist';
 
 // TODO(copy): replace every string in this component with the announced copy.
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export function WaitlistForm() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm<WaitlistValues>({
+    resolver: zodResolver(waitlistSchema),
+    defaultValues: { email: '' },
+    mode: 'onTouched',
+  });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const value = email.trim();
-
-    if (!value) {
-      setError('Entre ton adresse email.');
-      return;
-    }
-
-    if (!EMAIL_PATTERN.test(value)) {
-      setError('Cette adresse email ne semble pas valide.');
-      return;
-    }
-
-    setError(null);
-    setSubmitted(true);
-
-    // TODO(api): POST `value` to the waitlist endpoint once the backend exists.
+  function onSubmit() {
+    // TODO(api): POST the validated email to the waitlist endpoint once the
+    // backend exists, and validate again with `waitlistSchema` server-side.
   }
 
-  if (submitted) {
+  if (isSubmitSuccessful) {
     return (
       <div
         role="status"
@@ -55,8 +45,12 @@ export function WaitlistForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="w-full max-w-md">
-      <Field data-invalid={error ? true : undefined}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="w-full max-w-md"
+    >
+      <Field data-invalid={errors.email ? true : undefined}>
         <FieldLabel htmlFor="waitlist-email" className="sr-only">
           Adresse email
         </FieldLabel>
@@ -68,26 +62,28 @@ export function WaitlistForm() {
             />
             <Input
               id="waitlist-email"
-              name="email"
               type="email"
               inputMode="email"
               autoComplete="email"
               placeholder="ton@email.com"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                setError(null);
-              }}
-              aria-invalid={error ? true : undefined}
-              aria-describedby="waitlist-help"
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={`waitlist-help${
+                errors.email ? ' waitlist-error' : ''
+              }`}
               className="h-10 pl-9"
+              {...register('email')}
             />
           </div>
-          <Button type="submit" size="lg" className="h-10 shrink-0 px-4">
+          <Button
+            type="submit"
+            size="lg"
+            className="h-10 shrink-0 px-4"
+            disabled={isSubmitting}
+          >
             Me prévenir
           </Button>
         </div>
-        <FieldError id="waitlist-error">{error}</FieldError>
+        <FieldError id="waitlist-error" errors={[errors.email]} />
         <FieldDescription id="waitlist-help">
           Pas de spam. Un seul email au lancement.
         </FieldDescription>
