@@ -100,47 +100,38 @@ export function logEnvironment(): void {
   );
 }
 
-/**
- * Connect with the raw `mariadb` driver using the same target as the Prisma
- * adapter, and report the real error instead of the adapter's pool timeout.
- * A short timeout keeps it from delaying server startup for too long.
- */
-export async function probeDatabase(): Promise<void> {
-  const raw = process.env.DATABASE_URL;
-  if (!raw) {
-    console.error(
-      '[env-diag] skipping database probe: DATABASE_URL is not set',
-    );
-    return;
-  }
+function logConnectionError(error: unknown): void {
+  // The pool error wraps the real cause, so walk one level down.
+  const cause =
+    error && typeof error === 'object'
+      ? (error as { cause?: unknown }).cause
+      : undefined;
 
-  let config: mariadb.PoolConfig;
-  try {
-    const url = new URL(raw);
-    config = {
-      host: url.hostname.startsWith('[')
-        ? url.hostname.slice(1, -1)
-        : url.hostname,
-      port: url.port ? Number(url.port) : 3306,
-      user: url.username ? decodeURIComponent(url.username) : undefined,
-      password: url.password ? decodeURIComponent(url.password) : undefined,
-      database: decodeURIComponent(url.pathname.replace(/^\//, '')),
-      connectionLimit: 1,
-      connectTimeout: 5000,
-      acquireTimeout: 5000,
-    };
-
-    const query = new URLSearchParams(url.search);
-    if (query.get('ssl') === 'true' || query.get('ssl') === '1') {
-      config.ssl = { rejectUnauthorized: false };
+  for (const value of [error, cause]) {
+    if (!value || typeof value !== 'object') {
+      continue;
     }
-  } catch (error) {
-    console.error(
-      `[env-diag] cannot parse DATABASE_URL for the probe: ${formatError(error)}`,
-    );
-    return;
+    const details = value as Record<string, unknown>;
+    for (const key of [
+      'name',
+      'code',
+      'errno',
+      'sqlState',
+      'sqlMessage',
+      'message',
+    ]) {
+      if (details[key] !== undefined) {
+        console.error(`[env-diag]     ${key}=`, details[key]);
+      }
+    }
   }
+}
 
+/** Try one connection strategy and report the real outcome. */
+async function tryConnection(
+  label: string,
+  config: mariadb.PoolConfig,
+): Promise<boolean> {
   let pool: mariadb.Pool | undefined;
   const startedAt = Date.now();
   try {
@@ -152,7 +143,9 @@ export async function probeDatabase(): Promise<void> {
       on(event: string, listener: (error: unknown) => void): void;
     };
     emitter.on('error', (error) => {
-      console.error(`[env-diag] pool 'error' event: ${formatError(error)}`);
+      console.error(
+        `[env-diag]   (${label}) pool 'error' event: ${formatError(error)}`,
+      );
     });
 
     const connection = await pool.getConnection();
@@ -161,34 +154,93 @@ export async function probeDatabase(): Promise<void> {
         'SELECT VERSION() AS version, DATABASE() AS db, CURRENT_USER() AS currentUser, @@hostname AS serverHost',
       );
       console.log(
-        `[env-diag] database probe SUCCEEDED in ${Date.now() - startedAt}ms`,
+        `[env-diag] STRATEGY "${label}" SUCCEEDED in ${Date.now() - startedAt}ms`,
         rows,
       );
     } finally {
       await connection.release();
     }
+    return true;
   } catch (error) {
     console.error(
-      `[env-diag] database probe FAILED after ${Date.now() - startedAt}ms: ${formatError(error)}`,
+      `[env-diag] STRATEGY "${label}" FAILED after ${Date.now() - startedAt}ms: ${formatError(error)}`,
     );
-    if (error && typeof error === 'object') {
-      const details = error as Record<string, unknown>;
-      for (const key of [
-        'name',
-        'message',
-        'code',
-        'errno',
-        'sqlState',
-        'sqlMessage',
-        'cause',
-        'stack',
-      ]) {
-        if (details[key] !== undefined) {
-          console.error(`[env-diag]   ${key}=`, details[key]);
-        }
-      }
-    }
+    logConnectionError(error);
+    return false;
   } finally {
     await pool?.end().catch(() => undefined);
+  }
+}
+
+/**
+ * Probe the database with the raw `mariadb` driver against several
+ * authentication/transport strategies, so we learn which one actually works on
+ * this server (the Prisma adapter hides this behind a pool timeout). Stops at
+ * the first success.
+ */
+export async function probeDatabase(): Promise<void> {
+  const raw = process.env.DATABASE_URL;
+  if (!raw) {
+    console.error(
+      '[env-diag] skipping database probe: DATABASE_URL is not set',
+    );
+    return;
+  }
+
+  let base: mariadb.PoolConfig;
+  try {
+    const url = new URL(raw);
+    base = {
+      host: url.hostname.startsWith('[')
+        ? url.hostname.slice(1, -1)
+        : url.hostname,
+      port: url.port ? Number(url.port) : 3306,
+      user: url.username ? decodeURIComponent(url.username) : undefined,
+      password: url.password ? decodeURIComponent(url.password) : undefined,
+      database: decodeURIComponent(url.pathname.replace(/^\//, '')),
+    };
+
+    const query = new URLSearchParams(url.search);
+    if (query.get('ssl') === 'true' || query.get('ssl') === '1') {
+      base.ssl = { rejectUnauthorized: false };
+    }
+  } catch (error) {
+    console.error(
+      `[env-diag] cannot parse DATABASE_URL for the probe: ${formatError(error)}`,
+    );
+    return;
+  }
+
+  const timeouts: Partial<mariadb.PoolConfig> = {
+    connectionLimit: 1,
+    connectTimeout: 3000,
+    acquireTimeout: 4000,
+  };
+
+  const strategies: Array<{
+    label: string;
+    extra: Partial<mariadb.PoolConfig>;
+  }> = [
+    { label: 'plain (no TLS, no public key retrieval)', extra: {} },
+    {
+      label: 'TLS (ssl rejectUnauthorized=false)',
+      extra: { ssl: { rejectUnauthorized: false } },
+    },
+    {
+      label: 'allowPublicKeyRetrieval=true',
+      extra: { allowPublicKeyRetrieval: true },
+    },
+  ];
+
+  for (const strategy of strategies) {
+    console.log(`[env-diag] ---- probing strategy: ${strategy.label} ----`);
+    const ok = await tryConnection(strategy.label, {
+      ...base,
+      ...timeouts,
+      ...strategy.extra,
+    });
+    if (ok) {
+      return;
+    }
   }
 }
