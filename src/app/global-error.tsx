@@ -3,6 +3,8 @@
 import '@/app/globals.css';
 import { useEffect } from 'react';
 
+import { logger } from '@/lib/logger';
+
 // global-error replaces the root layout, so it must render its own html/body.
 // TODO(copy): placeholder copy until the product is announced.
 export default function GlobalError({
@@ -14,7 +16,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     // TODO(monitoring): forward the error to an error reporting service.
-    console.error(error);
+    logger.error(error);
   }, [error]);
 
   return (

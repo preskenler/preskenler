@@ -10,6 +10,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  logger: {
+    // Surface the full auth flow while developing, but keep production quiet
+    // by only logging errors.
+    level: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
+  },
   // Must be the last plugin so it can set cookies from Server Actions/Components.
   plugins: [nextCookies()],
 });

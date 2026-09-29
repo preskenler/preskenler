@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
 
 // TODO(copy): placeholder copy until the product is announced.
 export default function ErrorPage({
@@ -15,7 +16,7 @@ export default function ErrorPage({
 }) {
   useEffect(() => {
     // TODO(monitoring): forward the error to an error reporting service.
-    console.error(error);
+    logger.error(error);
   }, [error]);
 
   return (
