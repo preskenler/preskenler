@@ -1,7 +1,3 @@
-import { createLogger } from '@/lib/logger';
-
-const logger = createLogger('email');
-
 export type EmailMessage = {
   to: string;
   subject: string;
@@ -21,11 +17,6 @@ export type EmailMessage = {
  */
 export async function sendEmail({ to, subject, text }: EmailMessage) {
   if (process.env.NODE_ENV === 'production') {
-    logger.warn(
-      `email not delivered to ${to} (no transport configured): "${subject}"`,
-    );
     return;
   }
-
-  logger.info(`email to ${to}\nSubject: ${subject}\n\n${text}`);
 }
