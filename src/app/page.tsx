@@ -1,5 +1,19 @@
+import { AppBackground } from '@/components/app-background';
 import { ComingSoon } from '@/components/landing/coming-soon';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function IndexPage() {
-  return <ComingSoon />;
+  return (
+    <main className="relative isolate min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
+      <AppBackground />
+
+      <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 py-16">
+        <ComingSoon />
+      </div>
+    </main>
+  );
 }

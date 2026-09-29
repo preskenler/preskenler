@@ -2,9 +2,13 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { GalleryVerticalEndIcon } from 'lucide-react';
 
+import { AppBackground } from '@/components/app-background';
+
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <main className="relative isolate flex min-h-svh flex-col items-center justify-center gap-6 overflow-hidden bg-background p-6 text-foreground md:p-10">
+      <AppBackground />
+
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link
           href="/"

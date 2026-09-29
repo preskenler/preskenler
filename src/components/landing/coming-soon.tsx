@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 // TODO(copy): every string below is a placeholder until the product is announced.
 export function ComingSoon() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-12 px-6 py-16">
+    <div className="flex w-full flex-col items-center gap-12">
       <div className="flex w-full max-w-2xl flex-col items-center gap-6 text-center">
         <Badge variant="secondary" className="h-6 gap-2 px-3">
           <span className="relative flex size-2">
@@ -30,6 +30,6 @@ export function ComingSoon() {
       <footer className="text-xs text-muted-foreground">
         © {new Date().getFullYear()} PreskEnLer
       </footer>
-    </main>
+    </div>
   );
 }
