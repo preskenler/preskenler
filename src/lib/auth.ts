@@ -107,6 +107,9 @@ export const auth = betterAuth({
   // Demande F37: audit every email sign-in attempt so the cybersecurity centre
   // can spot an unusual number of failures across accounts. Best-effort only.
   hooks: {
+    // Better Auth 1.7.6 reads `result.headers` unguarded in `runAfterHooks`, so
+    // a user hook that returns `undefined` crashes every subsequent `auth.api.*`
+    // call. Always return an object.
     after: async (rawCtx) => {
       // `hooks.after` is typed as a generic middleware input in better-call,
       // but Better Auth calls it with the resolved endpoint context.
@@ -119,12 +122,12 @@ export const auth = betterAuth({
       };
 
       if (ctx.path !== '/sign-in/email') {
-        return;
+        return {};
       }
 
       const email = typeof ctx.body?.email === 'string' ? ctx.body.email : '';
       if (!email) {
-        return;
+        return {};
       }
 
       const returned = ctx.context?.returned;
@@ -151,6 +154,8 @@ export const auth = betterAuth({
         ipAddress,
         userAgent: headers?.get('user-agent') ?? null,
       });
+
+      return {};
     },
   },
   logger: {
