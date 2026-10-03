@@ -80,6 +80,15 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 
 ## UI / conventions
 
+- Accessibility (demandes F21–F24): `DisplayPreferences`
+  (`src/components/accessibility/`) bundles the theme and the text-size choice.
+  Text size scales the root font size (Tailwind is rem-based) and is applied
+  pre-paint by `textSizeScript` in `src/app/layout.tsx`. Keep form errors linked
+  with `aria-describedby`, announce async updates with `role="status"`, and mark
+  decorative icons `aria-hidden`. The theme tokens in `globals.css` are tuned to
+  WCAG AA/1.4.11 (muted text ≥4.5, borders/focus rings ≥3:1) — re-check contrast
+  before changing them.
+
 - shadcn/ui uses the `base-nova` style on **Base UI** (`@base-ui/react`), not
   Radix. Use Base UI props/patterns; a `migrate-radix-to-base` skill is available.
 - Tailwind v4 is CSS-first: theme lives in `src/app/globals.css`, there is no

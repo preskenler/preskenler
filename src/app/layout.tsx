@@ -3,17 +3,18 @@ import '@/app/globals.css';
 import { Outfit, Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TextSizeProvider } from '@/components/accessibility/text-size-provider';
+import { textSizeScript } from '@/lib/accessibility';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 const geistHeading = Geist({ subsets: ['latin'], variable: '--font-heading' });
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
-// TODO(copy): replace with the real product name and description at launch.
 export const metadata: Metadata = {
-  title: 'PreskEnLer — bientôt disponible',
+  title: 'PreskEnLer — Portail de la Ville de Terra Nova',
   description:
-    'PreskEnLer arrive bientôt. Laisse ton email pour être prévenu·e du lancement.',
+    'Accède aux services de la Ville de Terra Nova, consulte les annonces municipales et contacte l’administration.',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -29,13 +30,23 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       )}
     >
       <body className="min-h-full flex flex-col">
+        {/* Applies the stored text size before first paint (demande F24). */}
+        <script dangerouslySetInnerHTML={{ __html: textSizeScript }} />
+        <a
+          href="#contenu"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:ring-2 focus:ring-ring"
+        >
+          Aller au contenu
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>{children}</TooltipProvider>
+          <TextSizeProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </TextSizeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -17,7 +17,10 @@ export default async function AccountLayout({
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12">
+    <main
+      id="contenu"
+      className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12"
+    >
       <div className="flex flex-col gap-4">
         <div>
           <h1 className="font-heading text-2xl font-semibold">Mon compte</h1>

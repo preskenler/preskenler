@@ -9,7 +9,7 @@ function Spinner({
     <RiLoaderLine
       data-slot="spinner"
       role="status"
-      aria-label="Loading"
+      aria-label="Chargement"
       className={cn('size-4 animate-spin', className)}
       {...props}
     />

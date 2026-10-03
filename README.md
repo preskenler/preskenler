@@ -37,6 +37,14 @@ bootstrap agents at sign-up; create the first admin with
 profile — and can ban/unban accounts — from `/users`. The staff routes
 (`/requests`, `/messages`, `/users`) are permission gated.
 
+## Accessibility
+
+The interface targets WCAG AA: the palette in `src/app/globals.css` is tuned so
+muted text is ≥ 4.5:1 and borders/focus rings are ≥ 3:1. The header exposes a
+**display preferences** menu (theme + text size) — the text size scales the root
+font size and is persisted, and form errors/async updates are announced to
+assistive technology.
+
 ## Deployment
 
 The app is deployed to a cPanel **Setup Node.js App** (`Phusion Passenger`) as a
