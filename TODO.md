@@ -1,6 +1,6 @@
 # Demandes Terra Nova — TODO
 
-_Généré le 2026-10-03T11:32:48.907Z · API 1.0 · active · vague 4 · 32 visibles · 32 demandes (16 à faire, 16 faites)_
+_Généré le 2026-10-03T12:08:07.794Z · API 1.0 · active · vague 4 · 32 visibles · 32 demandes (7 à faire, 25 faites)_
 
 ## À faire
 
@@ -18,24 +18,6 @@ _Généré le 2026-10-03T11:32:48.907Z · API 1.0 · active · vague 4 · 32 vis
       > Notre service accueille des habitants qui ne maîtrisent pas tous la même langue. Au-delà des menus de l’interface, les contenus essentiels des services et des démarches doivent pouvoir être proposés dans plusieurs langues.
 - [ ] `F28` — **Mairie de Nova Terra (Institution)** · difficulté 1 · 270 XP · vague 2
       > Le catalogue de services commence à s’étoffer et les habitants ne doivent pas avoir à tout parcourir pour trouver les démarches les plus courantes. Nous souhaitons pouvoir mettre en avant les services prioritaires ou les plus utilisés.
-- [ ] `D18` — **Haut Conseil de la Ville (Institution)** · difficulté 3 · 840 XP · vague 3
-      > La plateforme doit pouvoir diffuser rapidement un message général à tous les habitants. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
-- [ ] `F29` — **Centre de surveillance environnementale (Alerte)** · difficulté 3 · 840 XP · vague 3
-      > Une montée inhabituelle du niveau de l’eau est observée dans le quartier sud. Les habitants doivent être informés rapidement. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
-- [ ] `F30` — **Service Communication (Institution)** · difficulté 2 · 560 XP · vague 3
-      > Les habitants souhaitent être prévenus lorsqu’une annonce importante est publiée. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
-- [ ] `F31` — **Agence sanitaire de Nova Terra (Alerte)** · difficulté 3 · 840 XP · vague 3 · IA
-      > Une vague de chaleur extrême touche actuellement plusieurs secteurs de la ville. Certaines personnes sont particulièrement vulnérables et doivent être informées rapidement avec des recommandations adaptées.
-- [ ] `F32` — **Citoyenne (Citoyen)** · difficulté 1 · 280 XP · vague 3
-      > Je cherche les services de santé mais je ne les trouve pas facilement. À mesure que le volume augmente, les utilisateurs doivent pouvoir retrouver rapidement les éléments qui nécessitent leur attention.
-- [ ] `F33` — **Service des Usagers (Institution)** · difficulté 1 · 290 XP · vague 4
-      > Les citoyens doivent pouvoir supprimer leur compte s’ils le souhaitent. Le parcours doit rester compréhensible pour l’utilisateur tout en évitant qu’une personne non autorisée puisse accéder à son espace.
-- [ ] `F34` — **Direction du Numérique (Institution)** · difficulté 2 · 580 XP · vague 4
-      > Les agents doivent pouvoir administrer les comptes citoyens. Le parcours doit rester compréhensible pour l’utilisateur tout en évitant qu’une personne non autorisée puisse accéder à son espace.
-- [ ] `F35` — **Nouveau citoyen (Citoyen)** · difficulté 1 · 290 XP · vague 4
-      > Bonjour, je viens d’arriver à Nova Terra et je découvre la plateforme. Je comprends les grandes rubriques, mais quelques indications au bon moment m’aideraient à effectuer mes premières actions sans devoir lire un long guide.
-- [ ] `F36` — **Service Mobilité (Institution)** · difficulté 2 · 580 XP · vague 4
-      > Les habitants doivent pouvoir consulter les horaires et infos des transports municipaux. L’habitant doit pouvoir comprendre rapidement l’information utile à sa situation et agir sans devoir parcourir plusieurs écrans.
 
 ## Faites
 
@@ -71,3 +53,21 @@ _Généré le 2026-10-03T11:32:48.907Z · API 1.0 · active · vague 4 · 32 vis
       > Après avoir envoyé une demande, je ne sais pas toujours si elle a réellement été prise en compte. J’aimerais obtenir une confirmation claire immédiatement après l’envoi afin d’éviter de recommencer inutilement la démarche.
 - [x] `D17` — **Service Relation Usagers (Institution)** · difficulté 1 · 270 XP · vague 2
       > Les premières demandes citoyennes arrivent et nos agents doivent pouvoir évaluer la charge de travail en un coup d’œil. Nous avons besoin de savoir immédiatement combien de demandes attendent encore une prise en charge.
+- [x] `D18` — **Haut Conseil de la Ville (Institution)** · difficulté 3 · 840 XP · vague 3
+      > La plateforme doit pouvoir diffuser rapidement un message général à tous les habitants. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
+- [x] `F29` — **Centre de surveillance environnementale (Alerte)** · difficulté 3 · 840 XP · vague 3
+      > Une montée inhabituelle du niveau de l’eau est observée dans le quartier sud. Les habitants doivent être informés rapidement. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
+- [x] `F30` — **Service Communication (Institution)** · difficulté 2 · 560 XP · vague 3
+      > Les habitants souhaitent être prévenus lorsqu’une annonce importante est publiée. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
+- [x] `F31` — **Agence sanitaire de Nova Terra (Alerte)** · difficulté 3 · 840 XP · vague 3 · IA
+      > Une vague de chaleur extrême touche actuellement plusieurs secteurs de la ville. Certaines personnes sont particulièrement vulnérables et doivent être informées rapidement avec des recommandations adaptées.
+- [x] `F32` — **Citoyenne (Citoyen)** · difficulté 1 · 280 XP · vague 3
+      > Je cherche les services de santé mais je ne les trouve pas facilement. À mesure que le volume augmente, les utilisateurs doivent pouvoir retrouver rapidement les éléments qui nécessitent leur attention.
+- [x] `F33` — **Service des Usagers (Institution)** · difficulté 1 · 290 XP · vague 4
+      > Les citoyens doivent pouvoir supprimer leur compte s’ils le souhaitent. Le parcours doit rester compréhensible pour l’utilisateur tout en évitant qu’une personne non autorisée puisse accéder à son espace.
+- [x] `F34` — **Direction du Numérique (Institution)** · difficulté 2 · 580 XP · vague 4
+      > Les agents doivent pouvoir administrer les comptes citoyens. Le parcours doit rester compréhensible pour l’utilisateur tout en évitant qu’une personne non autorisée puisse accéder à son espace.
+- [x] `F35` — **Nouveau citoyen (Citoyen)** · difficulté 1 · 290 XP · vague 4
+      > Bonjour, je viens d’arriver à Nova Terra et je découvre la plateforme. Je comprends les grandes rubriques, mais quelques indications au bon moment m’aideraient à effectuer mes premières actions sans devoir lire un long guide.
+- [x] `F36` — **Service Mobilité (Institution)** · difficulté 2 · 580 XP · vague 4
+      > Les habitants doivent pouvoir consulter les horaires et infos des transports municipaux. L’habitant doit pouvoir comprendre rapidement l’information utile à sa situation et agir sans devoir parcourir plusieurs écrans.
