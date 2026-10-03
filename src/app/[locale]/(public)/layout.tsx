@@ -20,10 +20,10 @@ export default async function PublicLayout({
   return (
     <div className="flex min-h-svh flex-col">
       <PublicHeader session={session} />
-      <BroadcastBanner items={broadcasts} />
       <main id="contenu" className="flex flex-1 flex-col">
         {children}
       </main>
+      <BroadcastBanner items={broadcasts} />
       <footer className="border-t">
         <div className="mx-auto w-full max-w-5xl px-6 py-8 text-xs text-muted-foreground">
           {t('copyright', { year: new Date().getFullYear() })}

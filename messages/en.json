@@ -300,7 +300,8 @@
       "recommendations": "Recommendations",
       "ai": "AI-assisted tailored recommendations",
       "viewAll": "All alerts",
-      "dismiss": "Dismiss this message"
+      "dismiss": "Dismiss this message",
+      "dismissBanner": "Dismiss the alerts ticker"
     }
   },
   "Errors": {

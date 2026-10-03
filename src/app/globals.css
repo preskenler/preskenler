@@ -4,6 +4,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes broadcast-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-broadcast-ticker {
+  animation: broadcast-ticker 45s linear infinite;
+}
+
 @theme inline {
   --font-heading: var(--font-heading);
   --font-sans: var(--font-sans);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { RiAlertLine, RiCloseLine, RiRobot2Line } from '@remixicon/react';
+import { RiAlertLine, RiCloseLine } from '@remixicon/react';
 
 import {
   Alert,
@@ -9,87 +9,98 @@ import {
   AlertDescription,
   AlertTitle,
 } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStoredIds } from '@/hooks/use-local-storage';
 import { Link } from '@/i18n/navigation';
-import type { BroadcastView } from '@/lib/broadcasts';
+import type { BroadcastLevel, BroadcastView } from '@/lib/broadcasts';
+import { cn } from '@/lib/utils';
 
 const STORAGE_KEY = 'preskenler:broadcasts-dismissed';
 
+function badgeVariant(level: BroadcastLevel) {
+  if (level === 'alert') return 'destructive' as const;
+  if (level === 'warning') return 'secondary' as const;
+  return 'outline' as const;
+}
+
 /**
- * Active general messages and alerts shown above the page (demandes D18, F29,
- * F30, F31). Residents can dismiss each message on their device.
+ * Active messages and alerts shown as a news ticker at the bottom of the page
+ * (demandes D18, F29, F30, F31). Residents can dismiss it on their device.
  */
 export function BroadcastBanner({ items }: { items: BroadcastView[] }) {
   const t = useTranslations('Public.Alerts');
   const [dismissed, setDismissed] = useStoredIds(STORAGE_KEY);
-
-  function dismiss(id: string) {
-    setDismissed([...new Set([...dismissed, id])]);
-  }
-
   const visible = items.filter((item) => !dismissed.includes(item.id));
 
   if (visible.length === 0) {
     return null;
   }
 
+  const hasUrgentItem = visible.some((item) => item.level !== 'info');
+
+  function dismissBanner() {
+    setDismissed([
+      ...new Set([...dismissed, ...visible.map((item) => item.id)]),
+    ]);
+  }
+
   return (
     <section
       aria-label={t('bannerLabel')}
-      className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 pt-6"
+      className="w-full px-3 pb-6 sm:px-6 lg:px-8"
     >
-      {visible.map((item) => (
-        <Alert
-          key={item.id}
-          variant={item.level === 'info' ? 'default' : 'destructive'}
-        >
-          <RiAlertLine aria-hidden="true" />
-          <AlertTitle>
-            {t(`levels.${item.level}`)} · {item.title}
-          </AlertTitle>
-          <AlertDescription>
-            {item.area ? (
-              <p className="text-xs font-medium">
-                {t('area', { area: item.area })}
-              </p>
-            ) : null}
-            <p>{item.body}</p>
-            {item.recommendations.length > 0 ? (
-              <>
-                <p className="mt-2 font-medium">{t('recommendations')}</p>
-                <ul className="list-disc ps-5">
-                  {item.recommendations.map((line, index) => (
-                    <li key={index}>{line}</li>
+      <Alert variant={hasUrgentItem ? 'destructive' : 'default'}>
+        <RiAlertLine aria-hidden="true" />
+        <AlertTitle className="sr-only">{t('bannerLabel')}</AlertTitle>
+        <AlertDescription className="min-w-0 overflow-hidden">
+          <div className="group/ticker overflow-hidden">
+            <div className="animate-broadcast-ticker flex w-max items-center group-hover/ticker:[animation-play-state:paused] group-focus-within/ticker:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:animate-none">
+              {[false, true].map((duplicate) => (
+                <span
+                  key={duplicate ? 'duplicate' : 'original'}
+                  aria-hidden={duplicate || undefined}
+                  className={cn(
+                    'flex shrink-0 items-center gap-8 pe-8',
+                    duplicate
+                      ? 'motion-reduce:hidden'
+                      : 'motion-reduce:flex-col motion-reduce:items-start motion-reduce:gap-3 motion-reduce:pe-0',
+                  )}
+                >
+                  {visible.map((item) => (
+                    <Link
+                      key={item.id}
+                      href="/alerts"
+                      tabIndex={duplicate ? -1 : undefined}
+                      className="flex shrink-0 items-center gap-2 whitespace-nowrap underline-offset-4 hover:underline focus-visible:underline motion-reduce:flex-wrap motion-reduce:whitespace-normal"
+                    >
+                      <Badge variant={badgeVariant(item.level)}>
+                        {t(`levels.${item.level}`)}
+                      </Badge>
+                      <strong className="text-foreground">{item.title}</strong>
+                      <span>— {item.body}</span>
+                      {item.area ? (
+                        <span>· {t('area', { area: item.area })}</span>
+                      ) : null}
+                    </Link>
                   ))}
-                </ul>
-              </>
-            ) : null}
-            {item.isAi ? (
-              <p className="mt-2 flex items-center gap-1 text-xs">
-                <RiRobot2Line aria-hidden="true" className="size-3.5" />
-                {t('ai')}
-              </p>
-            ) : null}
-            <p className="mt-2">
-              <Link href="/alerts" className="underline">
-                {t('viewAll')}
-              </Link>
-            </p>
-          </AlertDescription>
-          <AlertAction>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={() => dismiss(item.id)}
-              aria-label={t('dismiss')}
-            >
-              <RiCloseLine aria-hidden="true" />
-            </Button>
-          </AlertAction>
-        </Alert>
-      ))}
+                </span>
+              ))}
+            </div>
+          </div>
+        </AlertDescription>
+        <AlertAction>
+          <Button
+            type="button"
+            size="icon-sm"
+            variant="ghost"
+            onClick={dismissBanner}
+            aria-label={t('dismissBanner')}
+          >
+            <RiCloseLine aria-hidden="true" />
+          </Button>
+        </AlertAction>
+      </Alert>
     </section>
   );
 }

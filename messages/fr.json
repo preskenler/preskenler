@@ -300,7 +300,8 @@
       "recommendations": "Recommandations",
       "ai": "Recommandations adaptées assistées par IA",
       "viewAll": "Toutes les alertes",
-      "dismiss": "Masquer ce message"
+      "dismiss": "Masquer ce message",
+      "dismissBanner": "Masquer le bandeau d’alertes"
     }
   },
   "Errors": {
