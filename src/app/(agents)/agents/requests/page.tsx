@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { RequestsBoard } from '@/components/requests/requests-board';
+import { RequestsBoard } from '@/components/agents/requests-board';
 import { readWebcupSnapshot, syncWebcup } from '@/lib/webcup/sync';
 import type { WebcupSnapshot } from '@/lib/webcup/types';
 

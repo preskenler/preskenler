@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 
-import { submitServiceMessage } from '@/app/(site)/contact/actions';
+import { submitServiceMessage } from '@/app/(public)/contact/actions';
 import { Button } from '@/components/ui/button';
 import {
   Card,

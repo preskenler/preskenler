@@ -59,7 +59,7 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `GET /api/webcup/sync` (Bearer `WEBCUP_CRON_SECRET`, or Vercel's `CRON_SECRET`)
   is the scheduler entry point. On cPanel add a cron job every minute:
   `curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webcup/sync`.
-- Staff board at `/requests` (auth-gated) polls client-side every 30s; new
+- Staff board at `/agents/requests` (auth-gated) polls client-side every 30s; new
   arrivals are detected by `request_code`, never by a fixed count.
 
 ## Roles & staff area
@@ -71,12 +71,13 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   `webcupRequest`) and the three roles; `src/lib/roles.ts` holds the checks and
   French labels.
 - Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins use
-  `/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
+  `/admin/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
   `npx auth@latest create-admin --email … --role admin`.
-- Everything under `(staff)` (`/requests`, `/messages`, `/users`) is permission
-  gated; citizens are redirected to `/account`, and `/users` requires
-  `user: ['list']` (admin only). Inhabitants’ contact messages are triaged at
-  `/messages` (F22).
+- Areas are separate route groups: `(public)` (portal), `(auth)` (sign-in/up),
+  `(citizen)` (`/account/*`), `(agents)` (`/agents/requests`, `/agents/messages`)
+  and `(admin)` (`/admin/users`). The agents/admin areas share `StaffShell`;
+  citizens are redirected to `/account`. Inhabitants’ contact messages are
+  triaged at `/agents/messages` (F22).
 
 ## UI / conventions
 

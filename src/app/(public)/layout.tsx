@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
 
-import { SiteHeader } from '@/components/site/site-header';
+import { PublicHeader } from '@/components/public/public-header';
 import { auth } from '@/lib/auth';
 
-export default async function SiteLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: ReactNode;
@@ -13,7 +13,7 @@ export default async function SiteLayout({
 
   return (
     <div className="flex min-h-svh flex-col">
-      <SiteHeader session={session} />
+      <PublicHeader session={session} />
       <main id="contenu" className="flex flex-1 flex-col">
         {children}
       </main>

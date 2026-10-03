@@ -30,7 +30,7 @@ export default async function StaffUsersPage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session || !hasPermission(session.user.role, { user: ['list'] })) {
-    redirect('/requests');
+    redirect('/agents/requests');
   }
 
   const { users } = await auth.api.listUsers({

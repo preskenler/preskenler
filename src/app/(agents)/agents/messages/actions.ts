@@ -33,5 +33,5 @@ export async function setMessageStatus(formData: FormData) {
     data: { status },
   });
 
-  revalidatePath('/messages');
+  revalidatePath('/agents/messages');
 }
