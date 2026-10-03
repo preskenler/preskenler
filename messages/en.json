@@ -7,6 +7,8 @@
     "skipToContent": "Skip to content",
     "loadingPage": "Loading page",
     "displayPreferences": "Display preferences",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "theme": {
       "label": "Theme",
       "light": "Light",

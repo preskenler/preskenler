@@ -20,7 +20,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/auth/password-input';
 import { Spinner } from '@/components/ui/spinner';
 import { Link } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
@@ -121,9 +121,8 @@ export function ResetPasswordForm() {
               <FieldLabel htmlFor="reset-password-password">
                 {t('password')}
               </FieldLabel>
-              <Input
+              <PasswordInput
                 id="reset-password-password"
-                type="password"
                 autoComplete="new-password"
                 required
                 minLength={8}
@@ -146,9 +145,8 @@ export function ResetPasswordForm() {
               <FieldLabel htmlFor="reset-password-confirm">
                 {t('confirm')}
               </FieldLabel>
-              <Input
+              <PasswordInput
                 id="reset-password-confirm"
-                type="password"
                 autoComplete="new-password"
                 required
                 aria-invalid={errors.confirmPassword ? true : undefined}

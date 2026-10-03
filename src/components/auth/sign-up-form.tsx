@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 import { useLocale, useTranslations } from 'next-intl';
 
+import { PasswordInput } from '@/components/auth/password-input';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -123,9 +124,8 @@ export function SignUpForm() {
               <FieldLabel htmlFor="sign-up-password">
                 {t('password')}
               </FieldLabel>
-              <Input
+              <PasswordInput
                 id="sign-up-password"
-                type="password"
                 autoComplete="new-password"
                 required
                 minLength={8}

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
+import { PasswordInput } from '@/components/auth/password-input';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -110,9 +111,8 @@ export function SignInForm() {
                   {t('forgot')}
                 </Link>
               </div>
-              <Input
+              <PasswordInput
                 id="sign-in-password"
-                type="password"
                 autoComplete="current-password"
                 required
                 aria-invalid={errors.password ? true : undefined}
