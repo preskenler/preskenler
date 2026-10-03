@@ -34,7 +34,7 @@ export async function updateUserRole(formData: FormData) {
     headers: await headers(),
   });
 
-  revalidatePath('/users');
+  revalidatePath('/admin/users');
 }
 
 /** Ban or unban a user (demande D09), via the admin plugin. */
@@ -62,5 +62,5 @@ export async function toggleUserBan(formData: FormData) {
     });
   }
 
-  revalidatePath('/users');
+  revalidatePath('/admin/users');
 }

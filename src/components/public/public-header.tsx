@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { RiGalleryLine } from '@remixicon/react';
 
 import { DisplayPreferences } from '@/components/accessibility/display-preferences';
-import { SiteNav } from '@/components/site/site-nav';
+import { PublicNav } from '@/components/public/public-nav';
 import { Button } from '@/components/ui/button';
 import type { Session } from '@/lib/auth';
 
-export function SiteHeader({ session }: { session: Session | null }) {
+export function PublicHeader({ session }: { session: Session | null }) {
   return (
     <header className="border-b">
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-4">
@@ -20,7 +20,7 @@ export function SiteHeader({ session }: { session: Session | null }) {
           PreskEnLer
         </Link>
 
-        <SiteNav />
+        <PublicNav />
 
         <div className="flex items-center gap-2">
           <DisplayPreferences />

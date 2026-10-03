@@ -13,8 +13,8 @@ The app consumes the Ville de Terra Nova demand feed
 
 Endpoints:
 
-- `GET /api/webcup/requests` — authenticated snapshot for the `/requests` board;
-  refreshes from the API in the background.
+- `GET /api/webcup/requests` — authenticated snapshot for the `/agents/requests`
+  board; refreshes from the API in the background.
 - `GET /api/webcup/sync` — scheduler entry point, protected by
   `Authorization: Bearer $WEBCUP_CRON_SECRET`.
 
@@ -34,8 +34,8 @@ Profiles and permissions use the Better Auth **admin plugin**: roles are
 lives in `src/lib/permissions.ts`. Set `STAFF_EMAILS` (comma-separated) to
 bootstrap agents at sign-up; create the first admin with
 `npx auth@latest create-admin --email … --role admin`. Admins manage every
-profile — and can ban/unban accounts — from `/users`. The staff routes
-(`/requests`, `/messages`, `/users`) are permission gated.
+profile — and can ban/unban accounts — from `/admin/users`. The `/agents/*` and
+`/admin/*` routes are permission gated.
 
 ## Accessibility
 

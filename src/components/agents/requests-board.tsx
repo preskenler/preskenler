@@ -8,8 +8,8 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { RequestCard } from '@/components/requests/request-card';
-import { SessionStatus } from '@/components/requests/session-status';
+import { RequestCard } from '@/components/agents/request-card';
+import { SessionStatus } from '@/components/agents/session-status';
 import { useWebcupRequests } from '@/hooks/use-webcup-requests';
 import type { WebcupSnapshot } from '@/lib/webcup/types';
 

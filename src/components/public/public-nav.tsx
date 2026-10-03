@@ -11,7 +11,7 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ];
 
-export function SiteNav() {
+export function PublicNav() {
   const pathname = usePathname();
 
   return (

@@ -14,7 +14,7 @@ const links = [
   { href: '/sessions', label: 'Sessions' },
 ];
 
-export function AccountNav() {
+export function CitizenNav() {
   const pathname = usePathname();
 
   return (

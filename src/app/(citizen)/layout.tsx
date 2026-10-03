@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { AccountNav } from '@/components/account/account-nav';
+import { CitizenNav } from '@/components/citizen/citizen-nav';
 import { auth } from '@/lib/auth';
 
-export default async function AccountLayout({
+export default async function CitizenLayout({
   children,
 }: {
   children: ReactNode;
@@ -26,7 +26,7 @@ export default async function AccountLayout({
           <h1 className="font-heading text-2xl font-semibold">Mon compte</h1>
           <p className="text-sm text-muted-foreground">{session.user.email}</p>
         </div>
-        <AccountNav />
+        <CitizenNav />
       </div>
       {children}
     </main>

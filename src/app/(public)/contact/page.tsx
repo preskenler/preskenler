@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 
-import { ContactForm } from '@/components/site/contact-form';
+import { ContactForm } from '@/components/public/contact-form';
 import { auth } from '@/lib/auth';
 import { cityServices } from '@/lib/services';
 
