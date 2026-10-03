@@ -1,8 +1,11 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
+import { admin as adminPlugin } from 'better-auth/plugins';
 import { sendEmail } from '@/lib/email';
+import { ac, appRoles } from '@/lib/permissions';
 import { prisma } from '@/lib/prisma';
+import { getStaffEmailAllowlist } from '@/lib/roles';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -76,13 +79,41 @@ export const auth = betterAuth({
       },
     },
   },
+  databaseHooks: {
+    user: {
+      create: {
+        // Bootstrap agents from `STAFF_EMAILS`. Runs after the admin plugin has
+        // applied `defaultRole`, so the allowlisted role always wins.
+        after: async (user) => {
+          if (!getStaffEmailAllowlist().includes(user.email.toLowerCase())) {
+            return;
+          }
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'agent' },
+          });
+        },
+      },
+    },
+  },
   logger: {
     // Surface the full auth flow while developing, but keep production quiet
     // by only logging errors.
     level: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
   },
   // Must be the last plugin so it can set cookies from Server Actions/Components.
-  plugins: [nextCookies()],
+  plugins: [
+    adminPlugin({
+      ac,
+      roles: appRoles,
+      defaultRole: 'citizen',
+      adminRoles: ['admin'],
+      bannedUserMessage:
+        'Ton compte a été suspendu. Contacte l’administration si tu penses qu’il s’agit d’une erreur.',
+    }),
+    nextCookies(),
+  ],
 });
 
 export type Session = typeof auth.$Infer.Session;

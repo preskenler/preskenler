@@ -27,6 +27,16 @@ curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webc
 
 Requests are keyed on `request_code`, so repeated calls never create duplicates.
 
+## Roles
+
+Profiles and permissions use the Better Auth **admin plugin**: roles are
+`citizen`, `agent` or `admin` (comma-separated when combined) and access control
+lives in `src/lib/permissions.ts`. Set `STAFF_EMAILS` (comma-separated) to
+bootstrap agents at sign-up; create the first admin with
+`npx auth@latest create-admin --email … --role admin`. Admins manage every
+profile — and can ban/unban accounts — from `/users`. The staff routes
+(`/requests`, `/messages`, `/users`) are permission gated.
+
 ## Deployment
 
 The app is deployed to a cPanel **Setup Node.js App** (`Phusion Passenger`) as a
