@@ -4,6 +4,7 @@ import { SignOutButton } from '@/components/auth/sign-out-button';
 
 const links = [
   { href: '/account', label: 'Compte' },
+  { href: '/messages', label: 'Messages' },
   { href: '/change-password', label: 'Mot de passe' },
   { href: '/change-email', label: 'Email' },
   { href: '/sessions', label: 'Sessions' },

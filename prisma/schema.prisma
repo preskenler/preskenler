@@ -22,6 +22,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  messages      ServiceMessage[]
 
   @@unique([email])
   @@map("user")
@@ -124,4 +125,22 @@ model WebcupSession {
   updatedAt            DateTime @updatedAt
 
   @@map("webcup_session")
+}
+
+// Messages envoyés par les habitants aux services municipaux (demande D04).
+model ServiceMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name      String   @db.VarChar(120)
+  email     String   @db.VarChar(191)
+  service   String   @db.VarChar(64)
+  message   String   @db.Text
+  status    String   @default("new") @db.VarChar(16)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("service_message")
 }
