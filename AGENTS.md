@@ -36,6 +36,8 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   `agent.etat-civil@`, `agent.proprete@terranova.city`; and `admin@terranova.city`.
   Shared password `PreskEnLer2026!` (override with `SEED_PASSWORD`). Defined in
   `prisma/seed.ts`, wired through `migrations.seed` in `prisma7.config.ts`.
+  On cPanel, `npm run db:setup` runs `db:deploy` + `db:seed` in one step
+  (`npm run db:setup && npm run build`).
 - Local stack: `docker compose up` (db + app, with Compose Watch), or point
   `DATABASE_URL` at a MySQL on `localhost:3306`. Copy `.env.example` to `.env`.
 
