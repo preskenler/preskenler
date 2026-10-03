@@ -3,10 +3,14 @@ import { headers } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 
 import { ActivityChart } from '@/components/dashboard/activity-chart';
+import { AttentionCard } from '@/components/dashboard/attention-card';
 import { DashboardTable } from '@/components/dashboard/data-table';
+import { OnboardingChecklist } from '@/components/dashboard/onboarding-checklist';
 import { StatCards } from '@/components/dashboard/stat-cards';
 import { Badge } from '@/components/ui/badge';
 import { auth } from '@/lib/auth';
+import { toBroadcastView } from '@/lib/broadcasts';
+import { getActiveBroadcasts } from '@/lib/broadcast-store';
 import { getCitizenDashboard, getStaffDashboard } from '@/lib/dashboard';
 import { hasPermission } from '@/lib/permissions';
 import { normalizeRole, parseRoles } from '@/lib/roles';
@@ -35,7 +39,7 @@ export default async function DashboardPage() {
 
   const { user } = session;
 
-  if (hasPermission(user.role, { user: ['list'] })) {
+  if (hasPermission(user.role, { user: ['set-role'] })) {
     const [staff, { users }] = await Promise.all([
       getStaffDashboard(),
       auth.api.listUsers({ query: { limit: 200 }, headers: await headers() }),
@@ -171,9 +175,17 @@ export default async function DashboardPage() {
   }
 
   const citizen = await getCitizenDashboard(user.id);
+  const alerts = (await getActiveBroadcasts()).map(toBroadcastView);
 
   return (
     <>
+      <OnboardingChecklist
+        emailVerified={user.emailVerified}
+        hasMessages={citizen.total > 0}
+      />
+
+      <AttentionCard pendingMessages={citizen.pending} alerts={alerts} />
+
       <StatCards
         cards={[
           { title: t('cards.sentMessages'), value: citizen.total },

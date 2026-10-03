@@ -64,6 +64,11 @@ export const auth = betterAuth({
         await sendEmail({ to: user.email, subject, text });
       },
     },
+    deleteUser: {
+      // Citizens may delete their own account after re-entering their password
+      // (demande F33). No verification email is sent: deletion is immediate.
+      enabled: true,
+    },
   },
   databaseHooks: {
     user: {

@@ -27,7 +27,9 @@
       "ariaLabel": "Navigation principale",
       "services": "Services",
       "announcements": "Annonces",
-      "contact": "Contact"
+      "contact": "Contact",
+      "transport": "Transports",
+      "alerts": "Alertes"
     },
     "Header": {
       "account": "Mon compte",
@@ -64,6 +66,10 @@
         "contact": {
           "title": "Contacter la mairie",
           "description": "Envoie un message au service concerné et garde une trace."
+        },
+        "transport": {
+          "title": "Transports municipaux",
+          "description": "Horaires, lignes et infos pratiques pour te déplacer dans la ville."
         }
       },
       "latest": "Dernières annonces",
@@ -78,7 +84,8 @@
         "administration": "Administration",
         "cadre-de-vie": "Cadre de vie",
         "services-techniques": "Services techniques",
-        "social-citoyennete": "Social & citoyenneté"
+        "social-citoyennete": "Social & citoyenneté",
+        "sante": "Santé & urgences"
       },
       "items": {
         "etat-civil": {
@@ -112,7 +119,21 @@
         "vie-associative": {
           "name": "Vie associative & culture",
           "description": "Associations, événements municipaux et vie culturelle de la ville."
+        },
+        "sante": {
+          "name": "Santé & soins",
+          "description": "Accès aux soins, médecins de ville et questions de santé."
+        },
+        "prevention-sante": {
+          "name": "Prévention & vaccination",
+          "description": "Campagnes de prévention, vaccinations et dépistages."
         }
+      },
+      "search": {
+        "label": "Rechercher un service",
+        "placeholder": "Rechercher un service…",
+        "all": "Tous",
+        "noResults": "Aucun service ne correspond à « {query} »."
       }
     },
     "Announcements": {
@@ -175,6 +196,111 @@
         "invalid": "Merci de vérifier les informations du formulaire.",
         "send": "Envoi impossible pour le moment. Réessaie plus tard."
       }
+    },
+    "Transport": {
+      "metaTitle": "Transports municipaux — PreskEnLer",
+      "title": "Transports municipaux",
+      "description": "Horaires, lignes et informations pratiques pour te déplacer dans Terra Nova.",
+      "linesTitle": "Lignes et horaires",
+      "modes": {
+        "tram": "Tramway",
+        "bus": "Bus",
+        "shuttle": "Navette"
+      },
+      "frequency": "Toutes les {value}",
+      "firstLast": "Premier départ {first} · dernier départ {last}",
+      "lines": {
+        "tram-a": {
+          "name": "Tram A",
+          "description": "Centre-ville ↔ Quartier nord",
+          "frequency": "8 min",
+          "first": "05:30",
+          "last": "00:30",
+          "stops": "12 stations · desserte de la gare et du parc municipal."
+        },
+        "tram-b": {
+          "name": "Tram B",
+          "description": "Quartier sud ↔ Université",
+          "frequency": "10 min",
+          "first": "05:45",
+          "last": "00:00",
+          "stops": "9 stations · correspondance avec le Tram A à Bellecour."
+        },
+        "bus-1": {
+          "name": "Bus 1",
+          "description": "Gare ↔ Hôpital",
+          "frequency": "12 min",
+          "first": "06:00",
+          "last": "22:30",
+          "stops": "18 arrêts · desserte de l’hôpital et des services municipaux."
+        },
+        "bus-2": {
+          "name": "Bus 2",
+          "description": "Zones résidentielles ↔ Centre",
+          "frequency": "15 min",
+          "first": "06:15",
+          "last": "21:45",
+          "stops": "21 arrêts · passage par les marchés et le stade."
+        },
+        "navette-centre": {
+          "name": "Navette centre",
+          "description": "Navette électrique du centre historique",
+          "frequency": "6 min",
+          "first": "09:00",
+          "last": "19:00",
+          "stops": "8 arrêts · gratuite, desserte piétonne du centre."
+        }
+      },
+      "faresTitle": "Tarifs",
+      "faresNote": "Titres disponibles à bord, dans les agences et sur l’application de la ville.",
+      "fares": {
+        "single": {
+          "title": "Ticket à l’unité",
+          "description": "1,50 € · valable 1 heure sur tout le réseau."
+        },
+        "day": {
+          "title": "Pass journée",
+          "description": "4,00 € · voyages illimités jusqu’à minuit."
+        },
+        "month": {
+          "title": "Abonnement mensuel",
+          "description": "22,00 € · pour les déplacements réguliers."
+        }
+      },
+      "infoTitle": "Informations pratiques",
+      "info": {
+        "realtime": {
+          "title": "Temps réel",
+          "description": "Suis l’arrivée des prochains passages en direct."
+        },
+        "accessibility": {
+          "title": "Accessibilité",
+          "description": "Toutes les lignes de tramway sont accessibles aux fauteuils roulants."
+        },
+        "bikes": {
+          "title": "Vélos et vélos pliants",
+          "description": "Vélos autorisés hors heures de pointe ; pliants à toute heure."
+        }
+      },
+      "contactHint": "Une question sur un itinéraire ou un horaire ?",
+      "contactLink": "Contacte le service Voirie & mobilité"
+    },
+    "Alerts": {
+      "metaTitle": "Alertes de la ville — PreskEnLer",
+      "title": "Alertes de la ville",
+      "description": "Les messages importants et les alertes en cours de la Ville de Terra Nova.",
+      "empty": "Aucune alerte en cours.",
+      "bannerLabel": "Messages et alertes de la ville",
+      "levels": {
+        "info": "Information",
+        "warning": "Vigilance",
+        "alert": "Alerte"
+      },
+      "area": "Secteur : {area}",
+      "recommendations": "Recommandations",
+      "ai": "Recommandations adaptées assistées par IA",
+      "viewAll": "Toutes les alertes",
+      "dismiss": "Masquer ce message"
     }
   },
   "Errors": {
@@ -215,7 +341,20 @@
       "nameTooLong": "Ton nom ne peut pas dépasser 80 caractères.",
       "confirmRequired": "Confirme ton mot de passe.",
       "confirmMismatch": "Les mots de passe ne correspondent pas.",
-      "currentRequired": "Entre ton mot de passe actuel."
+      "currentRequired": "Entre ton mot de passe actuel.",
+      "deleteConfirmRequired": "Tape le mot de confirmation.",
+      "deleteConfirmMismatch": "Le mot de confirmation ne correspond pas."
+    },
+    "broadcast": {
+      "titleMin": "Entre un titre d’au moins 3 caractères.",
+      "titleMax": "Le titre ne peut pas dépasser 160 caractères.",
+      "bodyMin": "Décris le message en quelques mots (10 caractères minimum).",
+      "bodyMax": "Le message ne peut pas dépasser 5000 caractères.",
+      "areaMax": "Le secteur ne peut pas dépasser 120 caractères.",
+      "recommendationsMax": "Les recommandations ne peuvent pas dépasser 2000 caractères.",
+      "invalid": "Merci de vérifier les informations du formulaire.",
+      "unauthorized": "Tu n’as pas l’autorisation de diffuser un message.",
+      "server": "Diffusion impossible pour le moment. Réessaie plus tard."
     }
   },
   "Auth": {
@@ -336,7 +475,9 @@
       "email": "Adresse email",
       "sessions": "Sessions",
       "portal": "Portail",
-      "signOut": "Se déconnecter"
+      "signOut": "Se déconnecter",
+      "delete": "Supprimer mon compte",
+      "broadcasts": "Alertes & messages"
     },
     "cards": {
       "sentMessages": "Messages envoyés",
@@ -390,6 +531,98 @@
         "role": "Profil",
         "accountStatus": "Statut"
       }
+    },
+    "onboarding": {
+      "title": "Bienvenue sur ton espace",
+      "description": "Trois étapes pour démarrer sereinement sur le portail.",
+      "progress": "{done} sur {total} étapes terminées",
+      "done": "Étape terminée",
+      "dismiss": "Masquer ce guide",
+      "steps": {
+        "profile": {
+          "title": "Complète ton profil",
+          "description": "Vérifie ton nom et ton adresse email."
+        },
+        "service": {
+          "title": "Trouve un service",
+          "description": "Parcours les services municipaux et identifie le bon interlocuteur."
+        },
+        "ask": {
+          "title": "Démarre une démarche",
+          "description": "Envoie un premier message à un service depuis le formulaire de contact."
+        }
+      }
+    },
+    "notifications": {
+      "label": "{count, plural, =0 {Notifications} one {Notifications (# non lue)} other {Notifications (# non lues)}}",
+      "title": "Notifications",
+      "empty": "Aucune notification pour le moment.",
+      "unread": "{count, plural, =0 {Tout est lu} one {# non lue} other {# non lues}}",
+      "markAll": "Tout marquer comme lu",
+      "levels": {
+        "info": "Information",
+        "warning": "Vigilance",
+        "alert": "Alerte"
+      }
+    },
+    "attention": {
+      "title": "Nécessite ton attention",
+      "description": "Les éléments qui attendent une action de ta part.",
+      "none": "Tout est à jour, rien ne nécessite ton attention.",
+      "alerts": "{count, plural, one {# alerte en cours} other {# alertes en cours}}",
+      "pending": "{count, plural, one {# message en attente de traitement} other {# messages en attente de traitement}}",
+      "viewAlerts": "Voir les alertes",
+      "viewMessages": "Voir mes messages"
+    },
+    "broadcasts": {
+      "metaTitle": "Alertes & messages — PreskEnLer",
+      "description": "Diffuse un message général ou une alerte à tous les habitants.",
+      "form": {
+        "title": "Nouveau message",
+        "description": "L’information est affichée en haut du portail et dans l’espace personnel.",
+        "titleLabel": "Titre",
+        "bodyLabel": "Message",
+        "levelLabel": "Niveau",
+        "topicLabel": "Type",
+        "audienceLabel": "Destinataires",
+        "areaLabel": "Secteur (optionnel)",
+        "expiresLabel": "Expire le (optionnel)",
+        "recommendationsLabel": "Recommandations (optionnel)",
+        "recommendationsHelp": "Une recommandation par ligne. Pour une canicule, des conseils adaptés sont ajoutés automatiquement si ce champ est vide.",
+        "submit": "Diffuser",
+        "success": "Message diffusé."
+      },
+      "levels": {
+        "info": "Information",
+        "warning": "Vigilance",
+        "alert": "Alerte"
+      },
+      "topics": {
+        "general": "Message général",
+        "flood": "Inondation",
+        "heatwave": "Canicule",
+        "health": "Santé",
+        "transport": "Transports",
+        "announcement": "Annonce importante"
+      },
+      "audiences": {
+        "all": "Tous les habitants",
+        "citizens": "Citoyens",
+        "vulnerable": "Personnes vulnérables"
+      },
+      "ai": "IA",
+      "inactive": "Terminé",
+      "audienceLabel": "Destinataires",
+      "areaLabel": "Secteur",
+      "publishedLabel": "Publié",
+      "expiresLabel": "Expire",
+      "recommendationsTitle": "Recommandations",
+      "activeTitle": "Messages actifs",
+      "inactiveTitle": "Messages terminés",
+      "deactivate": "Désactiver",
+      "reactivate": "Réactiver",
+      "delete": "Supprimer",
+      "empty": "Aucun message pour le moment."
     }
   },
   "Account": {
@@ -448,6 +681,20 @@
       "revokeOthers": "Déconnecter les autres sessions",
       "revokeError": "Impossible de révoquer cette session.",
       "revokeOthersError": "Impossible de déconnecter les autres sessions."
+    },
+    "delete": {
+      "metaTitle": "Supprimer mon compte — PreskEnLer",
+      "title": "Supprimer mon compte",
+      "description": "La suppression de ton compte est définitive et entraîne la perte de tes données.",
+      "link": "Supprimer mon compte",
+      "warningTitle": "Action irréversible",
+      "warningDescription": "Une fois ton compte supprimé, tu ne pourras plus te connecter ni retrouver tes messages et tes démarches. Cette action ne peut pas être annulée.",
+      "password": "Mot de passe",
+      "confirmLabel": "Tape « {word} » pour confirmer",
+      "confirmHelp": "Saisis exactement {word} en majuscules.",
+      "confirmWord": "SUPPRIMER",
+      "submit": "Supprimer définitivement mon compte",
+      "error": "Suppression impossible pour le moment. Vérifie ton mot de passe et réessaie."
     }
   },
   "Agents": {
@@ -498,7 +745,7 @@
   "Admin": {
     "users": {
       "metaTitle": "Utilisateurs — PreskEnLer",
-      "description": "Attribue les profils citoyen, agent ou administrateur et suspends un compte si nécessaire. Les agents accèdent à l’espace de travail ; les administrateurs gèrent aussi les profils.",
+      "description": "Attribue les profils citoyen, agent ou administrateur et suspends un compte si nécessaire. Les agents accèdent à l’espace de travail et administrent les comptes citoyens ; les administrateurs gèrent aussi les profils et les rôles.",
       "roleLabel": "Profil de {name}",
       "update": "Mettre à jour",
       "suspend": "Suspendre",

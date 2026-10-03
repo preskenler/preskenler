@@ -27,7 +27,9 @@
       "ariaLabel": "Main navigation",
       "services": "Services",
       "announcements": "Announcements",
-      "contact": "Contact"
+      "contact": "Contact",
+      "transport": "Transport",
+      "alerts": "Alerts"
     },
     "Header": {
       "account": "My account",
@@ -64,6 +66,10 @@
         "contact": {
           "title": "Contact city hall",
           "description": "Send a message to the right department and keep a record."
+        },
+        "transport": {
+          "title": "Municipal transport",
+          "description": "Timetables, lines and practical info to get around the city."
         }
       },
       "latest": "Latest announcements",
@@ -78,7 +84,8 @@
         "administration": "Administration",
         "cadre-de-vie": "Living environment",
         "services-techniques": "Technical services",
-        "social-citoyennete": "Social & citizenship"
+        "social-citoyennete": "Social & citizenship",
+        "sante": "Health & emergencies"
       },
       "items": {
         "etat-civil": {
@@ -112,7 +119,21 @@
         "vie-associative": {
           "name": "Community life & culture",
           "description": "Associations, municipal events and the city’s cultural life."
+        },
+        "sante": {
+          "name": "Health & care",
+          "description": "Access to care, local doctors and health questions."
+        },
+        "prevention-sante": {
+          "name": "Prevention & vaccination",
+          "description": "Prevention campaigns, vaccinations and screenings."
         }
+      },
+      "search": {
+        "label": "Search for a service",
+        "placeholder": "Search for a service…",
+        "all": "All",
+        "noResults": "No service matches “{query}”."
       }
     },
     "Announcements": {
@@ -175,6 +196,111 @@
         "invalid": "Please check the information in the form.",
         "send": "Sending is not possible right now. Please try again later."
       }
+    },
+    "Transport": {
+      "metaTitle": "Municipal transport — PreskEnLer",
+      "title": "Municipal transport",
+      "description": "Timetables, lines and practical information to get around Terra Nova.",
+      "linesTitle": "Lines and timetables",
+      "modes": {
+        "tram": "Tram",
+        "bus": "Bus",
+        "shuttle": "Shuttle"
+      },
+      "frequency": "Every {value}",
+      "firstLast": "First departure {first} · last departure {last}",
+      "lines": {
+        "tram-a": {
+          "name": "Tram A",
+          "description": "City centre ↔ Northern district",
+          "frequency": "8 min",
+          "first": "05:30",
+          "last": "00:30",
+          "stops": "12 stops · serves the station and the municipal park."
+        },
+        "tram-b": {
+          "name": "Tram B",
+          "description": "Southern district ↔ University",
+          "frequency": "10 min",
+          "first": "05:45",
+          "last": "00:00",
+          "stops": "9 stops · connection with Tram A at Bellecour."
+        },
+        "bus-1": {
+          "name": "Bus 1",
+          "description": "Station ↔ Hospital",
+          "frequency": "12 min",
+          "first": "06:00",
+          "last": "22:30",
+          "stops": "18 stops · serves the hospital and municipal offices."
+        },
+        "bus-2": {
+          "name": "Bus 2",
+          "description": "Residential areas ↔ Centre",
+          "frequency": "15 min",
+          "first": "06:15",
+          "last": "21:45",
+          "stops": "21 stops · passes the markets and the stadium."
+        },
+        "navette-centre": {
+          "name": "Centre shuttle",
+          "description": "Electric shuttle of the historic centre",
+          "frequency": "6 min",
+          "first": "09:00",
+          "last": "19:00",
+          "stops": "8 stops · free, pedestrian route through the centre."
+        }
+      },
+      "faresTitle": "Fares",
+      "faresNote": "Tickets available on board, at the agencies and in the city app.",
+      "fares": {
+        "single": {
+          "title": "Single ticket",
+          "description": "€1.50 · valid for 1 hour across the network."
+        },
+        "day": {
+          "title": "Day pass",
+          "description": "€4.00 · unlimited travel until midnight."
+        },
+        "month": {
+          "title": "Monthly pass",
+          "description": "€22.00 · for regular travel."
+        }
+      },
+      "infoTitle": "Practical information",
+      "info": {
+        "realtime": {
+          "title": "Real time",
+          "description": "Follow the next arrivals live."
+        },
+        "accessibility": {
+          "title": "Accessibility",
+          "description": "All tram lines are wheelchair accessible."
+        },
+        "bikes": {
+          "title": "Bikes and folding bikes",
+          "description": "Bikes allowed off-peak; folding bikes at any time."
+        }
+      },
+      "contactHint": "A question about a route or a timetable?",
+      "contactLink": "Contact the Roads & mobility service"
+    },
+    "Alerts": {
+      "metaTitle": "City alerts — PreskEnLer",
+      "title": "City alerts",
+      "description": "Important messages and current alerts from the City of Terra Nova.",
+      "empty": "No current alert.",
+      "bannerLabel": "City messages and alerts",
+      "levels": {
+        "info": "Information",
+        "warning": "Caution",
+        "alert": "Alert"
+      },
+      "area": "Area: {area}",
+      "recommendations": "Recommendations",
+      "ai": "AI-assisted tailored recommendations",
+      "viewAll": "All alerts",
+      "dismiss": "Dismiss this message"
     }
   },
   "Errors": {
@@ -215,7 +341,20 @@
       "nameTooLong": "Your name cannot exceed 80 characters.",
       "confirmRequired": "Confirm your password.",
       "confirmMismatch": "Passwords do not match.",
-      "currentRequired": "Enter your current password."
+      "currentRequired": "Enter your current password.",
+      "deleteConfirmRequired": "Type the confirmation word.",
+      "deleteConfirmMismatch": "The confirmation word does not match."
+    },
+    "broadcast": {
+      "titleMin": "Enter a title of at least 3 characters.",
+      "titleMax": "The title cannot exceed 160 characters.",
+      "bodyMin": "Describe the message in a few words (10 characters minimum).",
+      "bodyMax": "The message cannot exceed 5000 characters.",
+      "areaMax": "The area cannot exceed 120 characters.",
+      "recommendationsMax": "Recommendations cannot exceed 2000 characters.",
+      "invalid": "Please check the form information.",
+      "unauthorized": "You are not allowed to broadcast a message.",
+      "server": "Broadcast failed for now. Try again later."
     }
   },
   "Auth": {
@@ -336,7 +475,9 @@
       "email": "Email address",
       "sessions": "Sessions",
       "portal": "Portal",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "delete": "Delete my account",
+      "broadcasts": "Alerts & messages"
     },
     "cards": {
       "sentMessages": "Messages sent",
@@ -390,6 +531,98 @@
         "role": "Role",
         "accountStatus": "Status"
       }
+    },
+    "onboarding": {
+      "title": "Welcome to your space",
+      "description": "Three steps to get started smoothly on the portal.",
+      "progress": "{done} of {total} steps completed",
+      "done": "Step completed",
+      "dismiss": "Hide this guide",
+      "steps": {
+        "profile": {
+          "title": "Complete your profile",
+          "description": "Check your name and email address."
+        },
+        "service": {
+          "title": "Find a service",
+          "description": "Browse the municipal services and identify the right contact."
+        },
+        "ask": {
+          "title": "Start a request",
+          "description": "Send your first message to a service from the contact form."
+        }
+      }
+    },
+    "notifications": {
+      "label": "{count, plural, =0 {Notifications} one {Notifications (# unread)} other {Notifications (# unread)}}",
+      "title": "Notifications",
+      "empty": "No notification yet.",
+      "unread": "{count, plural, =0 {All read} one {# unread} other {# unread}}",
+      "markAll": "Mark all as read",
+      "levels": {
+        "info": "Information",
+        "warning": "Caution",
+        "alert": "Alert"
+      }
+    },
+    "attention": {
+      "title": "Needs your attention",
+      "description": "The items waiting for an action from you.",
+      "none": "Everything is up to date, nothing needs your attention.",
+      "alerts": "{count, plural, one {# current alert} other {# current alerts}}",
+      "pending": "{count, plural, one {# message awaiting processing} other {# messages awaiting processing}}",
+      "viewAlerts": "View alerts",
+      "viewMessages": "View my messages"
+    },
+    "broadcasts": {
+      "metaTitle": "Alerts & messages — PreskEnLer",
+      "description": "Broadcast a general message or an alert to all residents.",
+      "form": {
+        "title": "New message",
+        "description": "The information is shown at the top of the portal and in the personal space.",
+        "titleLabel": "Title",
+        "bodyLabel": "Message",
+        "levelLabel": "Level",
+        "topicLabel": "Type",
+        "audienceLabel": "Recipients",
+        "areaLabel": "Area (optional)",
+        "expiresLabel": "Expires on (optional)",
+        "recommendationsLabel": "Recommendations (optional)",
+        "recommendationsHelp": "One recommendation per line. For a heatwave, tailored advice is added automatically when this field is empty.",
+        "submit": "Broadcast",
+        "success": "Message broadcast."
+      },
+      "levels": {
+        "info": "Information",
+        "warning": "Caution",
+        "alert": "Alert"
+      },
+      "topics": {
+        "general": "General message",
+        "flood": "Flood",
+        "heatwave": "Heatwave",
+        "health": "Health",
+        "transport": "Transport",
+        "announcement": "Important announcement"
+      },
+      "audiences": {
+        "all": "All residents",
+        "citizens": "Citizens",
+        "vulnerable": "Vulnerable people"
+      },
+      "ai": "AI",
+      "inactive": "Ended",
+      "audienceLabel": "Recipients",
+      "areaLabel": "Area",
+      "publishedLabel": "Published",
+      "expiresLabel": "Expires",
+      "recommendationsTitle": "Recommendations",
+      "activeTitle": "Active messages",
+      "inactiveTitle": "Ended messages",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "delete": "Delete",
+      "empty": "No message yet."
     }
   },
   "Account": {
@@ -448,6 +681,20 @@
       "revokeOthers": "Sign out other sessions",
       "revokeError": "Unable to revoke this session.",
       "revokeOthersError": "Unable to sign out the other sessions."
+    },
+    "delete": {
+      "metaTitle": "Delete my account — PreskEnLer",
+      "title": "Delete my account",
+      "description": "Deleting your account is permanent and loses your data.",
+      "link": "Delete my account",
+      "warningTitle": "Irreversible action",
+      "warningDescription": "Once your account is deleted, you will no longer be able to sign in or find your messages and requests. This action cannot be undone.",
+      "password": "Password",
+      "confirmLabel": "Type “{word}” to confirm",
+      "confirmHelp": "Enter exactly {word} in uppercase.",
+      "confirmWord": "DELETE",
+      "submit": "Permanently delete my account",
+      "error": "Deletion failed for now. Check your password and try again."
     }
   },
   "Agents": {
@@ -498,7 +745,7 @@
   "Admin": {
     "users": {
       "metaTitle": "Users — PreskEnLer",
-      "description": "Assign the resident, agent or administrator role and suspend an account if needed. Agents access the workspace; administrators also manage profiles.",
+      "description": "Assign the citizen, agent or administrator profiles and suspend an account when needed. Agents access the workspace and administer citizen accounts; administrators also manage profiles and roles.",
       "roleLabel": "Role of {name}",
       "update": "Update",
       "suspend": "Suspend",

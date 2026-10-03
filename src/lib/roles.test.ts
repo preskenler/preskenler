@@ -62,11 +62,20 @@ describe('hasPermission', () => {
     expect(hasPermission('citizen', { user: ['list'] })).toBe(false);
   });
 
-  it('reserves user management for admins', () => {
-    expect(hasPermission('agent', { user: ['list'] })).toBe(false);
+  it('lets agents administer citizen accounts but not roles (F34)', () => {
+    expect(hasPermission('agent', { user: ['list'] })).toBe(true);
+    expect(hasPermission('agent', { user: ['ban'] })).toBe(true);
+    expect(hasPermission('agent', { user: ['set-role'] })).toBe(false);
     expect(hasPermission('admin', { user: ['list'] })).toBe(true);
     expect(hasPermission('admin', { user: ['set-role'] })).toBe(true);
     expect(hasPermission('admin', { user: ['ban'] })).toBe(true);
+  });
+
+  it('lets staff publish broadcasts, not citizens (D18/F29/F31)', () => {
+    expect(hasPermission('agent', { broadcast: ['create'] })).toBe(true);
+    expect(hasPermission('agent', { broadcast: ['update'] })).toBe(true);
+    expect(hasPermission('admin', { broadcast: ['delete'] })).toBe(true);
+    expect(hasPermission('citizen', { broadcast: ['list'] })).toBe(false);
   });
 
   it('combines permissions from several roles', () => {

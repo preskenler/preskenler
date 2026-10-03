@@ -90,6 +90,25 @@ export function createVerifyEmailSchema(t: ValidationTranslator) {
   });
 }
 
+/**
+ * Account deletion (demande F33). The user must re-enter their password and
+ * type an exact confirmation word so the irreversible action stays deliberate.
+ */
+export function createDeleteAccountSchema(
+  t: ValidationTranslator,
+  confirmationWord: string,
+) {
+  return z
+    .object({
+      password: z.string().min(1, { error: t('passwordRequired') }),
+      confirmation: z.string().min(1, { error: t('deleteConfirmRequired') }),
+    })
+    .refine((values) => values.confirmation.trim() === confirmationWord, {
+      path: ['confirmation'],
+      error: t('deleteConfirmMismatch'),
+    });
+}
+
 export type SignInValues = z.infer<ReturnType<typeof createSignInSchema>>;
 export type SignUpValues = z.infer<ReturnType<typeof createSignUpSchema>>;
 export type ForgotPasswordValues = z.infer<
@@ -106,4 +125,7 @@ export type ChangeEmailValues = z.infer<
 >;
 export type VerifyEmailValues = z.infer<
   ReturnType<typeof createVerifyEmailSchema>
+>;
+export type DeleteAccountValues = z.infer<
+  ReturnType<typeof createDeleteAccountSchema>
 >;
