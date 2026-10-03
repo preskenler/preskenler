@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon, MailIcon } from 'lucide-react';
+import { RiCheckLine, RiMailLine } from '@remixicon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -38,7 +38,7 @@ export function WaitlistForm() {
         aria-live="polite"
         className="flex w-full max-w-md items-center justify-center gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground"
       >
-        <CheckIcon className="size-4 text-primary" aria-hidden />
+        <RiCheckLine className="size-4 text-primary" aria-hidden />
         Merci ! On te tiendra au courant du lancement.
       </div>
     );
@@ -56,7 +56,7 @@ export function WaitlistForm() {
         </FieldLabel>
         <div className="flex w-full items-start gap-2">
           <div className="relative flex-1">
-            <MailIcon
+            <RiMailLine
               className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden
             />

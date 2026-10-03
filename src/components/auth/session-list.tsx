@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MonitorIcon } from 'lucide-react';
+import { RiComputerLine } from '@remixicon/react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -104,7 +104,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
             {sessions.map((session) => (
               <Item key={session.id} variant="outline">
                 <ItemMedia variant="icon">
-                  <MonitorIcon />
+                  <RiComputerLine />
                 </ItemMedia>
                 <ItemContent>
                   <ItemTitle>

@@ -1,6 +1,6 @@
 'use client';
 
-import { MoonIcon, SunIcon } from 'lucide-react';
+import { RiMoonLine, RiSunLine } from '@remixicon/react';
 import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
@@ -19,8 +19,8 @@ export function ThemeToggle() {
       <DropdownMenuTrigger
         render={<Button variant="outline" size="icon" className="relative" />}
       >
-        <SunIcon className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <MoonIcon className="absolute inset-0 m-auto rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <RiSunLine className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+        <RiMoonLine className="absolute inset-0 m-auto rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
         <span className="sr-only">Changer de thème</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
