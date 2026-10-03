@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import { getFormatter, getTranslations } from 'next-intl/server';
 
 import { Badge } from '@/components/ui/badge';
 import {
@@ -8,27 +9,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  formatAnnouncementDate,
-  getLatestAnnouncements,
-} from '@/lib/announcements';
+import { Link } from '@/i18n/navigation';
+import { getLatestAnnouncements } from '@/lib/announcements';
 
-export const metadata = {
-  title: 'Annonces — PreskEnLer',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Public.Announcements');
 
-export default function AnnouncementsPage() {
+  return {
+    title: t('metaTitle'),
+  };
+}
+
+export default async function AnnouncementsPage() {
   const announcements = getLatestAnnouncements(Number.MAX_SAFE_INTEGER);
+  const t = await getTranslations('Public.Announcements');
+  const format = await getFormatter();
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-6 py-16">
       <header className="flex flex-col gap-3">
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          Annonces de la ville
+          {t('title')}
         </h1>
         <p className="max-w-2xl text-pretty text-muted-foreground">
-          Informations pratiques, changements de service et actualité de Terra
-          Nova.
+          {t('description')}
         </p>
       </header>
 
@@ -37,9 +41,13 @@ export default function AnnouncementsPage() {
           <Card key={announcement.slug} size="sm">
             <CardHeader>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline">{announcement.category}</Badge>
+                <Badge variant="outline">
+                  {t(`categories.${announcement.category}`)}
+                </Badge>
                 <CardDescription>
-                  {formatAnnouncementDate(announcement.publishedAt)}
+                  {format.dateTime(new Date(announcement.publishedAt), {
+                    dateStyle: 'long',
+                  })}
                 </CardDescription>
               </div>
               <CardTitle>
@@ -47,13 +55,13 @@ export default function AnnouncementsPage() {
                   href={`/announcements/${announcement.slug}`}
                   className="hover:underline"
                 >
-                  {announcement.title}
+                  {t(`items.${announcement.slug}.title`)}
                 </Link>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-pretty text-muted-foreground">
-                {announcement.excerpt}
+                {t(`items.${announcement.slug}.excerpt`)}
               </p>
             </CardContent>
           </Card>

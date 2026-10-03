@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 
-import { submitServiceMessage } from '@/app/(public)/contact/actions';
+import { submitServiceMessage } from '@/app/[locale]/(public)/contact/actions';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,7 +28,7 @@ import {
 } from '@/components/ui/native-select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
-import { contactSchema, type ContactValues } from '@/lib/schemas/contact';
+import { createContactSchema, type ContactValues } from '@/lib/schemas/contact';
 import type { CityService } from '@/lib/services';
 
 export function ContactForm({
@@ -41,6 +42,9 @@ export function ContactForm({
   defaultEmail: string;
   defaultService?: string;
 }) {
+  const t = useTranslations('Validation');
+  const tContact = useTranslations('Public.Contact.form');
+  const tServices = useTranslations('Public.Services');
   const [sent, setSent] = useState(false);
   const {
     register,
@@ -49,7 +53,7 @@ export function ContactForm({
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<ContactValues>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(createContactSchema(t)),
     defaultValues: {
       name: defaultName,
       email: defaultEmail,
@@ -86,10 +90,8 @@ export function ContactForm({
     return (
       <Card role="status" aria-live="polite">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Message envoyé</CardTitle>
-          <CardDescription>
-            Le service concerné te répondra à l’adresse indiquée.
-          </CardDescription>
+          <CardTitle className="text-xl">{tContact('sent.title')}</CardTitle>
+          <CardDescription>{tContact('sent.description')}</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center">
           <Button
@@ -97,7 +99,7 @@ export function ContactForm({
             variant="outline"
             onClick={() => setSent(false)}
           >
-            Envoyer un autre message
+            {tContact('sent.again')}
           </Button>
         </CardContent>
       </Card>
@@ -107,24 +109,19 @@ export function ContactForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">
-          Écrire aux services municipaux
-        </CardTitle>
-        <CardDescription>
-          Décris ta question ou ta difficulté, nous transmettons le message au
-          bon service.
-        </CardDescription>
+        <CardTitle className="text-xl">{tContact('title')}</CardTitle>
+        <CardDescription>{tContact('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.name ? true : undefined}>
-              <FieldLabel htmlFor="contact-name">Nom</FieldLabel>
+              <FieldLabel htmlFor="contact-name">{tContact('name')}</FieldLabel>
               <Input
                 id="contact-name"
                 type="text"
                 autoComplete="name"
-                placeholder="Ton nom"
+                placeholder={tContact('namePlaceholder')}
                 required
                 aria-invalid={errors.name ? true : undefined}
                 aria-describedby={
@@ -136,13 +133,15 @@ export function ContactForm({
             </Field>
 
             <Field data-invalid={errors.email ? true : undefined}>
-              <FieldLabel htmlFor="contact-email">Adresse email</FieldLabel>
+              <FieldLabel htmlFor="contact-email">
+                {tContact('email')}
+              </FieldLabel>
               <Input
                 id="contact-email"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
-                placeholder="ton@email.com"
+                placeholder={tContact('emailPlaceholder')}
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -155,7 +154,7 @@ export function ContactForm({
 
             <Field data-invalid={errors.service ? true : undefined}>
               <FieldLabel htmlFor="contact-service">
-                Service concerné
+                {tContact('service')}
               </FieldLabel>
               <NativeSelect
                 id="contact-service"
@@ -169,7 +168,7 @@ export function ContactForm({
               >
                 {services.map((service) => (
                   <NativeSelectOption key={service.slug} value={service.slug}>
-                    {service.name}
+                    {tServices(`items.${service.slug}.name`)}
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
@@ -180,12 +179,14 @@ export function ContactForm({
             </Field>
 
             <Field data-invalid={errors.message ? true : undefined}>
-              <FieldLabel htmlFor="contact-message">Message</FieldLabel>
+              <FieldLabel htmlFor="contact-message">
+                {tContact('message')}
+              </FieldLabel>
               <Textarea
                 id="contact-message"
                 rows={6}
                 required
-                placeholder="Explique ta demande…"
+                placeholder={tContact('messagePlaceholder')}
                 aria-invalid={errors.message ? true : undefined}
                 aria-describedby={`contact-message-help${
                   errors.message ? ' contact-message-error' : ''
@@ -193,7 +194,7 @@ export function ContactForm({
                 {...field('message')}
               />
               <FieldDescription id="contact-message-help">
-                Pas de données sensibles dans ce message.
+                {tContact('messageHelp')}
               </FieldDescription>
               <FieldError
                 id="contact-message-error"
@@ -209,7 +210,7 @@ export function ContactForm({
             <Field>
               <Button type="submit" size="lg" disabled={isSubmitting}>
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Envoyer le message
+                {tContact('submit')}
               </Button>
             </Field>
           </FieldGroup>

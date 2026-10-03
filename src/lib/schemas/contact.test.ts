@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { contactSchema } from './contact';
+import { createContactSchema } from './contact';
+
+const contactSchema = createContactSchema((key) => key);
 
 describe('contactSchema', () => {
   const valid = {

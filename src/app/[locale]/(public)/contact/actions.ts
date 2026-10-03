@@ -1,10 +1,11 @@
 'use server';
 
 import { headers } from 'next/headers';
+import { getTranslations } from 'next-intl/server';
 
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { contactSchema, type ContactValues } from '@/lib/schemas/contact';
+import { createContactSchema, type ContactValues } from '@/lib/schemas/contact';
 
 export type ContactActionResult = { error?: string };
 
@@ -18,10 +19,12 @@ export type ContactActionResult = { error?: string };
 export async function submitServiceMessage(
   values: ContactValues,
 ): Promise<ContactActionResult> {
-  const parsed = contactSchema.safeParse(values);
+  const tValidation = await getTranslations('Validation');
+  const tErrors = await getTranslations('Public.Contact.errors');
+  const parsed = createContactSchema(tValidation).safeParse(values);
 
   if (!parsed.success) {
-    return { error: 'Merci de vérifier les informations du formulaire.' };
+    return { error: tErrors('invalid') };
   }
 
   try {
@@ -37,6 +40,6 @@ export async function submitServiceMessage(
     return {};
   } catch (error) {
     console.error('[contact] failed to store service message', error);
-    return { error: 'Envoi impossible pour le moment. Réessaie plus tard.' };
+    return { error: tErrors('send') };
   }
 }

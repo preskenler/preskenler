@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -8,22 +9,28 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Link } from '@/i18n/navigation';
 import { cityServiceCategories, cityServices } from '@/lib/services';
 
-export const metadata = {
-  title: 'Services municipaux — PreskEnLer',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Public.Services');
 
-export default function ServicesPage() {
+  return {
+    title: t('metaTitle'),
+  };
+}
+
+export default async function ServicesPage() {
+  const t = await getTranslations('Public.Services');
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-16">
       <header className="flex flex-col gap-3">
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          Services municipaux
+          {t('title')}
         </h1>
         <p className="max-w-2xl text-pretty text-muted-foreground">
-          Identifie le service qui correspond à ton besoin et contacte-le
-          directement depuis le portail.
+          {t('description')}
         </p>
       </header>
 
@@ -38,13 +45,17 @@ export default function ServicesPage() {
 
         return (
           <section key={category} className="flex flex-col gap-4">
-            <h2 className="font-heading text-xl font-medium">{category}</h2>
+            <h2 className="font-heading text-xl font-medium">
+              {t(`categories.${category}`)}
+            </h2>
             <div className="grid gap-4 md:grid-cols-2">
               {services.map((service) => (
                 <Card key={service.slug} size="sm">
                   <CardHeader>
-                    <CardTitle>{service.name}</CardTitle>
-                    <CardDescription>{service.description}</CardDescription>
+                    <CardTitle>{t(`items.${service.slug}.name`)}</CardTitle>
+                    <CardDescription>
+                      {t(`items.${service.slug}.description`)}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="flex flex-wrap items-center gap-3">
                     <Button
@@ -54,7 +65,7 @@ export default function ServicesPage() {
                         <Link href={`/contact?service=${service.slug}`} />
                       }
                     >
-                      Contacter ce service
+                      {t('contactService')}
                     </Button>
                     <a
                       href={`mailto:${service.email}`}

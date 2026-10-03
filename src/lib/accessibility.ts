@@ -7,12 +7,6 @@ export const textSizes = ['default', 'large', 'xlarge'] as const;
 
 export type TextSize = (typeof textSizes)[number];
 
-export const textSizeLabels: Record<TextSize, string> = {
-  default: 'Normale',
-  large: 'Grande',
-  xlarge: 'Très grande',
-};
-
 export const TEXT_SIZE_STORAGE_KEY = 'preskenler-text-size';
 
 export const textSizeScale: Record<TextSize, string> = {

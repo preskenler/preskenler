@@ -1,22 +1,23 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
+import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 const links = [
-  { href: '/services', label: 'Services' },
-  { href: '/announcements', label: 'Annonces' },
-  { href: '/contact', label: 'Contact' },
-];
+  { href: '/services', key: 'services' },
+  { href: '/announcements', key: 'announcements' },
+  { href: '/contact', key: 'contact' },
+] as const;
 
 export function PublicNav() {
+  const t = useTranslations('Public.Nav');
   const pathname = usePathname();
 
   return (
     <nav
-      aria-label="Navigation principale"
+      aria-label={t('ariaLabel')}
       className="flex flex-wrap items-center gap-1 text-sm"
     >
       {links.map((link) => {
@@ -33,7 +34,7 @@ export function PublicNav() {
               active ? 'bg-muted text-foreground' : 'text-muted-foreground',
             )}
           >
-            {link.label}
+            {t(link.key)}
           </Link>
         );
       })}
