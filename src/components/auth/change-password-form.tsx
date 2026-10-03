@@ -26,7 +26,6 @@ import {
 } from '@/components/ui/field';
 import { PasswordInput } from '@/components/auth/password-input';
 import { Spinner } from '@/components/ui/spinner';
-import { Link } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
 import {
   createChangePasswordSchema,
@@ -40,7 +39,7 @@ const defaultValues: ChangePasswordValues = {
   revokeOtherSessions: true,
 };
 
-export function ChangePasswordForm() {
+export function ChangePasswordForm({ onBack }: { onBack?: () => void }) {
   const t = useTranslations('Account.password');
   const tv = useTranslations('Validation.auth');
   const {
@@ -94,7 +93,15 @@ export function ChangePasswordForm() {
         </CardHeader>
         <CardContent>
           <FieldDescription>
-            <Link href="/dashboard/account">{t('back')}</Link>
+            {onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                className="underline underline-offset-3 hover:text-foreground"
+              >
+                {t('back')}
+              </button>
+            ) : null}
           </FieldDescription>
         </CardContent>
       </Card>

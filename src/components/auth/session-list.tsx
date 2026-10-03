@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { RiComputerLine } from '@remixicon/react';
 
@@ -23,7 +23,6 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Spinner } from '@/components/ui/spinner';
-import { useRouter } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
 
 export type SessionInfo = {
@@ -45,12 +44,51 @@ function formatDate(value: string | Date) {
   }).format(date);
 }
 
-export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
+export function SessionList() {
   const t = useTranslations('Account.sessions');
-  const router = useRouter();
+  const [sessions, setSessions] = useState<SessionInfo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pendingToken, setPendingToken] = useState<string | null>(null);
   const [revokingOthers, setRevokingOthers] = useState(false);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    const { data, error: loadError } = await authClient.listSessions();
+    setLoading(false);
+
+    if (loadError) {
+      setError(loadError.message ?? t('loadError'));
+      return;
+    }
+
+    setError(null);
+    setSessions(data ?? []);
+  }, [t]);
+
+  useEffect(() => {
+    let active = true;
+
+    void authClient.listSessions().then(({ data, error: loadError }) => {
+      if (!active) {
+        return;
+      }
+
+      setLoading(false);
+
+      if (loadError) {
+        setError(loadError.message ?? t('loadError'));
+        return;
+      }
+
+      setError(null);
+      setSessions(data ?? []);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [t]);
 
   async function revoke(token: string) {
     setPendingToken(token);
@@ -62,8 +100,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
       return;
     }
 
-    setError(null);
-    router.refresh();
+    await reload();
   }
 
   async function revokeOtherSessions() {
@@ -76,8 +113,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
       return;
     }
 
-    setError(null);
-    router.refresh();
+    await reload();
   }
 
   return (
@@ -93,7 +129,15 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
           </Alert>
         ) : null}
 
-        {sessions.length === 0 ? (
+        {loading ? (
+          <p
+            role="status"
+            className="flex items-center gap-2 text-sm text-muted-foreground"
+          >
+            <Spinner aria-hidden="true" />
+            {t('loading')}
+          </p>
+        ) : sessions.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t('empty')}</p>
         ) : (
           <ItemGroup>

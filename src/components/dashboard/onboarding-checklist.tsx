@@ -44,7 +44,7 @@ export function OnboardingChecklist({
   }
 
   const steps = [
-    { key: 'profile', href: '/dashboard/account', done: emailVerified },
+    { key: 'profile', href: '/dashboard?account=info', done: emailVerified },
     { key: 'service', href: '/services', done: false },
     { key: 'ask', href: '/contact', done: hasMessages },
   ] as const;

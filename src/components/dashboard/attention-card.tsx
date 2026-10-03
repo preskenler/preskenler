@@ -78,7 +78,7 @@ export async function AttentionCard({
                     size="sm"
                     className="h-auto w-fit p-0"
                     nativeButton={false}
-                    render={<Link href="/dashboard/account/messages" />}
+                    render={<Link href="/dashboard/inbox" />}
                   >
                     {t('viewMessages')}
                   </Button>

@@ -61,7 +61,7 @@ describe('ChangeEmailForm', () => {
     await waitFor(() =>
       expect(mocks.changeEmail).toHaveBeenCalledWith({
         newEmail: 'new@example.com',
-        callbackURL: expect.stringContaining('/dashboard/account'),
+        callbackURL: expect.stringContaining('/dashboard?account=info'),
       }),
     );
     expect(await screen.findByText('Vérifie tes emails')).toBeInTheDocument();
