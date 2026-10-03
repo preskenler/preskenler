@@ -479,6 +479,17 @@
       "delete": "Supprimer mon compte",
       "broadcasts": "Alertes & messages"
     },
+    "accountDialog": {
+      "title": "Mon compte",
+      "description": "Gère les informations et la sécurité de ton compte.",
+      "sections": {
+        "info": "Informations",
+        "password": "Mot de passe",
+        "email": "Adresse email",
+        "sessions": "Sessions",
+        "delete": "Supprimer mon compte"
+      }
+    },
     "cards": {
       "sentMessages": "Messages envoyés",
       "handledMessages": "Messages traités",
@@ -679,6 +690,8 @@
       "unknownDevice": "Appareil inconnu",
       "revoke": "Révoquer",
       "revokeOthers": "Déconnecter les autres sessions",
+      "loading": "Chargement des sessions…",
+      "loadError": "Impossible de charger tes sessions.",
       "revokeError": "Impossible de révoquer cette session.",
       "revokeOthersError": "Impossible de déconnecter les autres sessions."
     },

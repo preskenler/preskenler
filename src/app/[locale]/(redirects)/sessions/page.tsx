@@ -9,7 +9,7 @@ export default async function LegacyRedirectPage({
   const { locale } = await params;
 
   return redirect({
-    href: '/dashboard/account/sessions',
+    href: '/dashboard?account=sessions',
     locale: locale as AppLocale,
   });
 }

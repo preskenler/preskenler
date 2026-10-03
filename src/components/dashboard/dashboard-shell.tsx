@@ -48,6 +48,7 @@ export async function DashboardShell({
         user={{
           name: session.user.name,
           email: session.user.email,
+          emailVerified: session.user.emailVerified,
           roleLabel: t(`roles.${role}`),
           image: session.user.image,
         }}

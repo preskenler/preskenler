@@ -7,10 +7,6 @@ import {
   RiMessage3Line,
   RiGroupLine,
   RiMegaphoneLine,
-  RiLockPasswordLine,
-  RiMailSettingsLine,
-  RiHistoryLine,
-  RiDeleteBinLine,
 } from '@remixicon/react';
 
 export type DashboardIcon = RemixiconComponentType;
@@ -21,14 +17,21 @@ export type DashboardNavItem = {
   labelKey: string;
   icon: DashboardIcon;
   permission?: Record<string, string[]>;
+  /** When set, the item opens an in-place dialog instead of navigating. */
+  dialog?: 'account';
 };
 
 /** Primary navigation; items with a permission are hidden when it is not met. */
 export const mainNavItems: DashboardNavItem[] = [
   { href: '/dashboard', labelKey: 'overview', icon: RiDashboardLine },
-  { href: '/dashboard/account', labelKey: 'account', icon: RiUserLine },
   {
-    href: '/dashboard/account/messages',
+    href: '/dashboard/account',
+    labelKey: 'account',
+    icon: RiUserLine,
+    dialog: 'account',
+  },
+  {
+    href: '/dashboard/inbox',
     labelKey: 'messages',
     icon: RiMailLine,
   },
@@ -58,31 +61,7 @@ export const mainNavItems: DashboardNavItem[] = [
   },
 ];
 
-/** Secondary account navigation. */
-export const secondaryNavItems: DashboardNavItem[] = [
-  {
-    href: '/dashboard/account/password',
-    labelKey: 'password',
-    icon: RiLockPasswordLine,
-  },
-  {
-    href: '/dashboard/account/email',
-    labelKey: 'email',
-    icon: RiMailSettingsLine,
-  },
-  {
-    href: '/dashboard/account/sessions',
-    labelKey: 'sessions',
-    icon: RiHistoryLine,
-  },
-  {
-    href: '/dashboard/account/delete',
-    labelKey: 'delete',
-    icon: RiDeleteBinLine,
-  },
-];
-
-export const allNavItems = [...mainNavItems, ...secondaryNavItems];
+export const allNavItems = [...mainNavItems];
 
 /** `/dashboard` only matches exactly so it does not shadow every section. */
 export function matchesPath(pathname: string, href: string) {

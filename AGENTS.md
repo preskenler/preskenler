@@ -91,11 +91,14 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - Areas are route groups under `src/app/[locale]/`: `(public)` (portal), `(auth)`
   (sign-in/up) and `(dashboard)` — one authenticated shell shared by citizens, agents
   and admins. Pages live under `/dashboard/*`: `/dashboard` (overview),
-  `/dashboard/account/*` (profile, messages, password, email, sessions),
-  `/dashboard/requests`, `/dashboard/messages` (staff triage, F22) and
-  `/dashboard/users` (admin). The sidebar is filtered by role/permission via
-  `hasPermission`; legacy URLs (`/account`, `/agents/requests`, `/admin/users`, …)
-  redirect to their `/dashboard` equivalents.
+  `/dashboard/inbox` (citizen messages), `/dashboard/requests`, `/dashboard/messages`
+  (staff triage, F22) and `/dashboard/users` (admin). Account management (profile,
+  password, email, sessions, delete) lives in the `sidebar-13` `AccountDialog`
+  (`src/components/dashboard/account-dialog.tsx`), opened from the main nav or the
+  user menu, not on its own route. The sidebar is filtered by role/permission via
+  `hasPermission`; legacy URLs (`/account`, `/change-password`, `/sessions`,
+  `/agents/requests`, `/admin/users`, …) redirect to their `/dashboard` equivalents
+  (account ones deep-link via `/dashboard?account=<section>`).
 
 ## i18n (next-intl)
 

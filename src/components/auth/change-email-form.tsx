@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
 import {
@@ -29,7 +28,13 @@ import {
   type ChangeEmailValues,
 } from '@/lib/schemas/auth';
 
-export function ChangeEmailForm({ currentEmail }: { currentEmail?: string }) {
+export function ChangeEmailForm({
+  currentEmail,
+  onBack,
+}: {
+  currentEmail?: string;
+  onBack?: () => void;
+}) {
   const t = useTranslations('Account.emailChange');
   const tv = useTranslations('Validation.auth');
   const locale = useLocale();
@@ -61,7 +66,7 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail?: string }) {
   async function onSubmit(values: ChangeEmailValues) {
     const { error } = await authClient.changeEmail({
       newEmail: values.newEmail,
-      callbackURL: `${window.location.origin}${localePrefix}/dashboard/account`,
+      callbackURL: `${window.location.origin}${localePrefix}/dashboard?account=info`,
     });
 
     if (error) {
@@ -83,7 +88,15 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail?: string }) {
         </CardHeader>
         <CardContent>
           <FieldDescription>
-            <Link href="/dashboard/account">{t('back')}</Link>
+            {onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                className="underline underline-offset-3 hover:text-foreground"
+              >
+                {t('back')}
+              </button>
+            ) : null}
           </FieldDescription>
         </CardContent>
       </Card>

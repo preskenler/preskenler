@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { getTranslations } from 'next-intl/server';
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import {
@@ -10,23 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Account');
+export type AccountInfoUser = {
+  name: string;
+  email: string;
+  emailVerified: boolean;
+};
 
-  return { title: t('metaTitle') };
-}
-
-export default async function AccountPage() {
-  const t = await getTranslations('Account.info');
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session) {
-    return null;
-  }
-
-  const { user } = session;
+export function AccountInfo({ user }: { user: AccountInfoUser }) {
+  const t = useTranslations('Account.info');
 
   return (
     <Card>

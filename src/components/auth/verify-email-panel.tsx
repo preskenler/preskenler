@@ -83,7 +83,7 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/dashboard/account">{t('goToAccount')}</Link>
+            <Link href="/dashboard?account=info">{t('goToAccount')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>

@@ -3,17 +3,14 @@ import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
+  listSessions: vi.fn(),
   revokeSession: vi.fn(),
   revokeOtherSessions: vi.fn(),
-  refresh: vi.fn(),
-}));
-
-vi.mock('@/i18n/navigation', () => ({
-  useRouter: () => ({ refresh: mocks.refresh }),
 }));
 
 vi.mock('@/lib/auth-client', () => ({
   authClient: {
+    listSessions: mocks.listSessions,
     revokeSession: mocks.revokeSession,
     revokeOtherSessions: mocks.revokeOtherSessions,
   },
@@ -41,48 +38,64 @@ const sessions: SessionInfo[] = [
 describe('SessionList', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.listSessions.mockResolvedValue({ data: sessions, error: null });
   });
 
-  it('renders each session with a fallback for unknown devices', () => {
-    renderWithIntl(<SessionList sessions={sessions} />);
+  it('loads each session with a fallback for unknown devices', async () => {
+    renderWithIntl(<SessionList />);
 
-    expect(screen.getByText('Chrome sur macOS')).toBeInTheDocument();
+    expect(await screen.findByText('Chrome sur macOS')).toBeInTheDocument();
     expect(screen.getByText('Appareil inconnu')).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: /révoquer/i })).toHaveLength(
       2,
     );
   });
 
-  it('shows an empty state when there are no sessions', () => {
-    renderWithIntl(<SessionList sessions={[]} />);
+  it('shows an empty state when there are no sessions', async () => {
+    mocks.listSessions.mockResolvedValue({ data: [], error: null });
+    renderWithIntl(<SessionList />);
 
-    expect(screen.getByText('Aucune session active.')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Aucune session active.'),
+    ).toBeInTheDocument();
   });
 
-  it('revokes a single session and refreshes', async () => {
+  it('shows an error when loading fails', async () => {
+    mocks.listSessions.mockResolvedValue({
+      data: null,
+      error: { message: 'Requête refusée.' },
+    });
+    renderWithIntl(<SessionList />);
+
+    expect(await screen.findByText('Requête refusée.')).toBeInTheDocument();
+  });
+
+  it('revokes a single session and reloads', async () => {
     mocks.revokeSession.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    renderWithIntl(<SessionList sessions={sessions} />);
+    renderWithIntl(<SessionList />);
 
+    await screen.findByText('Chrome sur macOS');
     await user.click(screen.getAllByRole('button', { name: /révoquer/i })[0]!);
 
     await waitFor(() =>
       expect(mocks.revokeSession).toHaveBeenCalledWith({ token: 'token-1' }),
     );
-    expect(mocks.refresh).toHaveBeenCalled();
+    expect(mocks.listSessions).toHaveBeenCalledTimes(2);
   });
 
-  it('revokes the other sessions and refreshes', async () => {
+  it('revokes the other sessions and reloads', async () => {
     mocks.revokeOtherSessions.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    renderWithIntl(<SessionList sessions={sessions} />);
+    renderWithIntl(<SessionList />);
 
+    await screen.findByText('Chrome sur macOS');
     await user.click(
       screen.getByRole('button', { name: /déconnecter les autres sessions/i }),
     );
 
     await waitFor(() => expect(mocks.revokeOtherSessions).toHaveBeenCalled());
-    expect(mocks.refresh).toHaveBeenCalled();
+    expect(mocks.listSessions).toHaveBeenCalledTimes(2);
   });
 
   it('shows an error when revocation fails', async () => {
@@ -90,11 +103,11 @@ describe('SessionList', () => {
       error: { message: 'Session introuvable.' },
     });
     const user = userEvent.setup();
-    renderWithIntl(<SessionList sessions={sessions} />);
+    renderWithIntl(<SessionList />);
 
+    await screen.findByText('Chrome sur macOS');
     await user.click(screen.getAllByRole('button', { name: /révoquer/i })[0]!);
 
     expect(await screen.findByText('Session introuvable.')).toBeInTheDocument();
-    expect(mocks.refresh).not.toHaveBeenCalled();
   });
 });

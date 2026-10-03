@@ -479,6 +479,17 @@
       "delete": "Delete my account",
       "broadcasts": "Alerts & messages"
     },
+    "accountDialog": {
+      "title": "My account",
+      "description": "Manage your account information and security.",
+      "sections": {
+        "info": "Information",
+        "password": "Password",
+        "email": "Email address",
+        "sessions": "Sessions",
+        "delete": "Delete my account"
+      }
+    },
     "cards": {
       "sentMessages": "Messages sent",
       "handledMessages": "Messages handled",
@@ -679,6 +690,8 @@
       "unknownDevice": "Unknown device",
       "revoke": "Revoke",
       "revokeOthers": "Sign out other sessions",
+      "loading": "Loading sessions…",
+      "loadError": "Unable to load your sessions.",
       "revokeError": "Unable to revoke this session.",
       "revokeOthersError": "Unable to sign out the other sessions."
     },

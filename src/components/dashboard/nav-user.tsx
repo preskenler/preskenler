@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link, useRouter } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -19,17 +19,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import {
-  RiMore2Line,
-  RiUserLine,
-  RiLockPasswordLine,
-  RiLogoutBoxLine,
-} from '@remixicon/react';
+import { RiMore2Line, RiUserLine, RiLogoutBoxLine } from '@remixicon/react';
 import { authClient } from '@/lib/auth-client';
 
 export type NavUserProfile = {
   name: string;
   email: string;
+  emailVerified: boolean;
   roleLabel: string;
   image?: string | null;
 };
@@ -43,7 +39,13 @@ function initials(name: string) {
     .join('');
 }
 
-export function NavUser({ user }: { user: NavUserProfile }) {
+export function NavUser({
+  user,
+  onOpenAccount,
+}: {
+  user: NavUserProfile;
+  onOpenAccount?: () => void;
+}) {
   const t = useTranslations('Dashboard');
   const { isMobile } = useSidebar();
   const router = useRouter();
@@ -107,15 +109,9 @@ export function NavUser({ user }: { user: NavUserProfile }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem render={<Link href="/dashboard/account" />}>
+              <DropdownMenuItem onClick={onOpenAccount}>
                 <RiUserLine aria-hidden="true" />
                 {t('nav.account')}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                render={<Link href="/dashboard/account/password" />}
-              >
-                <RiLockPasswordLine aria-hidden="true" />
-                {t('nav.password')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
