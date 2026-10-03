@@ -68,6 +68,9 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   `curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webcup/sync`.
 - Staff board at `/agents/requests` (auth-gated) polls client-side every 30s; new
   arrivals are detected by `request_code`, never by a fixed count.
+- `npm run requests` (`scripts/fetch_request.mjs`) lists the live demands as a
+  Markdown checklist for `TODO.md`; `npm run requests -- --write` refreshes the
+  file and preserves the checked state per `request_code`.
 
 ## Roles & staff area
 
