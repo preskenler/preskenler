@@ -46,7 +46,7 @@ test.describe('verify email', () => {
     await page.goto('/verify-email');
 
     await page
-      .getByRole('button', { name: "Renvoyer l'email de vérification" })
+      .getByRole('button', { name: /renvoyer l[’']email de vérification/i })
       .click();
     await expect(
       page.getByText('Cette adresse email ne semble pas valide.'),

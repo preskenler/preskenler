@@ -15,6 +15,11 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `npm run e2e` — Playwright (chromium only). It starts `npm run dev` itself;
   set `PLAYWRIGHT_BASE_URL` to target an already-running server. One spec:
   `npx playwright test e2e/auth.spec.ts`.
+- `npm run e2e:compose` — runs the suite against the Docker Compose stack:
+  builds/starts `db` + `app`, waits for the app healthcheck, runs Playwright from
+  the host against `http://localhost:3000`, then `docker compose down` (the
+  `db_data` volume is kept). Needs Chromium once:
+  `npx playwright install chromium`.
 - `npm run lint` / `npm run format` / `npm run format:check` (Prettier: single
   quotes, trailing commas).
 - CI (`.github/workflows/next.js.yml`) order: `db:deploy` → Prisma schema-drift

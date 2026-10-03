@@ -13,8 +13,8 @@ The app consumes the Ville de Terra Nova demand feed
 
 Endpoints:
 
-- `GET /api/webcup/requests` — authenticated snapshot for the `/agents/requests`
-  board; refreshes from the API in the background.
+- `GET /api/webcup/requests` — authenticated snapshot for the
+  `/dashboard/requests` board; refreshes from the API in the background.
 - `GET /api/webcup/sync` — scheduler entry point, protected by
   `Authorization: Bearer $WEBCUP_CRON_SECRET`.
 
@@ -50,8 +50,8 @@ Profiles and permissions use the Better Auth **admin plugin**: roles are
 lives in `src/lib/permissions.ts`. Set `STAFF_EMAILS` (comma-separated) to
 bootstrap agents at sign-up; create the first admin with
 `npx auth@latest create-admin --email … --role admin`. Admins manage every
-profile — and can ban/unban accounts — from `/admin/users`. The `/agents/*` and
-`/admin/*` routes are permission gated.
+profile — and can ban/unban accounts — from `/dashboard/users`. The
+`/dashboard/*` staff routes are permission gated.
 
 ## Accessibility
 
@@ -60,6 +60,22 @@ muted text is ≥ 4.5:1 and borders/focus rings are ≥ 3:1. The header exposes 
 **display preferences** menu (theme + text size) — the text size scales the root
 font size and is persisted, and form errors/async updates are announced to
 assistive technology.
+
+## Testing
+
+```sh
+npm test              # Vitest unit/component tests
+npm run e2e           # Playwright (Chromium); starts its own `npm run dev`
+npm run e2e:compose   # Playwright against the Docker Compose stack
+```
+
+`npm run e2e:compose` builds and starts `db` + `app`, waits for the app
+healthcheck, then runs the specs from the host against `http://localhost:3000`
+(`PLAYWRIGHT_BASE_URL`) before tearing the stack down. The `db_data` volume is
+kept. Install the browser once with `npx playwright install chromium`.
+
+To run the local stack yourself, copy `.env.example` to `.env` and use
+`docker compose up` (db + app, with Compose Watch).
 
 ## Deployment
 
