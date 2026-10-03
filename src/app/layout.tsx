@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import '@/app/globals.css';
-import { Inter } from 'next/font/google';
+import { Outfit, Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const geistHeading = Geist({ subsets: ['latin'], variable: '--font-heading' });
+
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
 // TODO(copy): replace with the real product name and description at launch.
 export const metadata: Metadata = {
@@ -19,7 +21,12 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang="fr"
       suppressHydrationWarning
-      className={cn('h-full antialiased', 'font-sans', inter.variable)}
+      className={cn(
+        'h-full antialiased',
+        'font-sans',
+        outfit.variable,
+        geistHeading.variable,
+      )}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider
