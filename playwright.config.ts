@@ -14,6 +14,9 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
+    // next-intl auto-detects the locale from `Accept-Language`. Pin French so
+    // existing specs keep hitting the unprefixed (default-locale) URLs.
+    locale: 'fr-FR',
   },
   projects: [
     {

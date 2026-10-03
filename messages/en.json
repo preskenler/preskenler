@@ -1,0 +1,208 @@
+{
+  "Metadata": {
+    "title": "PreskEnLer — City of Terra Nova Portal",
+    "description": "Access the services of the City of Terra Nova, read municipal announcements and contact the administration."
+  },
+  "Accessibility": {
+    "skipToContent": "Skip to content",
+    "loadingPage": "Loading page",
+    "displayPreferences": "Display preferences",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "textSize": {
+      "label": "Text size",
+      "default": "Default",
+      "large": "Large",
+      "xlarge": "Extra large"
+    }
+  },
+  "Public": {
+    "Nav": {
+      "ariaLabel": "Main navigation",
+      "services": "Services",
+      "announcements": "Announcements",
+      "contact": "Contact"
+    },
+    "Header": {
+      "account": "My account",
+      "signIn": "Sign in",
+      "signUp": "Create account"
+    },
+    "LocaleSwitcher": {
+      "label": "Language",
+      "fr": "Français",
+      "en": "English"
+    },
+    "Footer": {
+      "copyright": "© {year} PreskEnLer · City of Terra Nova Portal"
+    },
+    "Home": {
+      "metaTitle": "PreskEnLer — City of Terra Nova Portal",
+      "badge": "City of Terra Nova",
+      "title": "Welcome to the Terra Nova portal",
+      "description": "Find city services, read municipal announcements and reach the administration in a few clicks.",
+      "discoverServices": "Explore services",
+      "contact": "Contact us",
+      "createAccount": "Create my account",
+      "connectedAs": "Signed in as {name}.",
+      "createAccountHint": "Create your account to track your requests and reach your personal space.",
+      "cards": {
+        "services": {
+          "title": "Municipal services",
+          "description": "{count, plural, one {# service} other {# services}} to guide you through your requests."
+        },
+        "announcements": {
+          "title": "City announcements",
+          "description": "Terra Nova news and practical information."
+        },
+        "contact": {
+          "title": "Contact city hall",
+          "description": "Send a message to the right department and keep a record."
+        }
+      },
+      "latest": "Latest announcements",
+      "seeAll": "See all"
+    },
+    "Services": {
+      "metaTitle": "Municipal services — PreskEnLer",
+      "title": "Municipal services",
+      "description": "Find the service that matches your needs and contact it directly from the portal.",
+      "contactService": "Contact this service",
+      "categories": {
+        "administration": "Administration",
+        "cadre-de-vie": "Living environment",
+        "services-techniques": "Technical services",
+        "social-citoyennete": "Social & citizenship"
+      },
+      "items": {
+        "etat-civil": {
+          "name": "Civil registry",
+          "description": "Births, marriages, identity papers and official documents."
+        },
+        "relations-citoyennes": {
+          "name": "Citizen relations",
+          "description": "Questions, complaints and support with your paperwork."
+        },
+        "urbanisme": {
+          "name": "Urban planning & housing",
+          "description": "Building permits, authorizations and housing questions."
+        },
+        "proprete-dechets": {
+          "name": "Cleanliness & waste",
+          "description": "Garbage collection, bulky items, recycling and clean public spaces."
+        },
+        "eau-assainissement": {
+          "name": "Water & sanitation",
+          "description": "Meters, leaks, water quality and billing."
+        },
+        "voirie-mobilite": {
+          "name": "Roads & mobility",
+          "description": "Roads, street lighting, signage and transport."
+        },
+        "action-sociale": {
+          "name": "Social action",
+          "description": "Aid, family support and solidarity between residents."
+        },
+        "vie-associative": {
+          "name": "Community life & culture",
+          "description": "Associations, municipal events and the city’s cultural life."
+        }
+      }
+    },
+    "Announcements": {
+      "metaTitle": "Announcements — PreskEnLer",
+      "title": "City announcements",
+      "description": "Practical information, service changes and news from Terra Nova.",
+      "all": "All announcements",
+      "categories": {
+        "vie-municipale": "Municipal life",
+        "cadre-de-vie": "Living environment",
+        "voirie": "Roads",
+        "administration": "Administration"
+      },
+      "items": {
+        "ouverture-portail-numerique": {
+          "title": "Terra Nova’s digital portal opens its services",
+          "excerpt": "Create your account, find city services and reach the administration: everything is now in one place.",
+          "body": "The digital portal of the City of Terra Nova is open. Residents can create their account, sign in to their personal space and access the main municipal services.\n\nNew services will be added over time: request tracking, city announcements and online procedures.\n\nFor any question, the Citizen Relations department remains reachable through the portal’s contact form."
+        },
+        "collecte-encombrants": {
+          "title": "Bulky item collection: new monthly round",
+          "excerpt": "Bulky item collection now takes place on the first Saturday of every month in all neighbourhoods.",
+          "body": "To make life easier for residents, bulky item collection will now be held on the first Saturday of every month.\n\nItems must be left outside the home the evening before, following the sorting instructions.\n\nHazardous waste (paint, chemicals) is not accepted and must be taken to a recycling centre."
+        },
+        "travaux-avenue-des-fondateurs": {
+          "title": "Roadworks on avenue des Fondateurs",
+          "excerpt": "Road resurfacing work is planned on avenue des Fondateurs for three weeks.",
+          "body": "The City is resurfacing the roadway of avenue des Fondateurs. The work will last about three weeks.\n\nAlternating traffic will be in place during peak hours. Public transport lines are adjusting their routes.\n\nThe City thanks residents for their understanding and is doing its best to limit the disruption."
+        },
+        "permanences-etat-civil": {
+          "title": "Civil registry office hours on Saturday morning",
+          "excerpt": "The civil registry service now holds office hours on Saturday morning by appointment.",
+          "body": "To better support residents, the civil registry service now offers office hours on Saturday morning.\n\nAppointments can be booked from the personal space or through the portal’s contact form.\n\nUrgent matters are still handled as a priority on weekdays."
+        }
+      }
+    },
+    "Contact": {
+      "metaTitle": "Contact — PreskEnLer",
+      "title": "Contact city hall",
+      "description": "Send your question or issue to the relevant department. You get an immediate confirmation after sending.",
+      "form": {
+        "title": "Write to municipal services",
+        "description": "Describe your question or issue and we will forward the message to the right service.",
+        "name": "Name",
+        "namePlaceholder": "Your name",
+        "email": "Email address",
+        "emailPlaceholder": "you@email.com",
+        "service": "Relevant service",
+        "message": "Message",
+        "messagePlaceholder": "Explain your request…",
+        "messageHelp": "Do not include sensitive data in this message.",
+        "submit": "Send message",
+        "sent": {
+          "title": "Message sent",
+          "description": "The relevant service will reply to the address provided.",
+          "again": "Send another message"
+        }
+      },
+      "errors": {
+        "invalid": "Please check the information in the form.",
+        "send": "Sending is not possible right now. Please try again later."
+      }
+    }
+  },
+  "Errors": {
+    "NotFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for does not exist or has been moved.",
+      "backHome": "Back to home"
+    },
+    "Error": {
+      "label": "Error",
+      "title": "Something went wrong",
+      "description": "Something went wrong. Please try again in a moment.",
+      "retry": "Try again",
+      "backHome": "Back to home"
+    }
+  },
+  "Validation": {
+    "name": {
+      "required": "Enter your name.",
+      "max120": "Your name cannot exceed 120 characters."
+    },
+    "email": {
+      "invalid": "This email address does not look valid."
+    },
+    "service": {
+      "required": "Choose a service."
+    },
+    "message": {
+      "min": "Describe your request in a few words (at least 10 characters).",
+      "max2000": "Your message cannot exceed 2000 characters."
+    }
+  }
+}

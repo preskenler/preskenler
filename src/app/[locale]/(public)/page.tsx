@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
@@ -8,6 +7,7 @@ import {
   RiMailSendLine,
   RiMegaphoneLine,
 } from '@remixicon/react';
+import { getFormatter, getTranslations } from 'next-intl/server';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,16 +18,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Link } from '@/i18n/navigation';
 import { auth } from '@/lib/auth';
-import {
-  formatAnnouncementDate,
-  getLatestAnnouncements,
-} from '@/lib/announcements';
+import { getLatestAnnouncements } from '@/lib/announcements';
 import { cityServices } from '@/lib/services';
 
-export const metadata: Metadata = {
-  title: 'PreskEnLer — Portail de la Ville de Terra Nova',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Public.Home');
+
+  return {
+    title: t('metaTitle'),
+  };
+}
 
 function AccessCard({
   href,
@@ -63,17 +65,19 @@ function AccessCard({
 export default async function HomePage() {
   const session = await auth.api.getSession({ headers: await headers() });
   const latest = getLatestAnnouncements(3);
+  const t = await getTranslations('Public.Home');
+  const tAnnouncements = await getTranslations('Public.Announcements');
+  const format = await getFormatter();
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 py-16">
       <section className="flex flex-col items-center gap-6 text-center">
-        <Badge variant="secondary">Ville de Terra Nova</Badge>
+        <Badge variant="secondary">{t('badge')}</Badge>
         <h1 className="font-heading max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          Bienvenue sur le portail de Terra Nova
+          {t('title')}
         </h1>
         <p className="max-w-2xl text-pretty text-muted-foreground">
-          Retrouve les services de la ville, consulte les annonces municipales
-          et joins l’administration en quelques clics.
+          {t('description')}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Button
@@ -81,7 +85,7 @@ export default async function HomePage() {
             nativeButton={false}
             render={<Link href="/services" />}
           >
-            Découvrir les services
+            {t('discoverServices')}
           </Button>
           <Button
             size="lg"
@@ -89,7 +93,7 @@ export default async function HomePage() {
             nativeButton={false}
             render={<Link href="/contact" />}
           >
-            Nous contacter
+            {t('contact')}
           </Button>
           {session ? null : (
             <Button
@@ -98,50 +102,50 @@ export default async function HomePage() {
               nativeButton={false}
               render={<Link href="/sign-up" />}
             >
-              Créer mon compte
+              {t('createAccount')}
             </Button>
           )}
         </div>
         <p className="text-sm text-muted-foreground">
           {session
-            ? `Connecté·e en tant que ${session.user.name}.`
-            : 'Crée ton compte pour suivre tes démarches et retrouver ton espace personnel.'}
+            ? t('connectedAs', { name: session.user.name })
+            : t('createAccountHint')}
         </p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <AccessCard
           href="/services"
-          title="Services municipaux"
-          description={`${cityServices.length} services pour t’orienter dans tes démarches.`}
+          title={t('cards.services.title')}
+          description={t('cards.services.description', {
+            count: cityServices.length,
+          })}
           icon={<RiCommunityLine className="size-5" aria-hidden="true" />}
         />
         <AccessCard
           href="/announcements"
-          title="Annonces de la ville"
-          description="L’actualité et les informations pratiques de Terra Nova."
+          title={t('cards.announcements.title')}
+          description={t('cards.announcements.description')}
           icon={<RiMegaphoneLine className="size-5" aria-hidden="true" />}
         />
         <AccessCard
           href="/contact"
-          title="Contacter la mairie"
-          description="Envoie un message au service concerné et garde une trace."
+          title={t('cards.contact.title')}
+          description={t('cards.contact.description')}
           icon={<RiMailSendLine className="size-5" aria-hidden="true" />}
         />
       </section>
 
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="font-heading text-2xl font-semibold">
-            Dernières annonces
-          </h2>
+          <h2 className="font-heading text-2xl font-semibold">{t('latest')}</h2>
           <Button
             variant="ghost"
             size="sm"
             nativeButton={false}
             render={<Link href="/announcements" />}
           >
-            Tout voir
+            {t('seeAll')}
             <RiArrowRightLine data-icon="inline-end" />
           </Button>
         </div>
@@ -150,23 +154,25 @@ export default async function HomePage() {
             <Card key={announcement.slug} size="sm">
               <CardHeader>
                 <Badge variant="outline" className="w-fit">
-                  {announcement.category}
+                  {tAnnouncements(`categories.${announcement.category}`)}
                 </Badge>
                 <CardTitle>
                   <Link
                     href={`/announcements/${announcement.slug}`}
                     className="hover:underline"
                   >
-                    {announcement.title}
+                    {tAnnouncements(`items.${announcement.slug}.title`)}
                   </Link>
                 </CardTitle>
                 <CardDescription>
-                  {formatAnnouncementDate(announcement.publishedAt)}
+                  {format.dateTime(new Date(announcement.publishedAt), {
+                    dateStyle: 'long',
+                  })}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  {announcement.excerpt}
+                  {tAnnouncements(`items.${announcement.slug}.excerpt`)}
                 </p>
               </CardContent>
             </Card>

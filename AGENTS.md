@@ -10,7 +10,7 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `npm test` — Vitest (jsdom + Testing Library). Tests must live under `src/`
   (`src/**/*.{test,spec}.{ts,tsx}`); colocate them as `*.test.tsx`.
 - `npm run type:check` — run `npm run type:gen` first. Next 16 generates global
-  route types (`LayoutProps<'/'>`, `PageProps`, …) into `.next/types`; `tsc`
+  route types (`LayoutProps<'/[locale]'>`, `PageProps`, …) into `.next/types`; `tsc`
   fails on a clean tree without them.
 - `npm run e2e` — Playwright (chromium only). It starts `npm run dev` itself;
   set `PLAYWRIGHT_BASE_URL` to target an already-running server. One spec:
@@ -73,18 +73,42 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins use
   `/admin/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
   `npx auth@latest create-admin --email … --role admin`.
-- Areas are separate route groups: `(public)` (portal), `(auth)` (sign-in/up),
-  `(citizen)` (`/account/*`), `(agents)` (`/agents/requests`, `/agents/messages`)
-  and `(admin)` (`/admin/users`). The agents/admin areas share `StaffShell`;
+- Areas are separate route groups under `src/app/[locale]/`: `(public)` (portal),
+  `(auth)` (sign-in/up), `(citizen)` (`/account/*`), `(agents)` (`/agents/requests`,
+  `/agents/messages`) and `(admin)` (`/admin/users`). The agents/admin areas share `StaffShell`;
   citizens are redirected to `/account`. Inhabitants’ contact messages are
   triaged at `/agents/messages` (F22).
+
+## i18n (next-intl)
+
+- Locale-prefixed routing: `fr` (default) is unprefixed, English lives under
+  `/en`. Config `src/i18n/routing.ts`, request config `src/i18n/request.ts`,
+  navigation wrappers `src/i18n/navigation.ts`, proxy `src/proxy.ts` (Next 16
+  renamed middleware to proxy). The matcher excludes `/api/*`, so Better Auth
+  and the Webcup cron stay non-localized.
+- Pages live under `src/app/[locale]/`; `api/**` and `global-error.tsx` stay at
+  `src/app/`. The root layout is `src/app/[locale]/layout.tsx` and mounts
+  `NextIntlClientProvider`.
+- Messages live in `messages/fr.json` / `messages/en.json` (`en` is provisional).
+  Use `getTranslations` in async components and `useTranslations` in Client
+  Components. Public copy is namespaced under `Public`; shared strings under
+  `Accessibility`, `Errors`, `Validation`.
+- Import `Link` and navigation hooks from `@/i18n/navigation`, never `next/link`
+  or `next/navigation`, so the active locale is preserved.
+- Zod schemas that surface localized messages are factories taking `t`
+  (`createContactSchema(t)` in `src/lib/schemas/contact.ts`). Tests rendering
+  translated components use the `renderWithIntl` helper in `src/test/render.tsx`.
+- Playwright pins `locale: 'fr-FR'` so auto-detection keeps the default-locale
+  (unprefixed) URLs stable.
+- Not yet localized: auth, citizen, agent and admin areas (still French and
+  `next/link`), and the auth emails in `src/lib/auth.ts`.
 
 ## UI / conventions
 
 - Accessibility (demandes F21–F24): `DisplayPreferences`
   (`src/components/accessibility/`) bundles the theme and the text-size choice.
   Text size scales the root font size (Tailwind is rem-based) and is applied
-  pre-paint by `textSizeScript` in `src/app/layout.tsx`. Keep form errors linked
+  pre-paint by `textSizeScript` in `src/app/[locale]/layout.tsx`. Keep form errors linked
   with `aria-describedby`, announce async updates with `role="status"`, and mark
   decorative icons `aria-hidden`. The theme tokens in `globals.css` are tuned to
   WCAG AA/1.4.11 (muted text ≥4.5, borders/focus rings ≥3:1) — re-check contrast

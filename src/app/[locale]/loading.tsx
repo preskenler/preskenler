@@ -1,10 +1,14 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Loading() {
+export default async function Loading() {
+  const t = await getTranslations('Accessibility');
+
   return (
     <main
       aria-busy="true"
-      aria-label="Chargement de la page"
+      aria-label={t('loadingPage')}
       className="flex flex-1 flex-col items-center justify-center gap-12 px-6 py-16"
     >
       <div className="flex w-full max-w-2xl flex-col items-center gap-6">

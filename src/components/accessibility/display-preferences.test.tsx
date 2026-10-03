@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({ setTheme: vi.fn() }));
@@ -11,6 +11,7 @@ vi.mock('next-themes', () => ({
 import { DisplayPreferences } from './display-preferences';
 import { TextSizeProvider } from './text-size-provider';
 import { resetTextSizeStore } from '@/lib/accessibility';
+import { renderWithIntl } from '@/test/render';
 
 function createStorage() {
   const store = new Map<string, string>();
@@ -32,7 +33,7 @@ function createStorage() {
 let storage: ReturnType<typeof createStorage>;
 
 function renderMenu() {
-  return render(
+  return renderWithIntl(
     <TextSizeProvider>
       <DisplayPreferences />
     </TextSizeProvider>,

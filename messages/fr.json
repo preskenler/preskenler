@@ -1,0 +1,208 @@
+{
+  "Metadata": {
+    "title": "PreskEnLer — Portail de la Ville de Terra Nova",
+    "description": "Accède aux services de la Ville de Terra Nova, consulte les annonces municipales et contacte l’administration."
+  },
+  "Accessibility": {
+    "skipToContent": "Aller au contenu",
+    "loadingPage": "Chargement de la page",
+    "displayPreferences": "Préférences d’affichage",
+    "theme": {
+      "label": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "textSize": {
+      "label": "Taille du texte",
+      "default": "Normale",
+      "large": "Grande",
+      "xlarge": "Très grande"
+    }
+  },
+  "Public": {
+    "Nav": {
+      "ariaLabel": "Navigation principale",
+      "services": "Services",
+      "announcements": "Annonces",
+      "contact": "Contact"
+    },
+    "Header": {
+      "account": "Mon compte",
+      "signIn": "Se connecter",
+      "signUp": "Créer un compte"
+    },
+    "LocaleSwitcher": {
+      "label": "Langue",
+      "fr": "Français",
+      "en": "English"
+    },
+    "Footer": {
+      "copyright": "© {year} PreskEnLer · Portail de la Ville de Terra Nova"
+    },
+    "Home": {
+      "metaTitle": "PreskEnLer — Portail de la Ville de Terra Nova",
+      "badge": "Ville de Terra Nova",
+      "title": "Bienvenue sur le portail de Terra Nova",
+      "description": "Retrouve les services de la ville, consulte les annonces municipales et joins l’administration en quelques clics.",
+      "discoverServices": "Découvrir les services",
+      "contact": "Nous contacter",
+      "createAccount": "Créer mon compte",
+      "connectedAs": "Connecté·e en tant que {name}.",
+      "createAccountHint": "Crée ton compte pour suivre tes démarches et retrouver ton espace personnel.",
+      "cards": {
+        "services": {
+          "title": "Services municipaux",
+          "description": "{count, plural, one {# service} other {# services}} pour t’orienter dans tes démarches."
+        },
+        "announcements": {
+          "title": "Annonces de la ville",
+          "description": "L’actualité et les informations pratiques de Terra Nova."
+        },
+        "contact": {
+          "title": "Contacter la mairie",
+          "description": "Envoie un message au service concerné et garde une trace."
+        }
+      },
+      "latest": "Dernières annonces",
+      "seeAll": "Tout voir"
+    },
+    "Services": {
+      "metaTitle": "Services municipaux — PreskEnLer",
+      "title": "Services municipaux",
+      "description": "Identifie le service qui correspond à ton besoin et contacte-le directement depuis le portail.",
+      "contactService": "Contacter ce service",
+      "categories": {
+        "administration": "Administration",
+        "cadre-de-vie": "Cadre de vie",
+        "services-techniques": "Services techniques",
+        "social-citoyennete": "Social & citoyenneté"
+      },
+      "items": {
+        "etat-civil": {
+          "name": "État civil",
+          "description": "Naissances, mariages, papiers d’identité et documents officiels."
+        },
+        "relations-citoyennes": {
+          "name": "Relations citoyennes",
+          "description": "Questions, réclamations et accompagnement dans tes démarches."
+        },
+        "urbanisme": {
+          "name": "Urbanisme & logement",
+          "description": "Permis de construire, autorisations et questions de logement."
+        },
+        "proprete-dechets": {
+          "name": "Propreté & déchets",
+          "description": "Collecte des ordures, encombrants, tri et propreté des espaces publics."
+        },
+        "eau-assainissement": {
+          "name": "Eau & assainissement",
+          "description": "Compteurs, fuites, qualité de l’eau et facturation."
+        },
+        "voirie-mobilite": {
+          "name": "Voirie & mobilité",
+          "description": "Chaussées, éclairage public, signalisation et transports."
+        },
+        "action-sociale": {
+          "name": "Action sociale",
+          "description": "Aides, accompagnement des familles et solidarité entre habitants."
+        },
+        "vie-associative": {
+          "name": "Vie associative & culture",
+          "description": "Associations, événements municipaux et vie culturelle de la ville."
+        }
+      }
+    },
+    "Announcements": {
+      "metaTitle": "Annonces — PreskEnLer",
+      "title": "Annonces de la ville",
+      "description": "Informations pratiques, changements de service et actualité de Terra Nova.",
+      "all": "Toutes les annonces",
+      "categories": {
+        "vie-municipale": "Vie municipale",
+        "cadre-de-vie": "Cadre de vie",
+        "voirie": "Voirie",
+        "administration": "Administration"
+      },
+      "items": {
+        "ouverture-portail-numerique": {
+          "title": "Le portail numérique de Terra Nova ouvre ses services",
+          "excerpt": "Créer ton compte, retrouver les services de la ville et joindre l’administration : tout est désormais au même endroit.",
+          "body": "Le portail numérique de la Ville de Terra Nova est ouvert. Les habitants peuvent créer leur compte, se connecter à leur espace personnel et accéder aux principaux services municipaux.\n\nDe nouveaux services seront ajoutés progressivement : suivi des demandes, annonces de la ville et démarches en ligne.\n\nPour toute question, le service des Relations citoyennes reste joignable depuis le formulaire de contact du portail."
+        },
+        "collecte-encombrants": {
+          "title": "Collecte des encombrants : nouveau passage mensuel",
+          "excerpt": "La collecte des encombrants a désormais lieu le premier samedi de chaque mois dans tous les quartiers.",
+          "body": "Afin de simplifier la vie des habitants, la collecte des encombrants se tiendra désormais le premier samedi de chaque mois.\n\nLes objets doivent être déposés la veille au soir devant le domicile, en respectant les consignes de tri.\n\nLes déchets dangereux (peintures, produits chimiques) ne sont pas acceptés et doivent être déposés en déchèterie."
+        },
+        "travaux-avenue-des-fondateurs": {
+          "title": "Travaux de voirie avenue des Fondateurs",
+          "excerpt": "Des travaux de réfection de la chaussée sont prévus avenue des Fondateurs pendant trois semaines.",
+          "body": "La Ville procède à la réfection de la chaussée de l’avenue des Fondateurs. Les travaux dureront environ trois semaines.\n\nUne circulation alternée sera mise en place aux heures de pointe. Les lignes de transport adaptent leur itinéraire.\n\nLa Ville remercie les habitants pour leur compréhension et fait son possible pour limiter la gêne."
+        },
+        "permanences-etat-civil": {
+          "title": "Permanences d’état civil le samedi matin",
+          "excerpt": "Le service d’état civil ouvre désormais ses permanences le samedi matin sur rendez-vous.",
+          "body": "Pour mieux accompagner les habitants, le service d’état civil propose désormais des permanences le samedi matin.\n\nLes rendez-vous se prennent depuis l’espace personnel ou par le formulaire de contact du portail.\n\nLes démarches urgentes restent traitées en priorité en semaine."
+        }
+      }
+    },
+    "Contact": {
+      "metaTitle": "Contact — PreskEnLer",
+      "title": "Contacter la mairie",
+      "description": "Transmets ta question ou ta difficulté au service concerné. Tu reçois une confirmation immédiate après l’envoi.",
+      "form": {
+        "title": "Écrire aux services municipaux",
+        "description": "Décris ta question ou ta difficulté, nous transmettons le message au bon service.",
+        "name": "Nom",
+        "namePlaceholder": "Ton nom",
+        "email": "Adresse email",
+        "emailPlaceholder": "ton@email.com",
+        "service": "Service concerné",
+        "message": "Message",
+        "messagePlaceholder": "Explique ta demande…",
+        "messageHelp": "Pas de données sensibles dans ce message.",
+        "submit": "Envoyer le message",
+        "sent": {
+          "title": "Message envoyé",
+          "description": "Le service concerné te répondra à l’adresse indiquée.",
+          "again": "Envoyer un autre message"
+        }
+      },
+      "errors": {
+        "invalid": "Merci de vérifier les informations du formulaire.",
+        "send": "Envoi impossible pour le moment. Réessaie plus tard."
+      }
+    }
+  },
+  "Errors": {
+    "NotFound": {
+      "title": "Page introuvable",
+      "description": "La page que tu cherches n’existe pas ou a été déplacée.",
+      "backHome": "Retour à l’accueil"
+    },
+    "Error": {
+      "label": "Erreur",
+      "title": "Une erreur est survenue",
+      "description": "Quelque chose s’est mal passé. Réessaie dans un instant.",
+      "retry": "Réessayer",
+      "backHome": "Retour à l’accueil"
+    }
+  },
+  "Validation": {
+    "name": {
+      "required": "Entre ton nom.",
+      "max120": "Ton nom ne peut pas dépasser 120 caractères."
+    },
+    "email": {
+      "invalid": "Cette adresse email ne semble pas valide."
+    },
+    "service": {
+      "required": "Choisis un service."
+    },
+    "message": {
+      "min": "Décris ta demande en quelques mots (10 caractères minimum).",
+      "max2000": "Ton message ne peut pas dépasser 2000 caractères."
+    }
+  }
+}
