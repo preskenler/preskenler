@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { randomUUID } from 'node:crypto';
 import { hashPassword } from 'better-auth/crypto';
 
+import { buildHeatwaveRecommendations } from '@/lib/broadcasts';
 import { prisma } from '@/lib/prisma';
 import type { Role } from '@/lib/roles';
 
@@ -102,6 +103,78 @@ async function seedUser(user: SeedUser) {
   return { name: user.name, email, role: user.role, password };
 }
 
+type SeedBroadcast = {
+  code: string;
+  title: string;
+  body: string;
+  level: string;
+  topic: string;
+  audience: string;
+  area: string | null;
+  recommendations: string | null;
+  isAi: boolean;
+};
+
+/** Demo broadcasts (demandes D18, F29, F30, F31); idempotent via `code`. */
+const seedBroadcastFixtures: SeedBroadcast[] = [
+  {
+    code: 'seed-welcome',
+    title: 'Bienvenue sur le portail numérique',
+    body: 'Le portail de la Ville de Terra Nova réunit les services municipaux, les annonces et tes démarches au même endroit.',
+    level: 'info',
+    topic: 'general',
+    audience: 'all',
+    area: null,
+    recommendations: null,
+    isAi: false,
+  },
+  {
+    code: 'seed-flood-south',
+    title: 'Montée des eaux dans le quartier sud',
+    body: 'Une montée inhabituelle du niveau de l’eau est observée dans le quartier sud. Évite les berges et les passages bas jusqu’à nouvel ordre.',
+    level: 'alert',
+    topic: 'flood',
+    audience: 'all',
+    area: 'Quartier sud',
+    recommendations: null,
+    isAi: false,
+  },
+  {
+    code: 'seed-heatwave',
+    title: 'Vague de chaleur : recommandations',
+    body: 'Une vague de chaleur extrême touche actuellement plusieurs secteurs de la ville. Les personnes vulnérables doivent être informées et suivre les recommandations adaptées.',
+    level: 'alert',
+    topic: 'heatwave',
+    audience: 'vulnerable',
+    area: null,
+    recommendations: buildHeatwaveRecommendations('vulnerable'),
+    isAi: true,
+  },
+  {
+    code: 'seed-saturday-civil-status',
+    title: 'Permanences d’état civil le samedi matin',
+    body: 'Le service d’état civil ouvre désormais ses permanences le samedi matin sur rendez-vous.',
+    level: 'warning',
+    topic: 'announcement',
+    audience: 'all',
+    area: null,
+    recommendations: null,
+    isAi: false,
+  },
+];
+
+async function seedBroadcasts() {
+  for (const broadcast of seedBroadcastFixtures) {
+    await prisma.broadcast.upsert({
+      where: { code: broadcast.code },
+      update: broadcast,
+      create: broadcast,
+    });
+  }
+
+  return seedBroadcastFixtures.length;
+}
+
 async function main() {
   const seeded = [];
 
@@ -109,7 +182,10 @@ async function main() {
     seeded.push(await seedUser(user));
   }
 
+  const broadcastCount = await seedBroadcasts();
+
   console.table(seeded);
+  console.log(`[seed] ${broadcastCount} broadcasts ready`);
 }
 
 main()

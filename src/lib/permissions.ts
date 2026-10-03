@@ -15,6 +15,7 @@ export const statement = {
   ...defaultStatements,
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
+  broadcast: ['list', 'create', 'update', 'delete'],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -22,10 +23,16 @@ export const ac = createAccessControl(statement);
 /** Habitants: no administrative capabilities. */
 export const citizen = ac.newRole({});
 
-/** Agents: the staff area — live demands and citizen message triage. */
+/**
+ * Agents: the staff area — live demands, citizen message triage and citizen
+ * account administration (demande F34). They may list and suspend citizen
+ * accounts, but not touch roles or other staff members.
+ */
 export const agent = ac.newRole({
+  user: ['list', 'ban'],
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
+  broadcast: ['list', 'create', 'update', 'delete'],
 });
 
 /** Administrators: full user/session management plus the staff area. */
@@ -33,6 +40,7 @@ export const admin = ac.newRole({
   ...adminAc.statements,
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
+  broadcast: ['list', 'create', 'update', 'delete'],
 });
 
 export const appRoles = { citizen, agent, admin };

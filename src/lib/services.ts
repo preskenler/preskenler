@@ -8,6 +8,7 @@
  */
 
 export const cityServiceCategories = [
+  'sante',
   'administration',
   'cadre-de-vie',
   'services-techniques',
@@ -23,6 +24,16 @@ export type CityService = {
 };
 
 export const cityServices: CityService[] = [
+  {
+    slug: 'sante',
+    category: 'sante',
+    email: 'sante@terranova.city',
+  },
+  {
+    slug: 'prevention-sante',
+    category: 'sante',
+    email: 'prevention@terranova.city',
+  },
   {
     slug: 'etat-civil',
     category: 'administration',

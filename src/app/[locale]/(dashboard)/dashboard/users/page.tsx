@@ -21,7 +21,6 @@ import { auth } from '@/lib/auth';
 import { hasPermission } from '@/lib/permissions';
 import { normalizeRole, roles, ADMIN_BAN_REASON } from '@/lib/roles';
 import { toggleUserBan, updateUserRole } from './actions';
-
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Admin.users');
 
@@ -52,11 +51,20 @@ export default async function StaffUsersPage({
     headers: await headers(),
   });
 
+  // Admins manage every account; agents (F34) only see and administer citizens.
+  const canManageRoles = hasPermission(session.user.role, {
+    user: ['set-role'],
+  });
+  const canBan = hasPermission(session.user.role, { user: ['ban'] });
+  const visibleUsers = canManageRoles
+    ? users
+    : users.filter((candidate) => normalizeRole(candidate.role) === 'citizen');
+
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm text-muted-foreground">{t('description')}</p>
 
-      {users.map((user) => {
+      {visibleUsers.map((user) => {
         const isSelf = user.id === session.user.id;
         const role = normalizeRole(user.role);
         const banReason =
@@ -81,50 +89,56 @@ export default async function StaffUsersPage({
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
               <div className="flex flex-wrap items-end gap-2">
-                <form
-                  action={updateUserRole}
-                  className="flex flex-wrap items-end gap-2"
-                >
-                  <input type="hidden" name="userId" value={user.id} />
-                  <NativeSelect
-                    name="role"
-                    defaultValue={role}
-                    className="w-48"
-                    aria-label={t('roleLabel', { name: user.name })}
-                    disabled={isSelf}
+                {canManageRoles ? (
+                  <form
+                    action={updateUserRole}
+                    className="flex flex-wrap items-end gap-2"
                   >
-                    {roles.map((value) => (
-                      <NativeSelectOption key={value} value={value}>
-                        {t(`roles.${value}`)}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
-                  <Button
-                    type="submit"
-                    size="sm"
-                    variant="outline"
-                    disabled={isSelf}
-                  >
-                    {t('update')}
-                  </Button>
-                </form>
+                    <input type="hidden" name="userId" value={user.id} />
+                    <NativeSelect
+                      name="role"
+                      defaultValue={role}
+                      className="w-48"
+                      aria-label={t('roleLabel', { name: user.name })}
+                      disabled={isSelf}
+                    >
+                      {roles.map((value) => (
+                        <NativeSelectOption key={value} value={value}>
+                          {t(`roles.${value}`)}
+                        </NativeSelectOption>
+                      ))}
+                    </NativeSelect>
+                    <Button
+                      type="submit"
+                      size="sm"
+                      variant="outline"
+                      disabled={isSelf}
+                    >
+                      {t('update')}
+                    </Button>
+                  </form>
+                ) : (
+                  <Badge variant="outline">{t(`roles.${role}`)}</Badge>
+                )}
 
-                <form action={toggleUserBan}>
-                  <input type="hidden" name="userId" value={user.id} />
-                  <input
-                    type="hidden"
-                    name="banned"
-                    value={user.banned ? 'false' : 'true'}
-                  />
-                  <Button
-                    type="submit"
-                    size="sm"
-                    variant={user.banned ? 'outline' : 'destructive'}
-                    disabled={isSelf}
-                  >
-                    {user.banned ? t('reactivate') : t('suspend')}
-                  </Button>
-                </form>
+                {canBan ? (
+                  <form action={toggleUserBan}>
+                    <input type="hidden" name="userId" value={user.id} />
+                    <input
+                      type="hidden"
+                      name="banned"
+                      value={user.banned ? 'false' : 'true'}
+                    />
+                    <Button
+                      type="submit"
+                      size="sm"
+                      variant={user.banned ? 'outline' : 'destructive'}
+                      disabled={isSelf}
+                    >
+                      {user.banned ? t('reactivate') : t('suspend')}
+                    </Button>
+                  </form>
+                ) : null}
               </div>
 
               {user.banned && banReason ? (

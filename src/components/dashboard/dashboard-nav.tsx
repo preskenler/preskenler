@@ -6,9 +6,11 @@ import {
   RiListUnordered,
   RiMessage3Line,
   RiGroupLine,
+  RiMegaphoneLine,
   RiLockPasswordLine,
   RiMailSettingsLine,
   RiHistoryLine,
+  RiDeleteBinLine,
 } from '@remixicon/react';
 
 export type DashboardIcon = RemixiconComponentType;
@@ -43,6 +45,12 @@ export const mainNavItems: DashboardNavItem[] = [
     permission: { serviceMessage: ['list'] },
   },
   {
+    href: '/dashboard/broadcasts',
+    labelKey: 'broadcasts',
+    icon: RiMegaphoneLine,
+    permission: { broadcast: ['list'] },
+  },
+  {
     href: '/dashboard/users',
     labelKey: 'users',
     icon: RiGroupLine,
@@ -66,6 +74,11 @@ export const secondaryNavItems: DashboardNavItem[] = [
     href: '/dashboard/account/sessions',
     labelKey: 'sessions',
     icon: RiHistoryLine,
+  },
+  {
+    href: '/dashboard/account/delete',
+    labelKey: 'delete',
+    icon: RiDeleteBinLine,
   },
 ];
 

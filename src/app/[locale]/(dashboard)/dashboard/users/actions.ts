@@ -4,8 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
 import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import { hasPermission } from '@/lib/permissions';
-import { ADMIN_BAN_REASON, isRole } from '@/lib/roles';
+import { ADMIN_BAN_REASON, isAdmin, isRole, normalizeRole } from '@/lib/roles';
 
 async function requirePermission(permissions: Record<string, string[]>) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -37,7 +38,7 @@ export async function updateUserRole(formData: FormData) {
   revalidatePath('/dashboard/users');
 }
 
-/** Ban or unban a user (demande D09), via the admin plugin. */
+/** Ban or unban a user (demande D09, extended by F34), via the admin plugin. */
 export async function toggleUserBan(formData: FormData) {
   const session = await requirePermission({ user: ['ban'] });
 
@@ -46,6 +47,18 @@ export async function toggleUserBan(formData: FormData) {
 
   if (!userId || userId === session.user.id) {
     return;
+  }
+
+  // Agents administer citizen accounts only (F34): never peers or admins.
+  if (!isAdmin(session.user.role)) {
+    const target = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+
+    if (!target || normalizeRole(target.role) !== 'citizen') {
+      return;
+    }
   }
 
   const requestHeaders = await headers();

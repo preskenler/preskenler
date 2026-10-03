@@ -149,3 +149,29 @@ model ServiceMessage {
   @@index([createdAt])
   @@map("service_message")
 }
+
+// General messages and alerts broadcast to residents (demandes D18, F29, F30
+// and F31). Staff publish them; residents see the active ones as a banner and
+// through the notification bell. `code` makes demo seeds idempotent.
+model Broadcast {
+  id              String    @id @default(cuid())
+  code            String?   @unique @db.VarChar(64)
+  title           String    @db.VarChar(160)
+  body            String    @db.Text
+  level           String    @default("info") @db.VarChar(16)
+  topic           String    @default("general") @db.VarChar(32)
+  audience        String    @default("all") @db.VarChar(32)
+  area            String?   @db.VarChar(120)
+  recommendations String?   @db.Text
+  isAi            Boolean   @default(false)
+  active          Boolean   @default(true)
+  publishedAt     DateTime  @default(now())
+  expiresAt       DateTime?
+  createdById     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([active, publishedAt])
+  @@index([level])
+  @@map("broadcast")
+}

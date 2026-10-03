@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
 import {
   RiArrowRightLine,
+  RiBusLine,
   RiCommunityLine,
   RiMailSendLine,
   RiMegaphoneLine,
@@ -113,7 +114,7 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <AccessCard
           href="/services"
           title={t('cards.services.title')}
@@ -121,6 +122,12 @@ export default async function HomePage() {
             count: cityServices.length,
           })}
           icon={<RiCommunityLine className="size-5" aria-hidden="true" />}
+        />
+        <AccessCard
+          href="/transport"
+          title={t('cards.transport.title')}
+          description={t('cards.transport.description')}
+          icon={<RiBusLine className="size-5" aria-hidden="true" />}
         />
         <AccessCard
           href="/announcements"

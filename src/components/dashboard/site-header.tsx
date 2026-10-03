@@ -5,13 +5,21 @@ import { RiExternalLinkLine } from '@remixicon/react';
 
 import { Link, usePathname } from '@/i18n/navigation';
 import { DisplayPreferences } from '@/components/accessibility/display-preferences';
+import {
+  NotificationBell,
+  type BroadcastNotification,
+} from '@/components/dashboard/notification-bell';
 import { LocaleSwitcher } from '@/components/public/locale-switcher';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { findNavLabelKey } from '@/components/dashboard/dashboard-nav';
 
-export function SiteHeader() {
+export function SiteHeader({
+  notifications,
+}: {
+  notifications: BroadcastNotification[];
+}) {
   const t = useTranslations('Dashboard');
   const pathname = usePathname();
   const title = t(`nav.${findNavLabelKey(pathname)}`);
@@ -27,6 +35,7 @@ export function SiteHeader() {
         <h1 className="text-base font-medium">{title}</h1>
 
         <div className="ml-auto flex items-center gap-2">
+          <NotificationBell items={notifications} />
           <LocaleSwitcher />
           <DisplayPreferences />
           <Button
