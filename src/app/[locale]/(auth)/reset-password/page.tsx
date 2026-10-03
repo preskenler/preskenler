@@ -1,11 +1,14 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import { ResetPasswordForm } from '@/components/auth/reset-password-form';
 
-export const metadata: Metadata = {
-  title: 'Nouveau mot de passe — PreskEnLer',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Auth.reset');
+
+  return { title: t('metaTitle') };
+}
 
 export default function ResetPasswordPage() {
   return (

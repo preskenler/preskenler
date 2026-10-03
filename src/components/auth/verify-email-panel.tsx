@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,10 +22,19 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Link } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
-import { verifyEmailSchema, type VerifyEmailValues } from '@/lib/schemas/auth';
+import {
+  createVerifyEmailSchema,
+  type VerifyEmailValues,
+} from '@/lib/schemas/auth';
 
 export function VerifyEmailPanel({ email = '' }: { email?: string }) {
+  const t = useTranslations('Auth.verify');
+  const tv = useTranslations('Validation.auth');
+  const locale = useLocale();
+  const localePrefix = locale === routing.defaultLocale ? '' : `/${locale}`;
   const searchParams = useSearchParams();
   const verified = searchParams.get('verified') === '1';
 
@@ -36,7 +45,7 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
     clearErrors,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<VerifyEmailValues>({
-    resolver: zodResolver(verifyEmailSchema),
+    resolver: zodResolver(createVerifyEmailSchema(tv)),
     defaultValues: { email },
     mode: 'onTouched',
   });
@@ -55,14 +64,12 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
   async function onSubmit(values: VerifyEmailValues) {
     const { error } = await authClient.sendVerificationEmail({
       email: values.email,
-      callbackURL: `${window.location.origin}/verify-email?verified=1`,
+      callbackURL: `${window.location.origin}${localePrefix}/verify-email?verified=1`,
     });
 
     if (error) {
       setError('root.server', {
-        message:
-          error.message ??
-          "Impossible d'envoyer l'email de vérification pour le moment.",
+        message: error.message ?? t('error'),
       });
     }
   }
@@ -71,14 +78,12 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
     return (
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Adresse email vérifiée</CardTitle>
-          <CardDescription>
-            Merci ! Ton adresse email est maintenant confirmée.
-          </CardDescription>
+          <CardTitle className="text-xl">{t('verifiedTitle')}</CardTitle>
+          <CardDescription>{t('verifiedDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/account">Accéder à mon compte</Link>
+            <Link href="/dashboard/account">{t('goToAccount')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -89,15 +94,12 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
     return (
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Email envoyé</CardTitle>
-          <CardDescription>
-            Si un compte non vérifié existe pour cette adresse, tu recevras un
-            nouveau lien de vérification.
-          </CardDescription>
+          <CardTitle className="text-xl">{t('sentTitle')}</CardTitle>
+          <CardDescription>{t('sentDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/sign-in">Retour à la connexion</Link>
+            <Link href="/sign-in">{t('backToSignIn')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -107,25 +109,22 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Vérifier mon adresse email</CardTitle>
-        <CardDescription>
-          Renvoie un lien de vérification à l&apos;adresse associée à ton
-          compte.
-        </CardDescription>
+        <CardTitle className="text-xl">{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.email ? true : undefined}>
               <FieldLabel htmlFor="verify-email-address">
-                Adresse email
+                {t('email')}
               </FieldLabel>
               <Input
                 id="verify-email-address"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
-                placeholder="ton@email.com"
+                placeholder={t('emailPlaceholder')}
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -152,10 +151,10 @@ export function VerifyEmailPanel({ email = '' }: { email?: string }) {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Renvoyer l&apos;email de vérification
+                {t('submit')}
               </Button>
               <FieldDescription className="text-center">
-                <Link href="/sign-in">Retour à la connexion</Link>
+                <Link href="/sign-in">{t('backToSignIn')}</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

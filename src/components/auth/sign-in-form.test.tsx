@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
@@ -9,14 +9,11 @@ const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
 }));
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mocks.push, refresh: mocks.refresh }),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
+  useRouter: () => ({ push: mocks.push, refresh: mocks.refresh }),
 }));
 
 vi.mock('@/lib/auth-client', () => ({
@@ -39,7 +36,7 @@ describe('SignInForm', () => {
 
   it('shows field-level errors for empty fields and does not submit', async () => {
     const user = userEvent.setup();
-    render(<SignInForm />);
+    renderWithIntl(<SignInForm />);
 
     await user.click(screen.getByRole('button', { name: /se connecter/i }));
 
@@ -52,7 +49,7 @@ describe('SignInForm', () => {
 
   it('submits valid values and redirects on success', async () => {
     mocks.signInEmail.mockResolvedValue({ error: null });
-    render(<SignInForm />);
+    renderWithIntl(<SignInForm />);
 
     const user = await fillValidValues();
     await user.click(screen.getByRole('button', { name: /se connecter/i }));
@@ -63,14 +60,14 @@ describe('SignInForm', () => {
         password: 'password123',
       }),
     );
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/dashboard'));
   });
 
   it('shows the server error when credentials are rejected', async () => {
     mocks.signInEmail.mockResolvedValue({
       error: { message: 'Identifiants invalides.' },
     });
-    render(<SignInForm />);
+    renderWithIntl(<SignInForm />);
 
     const user = await fillValidValues();
     await user.click(screen.getByRole('button', { name: /se connecter/i }));

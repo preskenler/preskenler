@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({ requestPasswordReset: vi.fn() }));
 
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
 }));
@@ -24,7 +24,7 @@ describe('ForgotPasswordForm', () => {
 
   it('shows a field-level error for an invalid email and does not submit', async () => {
     const user = userEvent.setup();
-    render(<ForgotPasswordForm />);
+    renderWithIntl(<ForgotPasswordForm />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'nope');
     await user.click(screen.getByRole('button', { name: /envoyer le lien/i }));
@@ -38,7 +38,7 @@ describe('ForgotPasswordForm', () => {
   it('requests a reset and shows a neutral confirmation', async () => {
     mocks.requestPasswordReset.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<ForgotPasswordForm />);
+    renderWithIntl(<ForgotPasswordForm />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'ada@example.com');
     await user.click(screen.getByRole('button', { name: /envoyer le lien/i }));
@@ -57,7 +57,7 @@ describe('ForgotPasswordForm', () => {
       error: { message: 'Trop de tentatives.' },
     });
     const user = userEvent.setup();
-    render(<ForgotPasswordForm />);
+    renderWithIntl(<ForgotPasswordForm />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'ada@example.com');
     await user.click(screen.getByRole('button', { name: /envoyer le lien/i }));

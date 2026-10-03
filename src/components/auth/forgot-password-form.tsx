@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,13 +21,19 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Link } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
 import {
-  forgotPasswordSchema,
+  createForgotPasswordSchema,
   type ForgotPasswordValues,
 } from '@/lib/schemas/auth';
 
 export function ForgotPasswordForm() {
+  const t = useTranslations('Auth.forgot');
+  const tv = useTranslations('Validation.auth');
+  const locale = useLocale();
+  const localePrefix = locale === routing.defaultLocale ? '' : `/${locale}`;
   const {
     register,
     handleSubmit,
@@ -35,7 +41,7 @@ export function ForgotPasswordForm() {
     clearErrors,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<ForgotPasswordValues>({
-    resolver: zodResolver(forgotPasswordSchema),
+    resolver: zodResolver(createForgotPasswordSchema(tv)),
     defaultValues: { email: '' },
     mode: 'onTouched',
   });
@@ -54,14 +60,12 @@ export function ForgotPasswordForm() {
   async function onSubmit(values: ForgotPasswordValues) {
     const { error } = await authClient.requestPasswordReset({
       email: values.email,
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${window.location.origin}${localePrefix}/reset-password`,
     });
 
     if (error) {
       setError('root.server', {
-        message:
-          error.message ??
-          "Impossible d'envoyer l'email pour le moment. Réessaie plus tard.",
+        message: error.message ?? t('error'),
       });
     }
   }
@@ -70,15 +74,12 @@ export function ForgotPasswordForm() {
     return (
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Vérifie tes emails</CardTitle>
-          <CardDescription>
-            Si un compte existe pour cette adresse, tu recevras un lien pour
-            choisir un nouveau mot de passe.
-          </CardDescription>
+          <CardTitle className="text-xl">{t('successTitle')}</CardTitle>
+          <CardDescription>{t('successDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/sign-in">Retour à la connexion</Link>
+            <Link href="/sign-in">{t('backToSignIn')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -88,24 +89,22 @@ export function ForgotPasswordForm() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Mot de passe oublié</CardTitle>
-        <CardDescription>
-          Entre ton adresse email pour recevoir un lien de réinitialisation.
-        </CardDescription>
+        <CardTitle className="text-xl">{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.email ? true : undefined}>
               <FieldLabel htmlFor="forgot-password-email">
-                Adresse email
+                {t('email')}
               </FieldLabel>
               <Input
                 id="forgot-password-email"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
-                placeholder="ton@email.com"
+                placeholder={t('emailPlaceholder')}
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -132,10 +131,10 @@ export function ForgotPasswordForm() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Envoyer le lien
+                {t('submit')}
               </Button>
               <FieldDescription className="text-center">
-                <Link href="/sign-in">Retour à la connexion</Link>
+                <Link href="/sign-in">{t('backToSignIn')}</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

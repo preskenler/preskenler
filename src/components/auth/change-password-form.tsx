@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Controller,
   useForm,
   type UseFormRegisterReturn,
 } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,9 +26,10 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Link } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
 import {
-  changePasswordSchema,
+  createChangePasswordSchema,
   type ChangePasswordValues,
 } from '@/lib/schemas/auth';
 
@@ -40,6 +41,8 @@ const defaultValues: ChangePasswordValues = {
 };
 
 export function ChangePasswordForm() {
+  const t = useTranslations('Account.password');
+  const tv = useTranslations('Validation.auth');
   const {
     register,
     control,
@@ -49,7 +52,7 @@ export function ChangePasswordForm() {
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<ChangePasswordValues>({
-    resolver: zodResolver(changePasswordSchema),
+    resolver: zodResolver(createChangePasswordSchema(tv)),
     defaultValues,
     mode: 'onTouched',
   });
@@ -74,9 +77,7 @@ export function ChangePasswordForm() {
 
     if (error) {
       setError('root.server', {
-        message:
-          error.message ??
-          'Impossible de changer le mot de passe pour le moment.',
+        message: error.message ?? t('error'),
       });
       return;
     }
@@ -88,15 +89,12 @@ export function ChangePasswordForm() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Mot de passe modifié</CardTitle>
-          <CardDescription>
-            Ton nouveau mot de passe est actif. Les autres sessions ont été
-            déconnectées si tu l&apos;as demandé.
-          </CardDescription>
+          <CardTitle>{t('successTitle')}</CardTitle>
+          <CardDescription>{t('successDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription>
-            <Link href="/account">Retour au compte</Link>
+            <Link href="/dashboard/account">{t('back')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -106,17 +104,15 @@ export function ChangePasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Changer mon mot de passe</CardTitle>
-        <CardDescription>
-          Saisis ton mot de passe actuel puis choisis-en un nouveau.
-        </CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.currentPassword ? true : undefined}>
               <FieldLabel htmlFor="change-password-current">
-                Mot de passe actuel
+                {t('current')}
               </FieldLabel>
               <Input
                 id="change-password-current"
@@ -138,9 +134,7 @@ export function ChangePasswordForm() {
             </Field>
 
             <Field data-invalid={errors.newPassword ? true : undefined}>
-              <FieldLabel htmlFor="change-password-new">
-                Nouveau mot de passe
-              </FieldLabel>
+              <FieldLabel htmlFor="change-password-new">{t('new')}</FieldLabel>
               <Input
                 id="change-password-new"
                 type="password"
@@ -154,7 +148,7 @@ export function ChangePasswordForm() {
                 {...field('newPassword')}
               />
               <FieldDescription id="change-password-help">
-                Au moins 8 caractères.
+                {t('minLength')}
               </FieldDescription>
               <FieldError
                 id="change-password-new-error"
@@ -164,7 +158,7 @@ export function ChangePasswordForm() {
 
             <Field data-invalid={errors.confirmPassword ? true : undefined}>
               <FieldLabel htmlFor="change-password-confirm">
-                Confirme le nouveau mot de passe
+                {t('confirm')}
               </FieldLabel>
               <Input
                 id="change-password-confirm"
@@ -198,7 +192,7 @@ export function ChangePasswordForm() {
                     }
                   />
                   <FieldLabel htmlFor="change-password-revoke">
-                    Déconnecter mes autres appareils
+                    {t('revoke')}
                   </FieldLabel>
                 </Field>
               )}
@@ -217,7 +211,7 @@ export function ChangePasswordForm() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Mettre à jour mon mot de passe
+                {t('submit')}
               </Button>
             </Field>
           </FieldGroup>

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
@@ -12,8 +12,8 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => mocks.searchParams,
 }));
 
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
 }));
@@ -32,7 +32,7 @@ describe('ResetPasswordForm', () => {
 
   it('shows an invalid-link state when the token is missing', () => {
     mocks.searchParams = new URLSearchParams();
-    render(<ResetPasswordForm />);
+    renderWithIntl(<ResetPasswordForm />);
 
     expect(screen.getByText('Lien invalide')).toBeInTheDocument();
     expect(mocks.resetPassword).not.toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe('ResetPasswordForm', () => {
 
   it('rejects non-matching passwords', async () => {
     const user = userEvent.setup();
-    render(<ResetPasswordForm />);
+    renderWithIntl(<ResetPasswordForm />);
 
     await user.type(
       screen.getByLabelText('Nouveau mot de passe'),
@@ -63,7 +63,7 @@ describe('ResetPasswordForm', () => {
   it('resets the password and shows the success state', async () => {
     mocks.resetPassword.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<ResetPasswordForm />);
+    renderWithIntl(<ResetPasswordForm />);
 
     await user.type(
       screen.getByLabelText('Nouveau mot de passe'),
@@ -91,7 +91,7 @@ describe('ResetPasswordForm', () => {
       error: { message: 'Jeton invalide.' },
     });
     const user = userEvent.setup();
-    render(<ResetPasswordForm />);
+    renderWithIntl(<ResetPasswordForm />);
 
     await user.type(
       screen.getByLabelText('Nouveau mot de passe'),

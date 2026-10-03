@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebcupSessionView } from '@/lib/webcup/types';
@@ -16,14 +20,16 @@ export function SessionStatus({
 }: {
   session: WebcupSessionView | null;
 }) {
+  const t = useTranslations('Agents.session');
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex flex-wrap items-center gap-2">
-          État du flux
+          {t('title')}
           {session ? (
             <Badge variant={session.isRunning ? 'default' : 'secondary'}>
-              {session.isRunning ? 'En cours' : session.status}
+              {session.isRunning ? t('running') : session.status}
             </Badge>
           ) : null}
         </CardTitle>
@@ -31,28 +37,29 @@ export function SessionStatus({
       <CardContent>
         {session ? (
           <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <Stat label="Vague actuelle" value={session.currentWave} />
+            <Stat label={t('currentWave')} value={session.currentWave} />
             <Stat
-              label="Demandes visibles"
+              label={t('visibleRequests')}
               value={session.visibleRequestsCount}
             />
             <Stat
-              label="Initiales / vagues"
+              label={t('initialAndWaves')}
               value={`${session.initialRequestsCount} / ${session.waveRequestsCount}`}
             />
             <Stat
-              label="Prochaine vague"
+              label={t('nextWave')}
               value={
                 session.nextWaveNumber === 0
-                  ? 'Toutes diffusées'
-                  : `n°${session.nextWaveNumber} · ${session.minutesUntilNextWave} min`
+                  ? t('allBroadcast')
+                  : t('nextWaveValue', {
+                      number: session.nextWaveNumber,
+                      minutes: session.minutesUntilNextWave,
+                    })
               }
             />
           </dl>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            Aucune donnée de session pour le moment.
-          </p>
+          <p className="text-sm text-muted-foreground">{t('empty')}</p>
         )}
       </CardContent>
     </Card>

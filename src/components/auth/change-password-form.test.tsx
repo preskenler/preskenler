@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({ changePassword: vi.fn() }));
 
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
 }));
@@ -38,7 +38,7 @@ describe('ChangePasswordForm', () => {
 
   it('shows field-level errors for empty fields and does not submit', async () => {
     const user = userEvent.setup();
-    render(<ChangePasswordForm />);
+    renderWithIntl(<ChangePasswordForm />);
 
     await user.click(
       screen.getByRole('button', { name: /mettre à jour mon mot de passe/i }),
@@ -55,7 +55,7 @@ describe('ChangePasswordForm', () => {
 
   it('rejects non-matching new passwords', async () => {
     const user = userEvent.setup();
-    render(<ChangePasswordForm />);
+    renderWithIntl(<ChangePasswordForm />);
 
     await user.type(
       screen.getByLabelText('Mot de passe actuel'),
@@ -81,7 +81,7 @@ describe('ChangePasswordForm', () => {
 
   it('submits with revokeOtherSessions enabled by default', async () => {
     mocks.changePassword.mockResolvedValue({ error: null });
-    render(<ChangePasswordForm />);
+    renderWithIntl(<ChangePasswordForm />);
 
     const user = await fillValidValues();
     await user.click(
@@ -100,7 +100,7 @@ describe('ChangePasswordForm', () => {
 
   it('honours unchecking the revoke-other-sessions option', async () => {
     mocks.changePassword.mockResolvedValue({ error: null });
-    render(<ChangePasswordForm />);
+    renderWithIntl(<ChangePasswordForm />);
 
     const user = await fillValidValues();
     await user.click(
@@ -123,7 +123,7 @@ describe('ChangePasswordForm', () => {
     mocks.changePassword.mockResolvedValue({
       error: { message: 'Mot de passe incorrect.' },
     });
-    render(<ChangePasswordForm />);
+    renderWithIntl(<ChangePasswordForm />);
 
     const user = await fillValidValues();
     await user.click(

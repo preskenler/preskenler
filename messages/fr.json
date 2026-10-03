@@ -203,6 +203,313 @@
     "message": {
       "min": "Décris ta demande en quelques mots (10 caractères minimum).",
       "max2000": "Ton message ne peut pas dépasser 2000 caractères."
+    },
+    "auth": {
+      "emailInvalid": "Cette adresse email ne semble pas valide.",
+      "passwordRequired": "Entre ton mot de passe.",
+      "passwordTooShort": "Au moins 8 caractères.",
+      "passwordTooLong": "Ton mot de passe est trop long.",
+      "nameRequired": "Entre ton nom.",
+      "nameTooLong": "Ton nom ne peut pas dépasser 80 caractères.",
+      "confirmRequired": "Confirme ton mot de passe.",
+      "confirmMismatch": "Les mots de passe ne correspondent pas.",
+      "currentRequired": "Entre ton mot de passe actuel."
+    }
+  },
+  "Auth": {
+    "signOut": "Se déconnecter",
+    "signIn": {
+      "metaTitle": "Connexion — PreskEnLer",
+      "title": "Connexion",
+      "description": "Entre tes identifiants pour accéder à ton compte.",
+      "email": "Adresse email",
+      "emailPlaceholder": "ton@email.com",
+      "password": "Mot de passe",
+      "forgot": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "Créer un compte",
+      "error": "Connexion impossible. Vérifie tes identifiants.",
+      "banned": "Ton compte a été suspendu. Contacte l’administration si tu penses qu’il s’agit d’une erreur."
+    },
+    "signUp": {
+      "metaTitle": "Créer un compte — PreskEnLer",
+      "title": "Créer un compte",
+      "description": "Quelques secondes suffisent pour rejoindre PreskEnLer.",
+      "name": "Nom",
+      "namePlaceholder": "John Doe",
+      "email": "Adresse email",
+      "emailPlaceholder": "ton@email.com",
+      "password": "Mot de passe",
+      "passwordHint": "Au moins 8 caractères.",
+      "submit": "Créer mon compte",
+      "haveAccount": "Déjà un compte ?",
+      "signIn": "Se connecter",
+      "error": "Création du compte impossible."
+    },
+    "forgot": {
+      "metaTitle": "Mot de passe oublié — PreskEnLer",
+      "title": "Mot de passe oublié",
+      "description": "Entre ton adresse email pour recevoir un lien de réinitialisation.",
+      "email": "Adresse email",
+      "emailPlaceholder": "ton@email.com",
+      "submit": "Envoyer le lien",
+      "backToSignIn": "Retour à la connexion",
+      "successTitle": "Vérifie tes emails",
+      "successDescription": "Si un compte existe pour cette adresse, tu recevras un lien pour choisir un nouveau mot de passe.",
+      "error": "Impossible d’envoyer l’email pour le moment. Réessaie plus tard."
+    },
+    "reset": {
+      "metaTitle": "Nouveau mot de passe — PreskEnLer",
+      "title": "Nouveau mot de passe",
+      "description": "Choisis un nouveau mot de passe pour ton compte.",
+      "password": "Nouveau mot de passe",
+      "passwordHint": "Au moins 8 caractères.",
+      "confirm": "Confirme le mot de passe",
+      "submit": "Réinitialiser mon mot de passe",
+      "successTitle": "Mot de passe modifié",
+      "successDescription": "Tu peux maintenant te connecter avec ton nouveau mot de passe. Par sécurité, toutes tes sessions ont été déconnectées.",
+      "signIn": "Se connecter",
+      "invalidTitle": "Lien invalide",
+      "invalidDescription": "Ce lien de réinitialisation est incomplet ou a expiré.",
+      "requestNew": "Demander un nouveau lien",
+      "invalidToken": "Lien de réinitialisation invalide ou expiré.",
+      "error": "Réinitialisation impossible. Le lien est peut-être expiré."
+    },
+    "verify": {
+      "metaTitle": "Vérifier mon adresse email — PreskEnLer",
+      "title": "Vérifier mon adresse email",
+      "description": "Renvoie un lien de vérification à l’adresse associée à ton compte.",
+      "email": "Adresse email",
+      "emailPlaceholder": "ton@email.com",
+      "submit": "Renvoyer l’email de vérification",
+      "backToSignIn": "Retour à la connexion",
+      "verifiedTitle": "Adresse email vérifiée",
+      "verifiedDescription": "Merci ! Ton adresse email est maintenant confirmée.",
+      "goToAccount": "Accéder à mon compte",
+      "sentTitle": "Email envoyé",
+      "sentDescription": "Si un compte non vérifié existe pour cette adresse, tu recevras un nouveau lien de vérification.",
+      "error": "Impossible d’envoyer l’email de vérification pour le moment."
+    }
+  },
+  "AuthEmails": {
+    "resetPassword": {
+      "subject": "Réinitialise ton mot de passe PreskEnLer",
+      "greeting": "Bonjour {name},",
+      "intro": "Tu as demandé à réinitialiser ton mot de passe.",
+      "action": "Ouvre ce lien pour en choisir un nouveau :",
+      "ignore": "Si tu n’es pas à l’origine de cette demande, ignore cet email."
+    },
+    "verifyEmail": {
+      "subject": "Vérifie ton adresse email PreskEnLer",
+      "greeting": "Bonjour {name},",
+      "intro": "Confirme ton adresse email pour terminer ton inscription :",
+      "ignore": "Si tu n’es pas à l’origine de cette inscription, ignore cet email."
+    },
+    "changeEmail": {
+      "subject": "Confirme le changement d’adresse email PreskEnLer",
+      "greeting": "Bonjour {name},",
+      "intro": "Tu as demandé à utiliser {newEmail} pour ton compte.",
+      "action": "Ouvre ce lien pour confirmer ce changement :",
+      "ignore": "Si tu n’es pas à l’origine de cette demande, ignore cet email."
+    }
+  },
+  "Dashboard": {
+    "metaTitle": "Tableau de bord — PreskEnLer",
+    "brand": "PreskEnLer",
+    "roles": {
+      "citizen": "Citoyen",
+      "agent": "Agent municipal",
+      "admin": "Administrateur"
+    },
+    "nav": {
+      "overview": "Tableau de bord",
+      "account": "Mon compte",
+      "messages": "Mes messages",
+      "requests": "Demandes",
+      "staffMessages": "Messages habitants",
+      "users": "Utilisateurs",
+      "secondary": "Compte",
+      "password": "Mot de passe",
+      "email": "Adresse email",
+      "sessions": "Sessions",
+      "portal": "Portail",
+      "signOut": "Se déconnecter"
+    },
+    "cards": {
+      "sentMessages": "Messages envoyés",
+      "handledMessages": "Messages traités",
+      "pendingMessages": "Messages à traiter",
+      "emailStatus": "Adresse email",
+      "verified": "Vérifiée",
+      "notVerified": "À vérifier",
+      "visibleRequests": "Demandes visibles",
+      "visibleRequestsHint": "Demandes diffusées par la Ville",
+      "totalRequests": "Demandes suivies",
+      "currentWave": "Vague en cours",
+      "sessionRunning": "Le flux est en cours",
+      "sessionStopped": "Le flux est arrêté",
+      "users": "Utilisateurs",
+      "agents": "Agents",
+      "banned": "Comptes suspendus"
+    },
+    "chart": {
+      "citizenTitle": "Mon activité (30 derniers jours)",
+      "citizenDescription": "Messages envoyés aux services municipaux.",
+      "staffTitle": "Demandes arrivées (30 derniers jours)",
+      "staffDescription": "Nouvelles demandes diffusées par la Ville de Terra Nova.",
+      "empty": "Aucune donnée à afficher",
+      "emptyHint": "L’activité apparaîtra ici dès qu’il y aura des données."
+    },
+    "table": {
+      "citizenTitle": "Mes derniers messages",
+      "citizenDescription": "Les plus récents de tes messages aux services.",
+      "requestsTitle": "Dernières demandes",
+      "requestsDescription": "Les demandes les plus récentes du flux Terra Nova.",
+      "usersTitle": "Utilisateurs",
+      "usersDescription": "Les derniers comptes créés.",
+      "emptyTitle": "Aucune donnée",
+      "emptyDescription": "Il n’y a rien à afficher pour le moment.",
+      "statusNew": "À traiter",
+      "statusHandled": "Traité",
+      "accountActive": "Actif",
+      "accountBanned": "Suspendu",
+      "columns": {
+        "service": "Service",
+        "status": "Statut",
+        "date": "Date",
+        "code": "Code",
+        "requester": "Demandeur",
+        "difficulty": "Difficulté",
+        "wave": "Vague",
+        "xp": "XP",
+        "name": "Nom",
+        "email": "Adresse email",
+        "role": "Profil",
+        "accountStatus": "Statut"
+      }
+    }
+  },
+  "Account": {
+    "metaTitle": "Mon compte — PreskEnLer",
+    "info": {
+      "title": "Informations du compte",
+      "description": "Détails de ton compte et état de vérification de ton adresse email.",
+      "name": "Nom",
+      "email": "Adresse email",
+      "verified": "Vérifiée",
+      "notVerified": "Non vérifiée"
+    },
+    "messages": {
+      "metaTitle": "Mes messages — PreskEnLer",
+      "title": "Mes messages",
+      "description": "Les messages que tu as envoyés aux services municipaux.",
+      "emptyTitle": "Aucun message envoyé",
+      "emptyDescription": "Utilise le formulaire de contact pour joindre un service municipal.",
+      "statusReceived": "Reçu",
+      "statusHandled": "Traité"
+    },
+    "password": {
+      "metaTitle": "Changer mon mot de passe — PreskEnLer",
+      "title": "Changer mon mot de passe",
+      "description": "Saisis ton mot de passe actuel puis choisis-en un nouveau.",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirme le nouveau mot de passe",
+      "minLength": "Au moins 8 caractères.",
+      "revoke": "Déconnecter mes autres appareils",
+      "submit": "Mettre à jour mon mot de passe",
+      "successTitle": "Mot de passe modifié",
+      "successDescription": "Ton nouveau mot de passe est actif. Les autres sessions ont été déconnectées si tu l’as demandé.",
+      "back": "Retour au compte",
+      "error": "Impossible de changer le mot de passe pour le moment."
+    },
+    "emailChange": {
+      "metaTitle": "Changer mon adresse email — PreskEnLer",
+      "title": "Changer mon adresse email",
+      "description": "Entre ta nouvelle adresse email.",
+      "current": "Adresse actuelle : {email}",
+      "new": "Nouvelle adresse email",
+      "submit": "Changer mon adresse email",
+      "successTitle": "Vérifie tes emails",
+      "successDescription": "Pour des raisons de sécurité, le changement d’adresse email doit être confirmé depuis ta boîte mail. Ouvre le lien que nous venons d’envoyer pour finaliser la modification.",
+      "back": "Retour au compte",
+      "error": "Impossible de changer l’adresse email pour le moment."
+    },
+    "sessions": {
+      "metaTitle": "Sessions actives — PreskEnLer",
+      "title": "Sessions actives",
+      "description": "Appareils actuellement connectés à ton compte.",
+      "empty": "Aucune session active.",
+      "unknownDevice": "Appareil inconnu",
+      "revoke": "Révoquer",
+      "revokeOthers": "Déconnecter les autres sessions",
+      "revokeError": "Impossible de révoquer cette session.",
+      "revokeOthersError": "Impossible de déconnecter les autres sessions."
+    }
+  },
+  "Agents": {
+    "requests": {
+      "metaTitle": "Demandes Terra Nova — PreskEnLer",
+      "syncError": "Connexion à l’API Terra Nova impossible.",
+      "refreshError": "Impossible de rafraîchir les demandes.",
+      "unavailableTitle": "Flux indisponible",
+      "unavailableDescription": "{message} Les données affichées peuvent être incomplètes.",
+      "status": "{count, plural, =0 {Aucune demande suivie.} one {# demande suivie.} other {# demandes suivies.}}",
+      "newStatus": "{count, plural, one {# nouvelle demande.} other {# nouvelles demandes.}}",
+      "heading": "{count, plural, =0 {Aucune demande suivie} one {# demande suivie} other {# demandes suivies}}",
+      "newBadge": "{count, plural, one {# nouvelle} other {# nouvelles}}",
+      "refreshing": "Actualisation…",
+      "refreshedAt": "Actualisé à {time}",
+      "emptyTitle": "Aucune demande pour le moment",
+      "emptyDescription": "Le flux de Terra Nova n’a pas encore livré de demande.",
+      "card": {
+        "new": "Nouveau",
+        "availableAtLaunch": "Disponible au lancement",
+        "wave": "Vague {number}",
+        "xp": "{xp} XP",
+        "xpBreakdown": "Base {base} + bonus {bonus}"
+      }
+    },
+    "session": {
+      "title": "État du flux",
+      "running": "En cours",
+      "currentWave": "Vague actuelle",
+      "visibleRequests": "Demandes visibles",
+      "initialAndWaves": "Initiales / vagues",
+      "nextWave": "Prochaine vague",
+      "allBroadcast": "Toutes diffusées",
+      "nextWaveValue": "n°{number} · {minutes} min",
+      "empty": "Aucune donnée de session pour le moment."
+    },
+    "messages": {
+      "metaTitle": "Messages des habitants — PreskEnLer",
+      "summary": "{pending, plural, =0 {Aucun message à traiter} one {# message à traiter} other {# messages à traiter}} sur {total, plural, one {# message reçu} other {# messages reçus}}.",
+      "emptyTitle": "Aucun message reçu",
+      "emptyDescription": "Les messages envoyés depuis le formulaire de contact arriveront ici.",
+      "statusNew": "À traiter",
+      "statusHandled": "Traité",
+      "markHandled": "Marquer comme traité",
+      "reopen": "Rouvrir"
+    }
+  },
+  "Admin": {
+    "users": {
+      "metaTitle": "Utilisateurs — PreskEnLer",
+      "description": "Attribue les profils citoyen, agent ou administrateur et suspends un compte si nécessaire. Les agents accèdent à l’espace de travail ; les administrateurs gèrent aussi les profils.",
+      "roleLabel": "Profil de {name}",
+      "update": "Mettre à jour",
+      "suspend": "Suspendre",
+      "reactivate": "Réactiver",
+      "banned": "Suspendu",
+      "you": "toi",
+      "reason": "Motif : {reason}",
+      "banReasonAdmin": "Suspension par un administrateur",
+      "roles": {
+        "citizen": "Citoyen",
+        "agent": "Agent municipal",
+        "admin": "Administrateur"
+      }
     }
   }
 }

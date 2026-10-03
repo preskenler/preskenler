@@ -11,14 +11,14 @@ export const roles = ['citizen', 'agent', 'admin'] as const;
 
 export type Role = (typeof roles)[number];
 
-export const roleLabels: Record<Role, string> = {
-  citizen: 'Citoyen',
-  agent: 'Agent municipal',
-  admin: 'Administrateur',
-};
-
 /** Role granted to new accounts (mirrors `defaultRole` in `auth.ts`). */
 export const defaultRole: Role = 'citizen';
+
+/**
+ * Stable code stored as `banReason` when an admin suspends an account, so the
+ * UI can localize the reason instead of persisting display copy.
+ */
+export const ADMIN_BAN_REASON = 'admin-suspension';
 
 export function isRole(value: unknown): value is Role {
   return (

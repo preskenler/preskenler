@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
@@ -12,8 +12,8 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => mocks.searchParams,
 }));
 
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
 }));
@@ -32,18 +32,18 @@ describe('VerifyEmailPanel', () => {
 
   it('shows the verified state when the link succeeded', () => {
     mocks.searchParams = new URLSearchParams('verified=1');
-    render(<VerifyEmailPanel />);
+    renderWithIntl(<VerifyEmailPanel />);
 
     expect(screen.getByText('Adresse email vérifiée')).toBeInTheDocument();
   });
 
   it('rejects an invalid email and does not submit', async () => {
     const user = userEvent.setup();
-    render(<VerifyEmailPanel />);
+    renderWithIntl(<VerifyEmailPanel />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'nope');
     await user.click(
-      screen.getByRole('button', { name: /renvoyer l'email de vérification/i }),
+      screen.getByRole('button', { name: /renvoyer l’email de vérification/i }),
     );
 
     expect(
@@ -55,11 +55,11 @@ describe('VerifyEmailPanel', () => {
   it('resends the verification email and confirms', async () => {
     mocks.sendVerificationEmail.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<VerifyEmailPanel />);
+    renderWithIntl(<VerifyEmailPanel />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'ada@example.com');
     await user.click(
-      screen.getByRole('button', { name: /renvoyer l'email de vérification/i }),
+      screen.getByRole('button', { name: /renvoyer l’email de vérification/i }),
     );
 
     await waitFor(() =>
@@ -76,11 +76,11 @@ describe('VerifyEmailPanel', () => {
       error: { message: 'Adresse déjà vérifiée.' },
     });
     const user = userEvent.setup();
-    render(<VerifyEmailPanel />);
+    renderWithIntl(<VerifyEmailPanel />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'ada@example.com');
     await user.click(
-      screen.getByRole('button', { name: /renvoyer l'email de vérification/i }),
+      screen.getByRole('button', { name: /renvoyer l’email de vérification/i }),
     );
 
     expect(

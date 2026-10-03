@@ -81,8 +81,8 @@ model Verification {
   @@map("verification")
 }
 
-// Demandes diffusées par l'API de la Ville de Terra Nova. `request_code` est
-// l'identifiant métier stable utilisé pour dédupliquer les rafraîchissements.
+// Demands broadcast by the City of Terra Nova API. `request_code` is the
+// stable business identifier used to deduplicate refreshes.
 model WebcupRequest {
   id               String   @id @default(cuid())
   requestCode      String   @unique @db.VarChar(32)
@@ -115,7 +115,7 @@ model WebcupRequest {
   @@map("webcup_request")
 }
 
-// État courant du flux (vagues, compteurs), une seule ligne `current`.
+// Current state of the stream (waves, counters), a single `current` row.
 model WebcupSession {
   id                   String   @id @default("current")
   status               String   @db.VarChar(32)
@@ -132,7 +132,7 @@ model WebcupSession {
   @@map("webcup_session")
 }
 
-// Messages envoyés par les habitants aux services municipaux (demande D04).
+// Messages sent by residents to municipal services (demande D04).
 model ServiceMessage {
   id        String   @id @default(cuid())
   userId    String?

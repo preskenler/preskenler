@@ -1,14 +1,36 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  changeEmailSchema,
-  changePasswordSchema,
-  forgotPasswordSchema,
-  resetPasswordSchema,
-  signInSchema,
-  signUpSchema,
-  verifyEmailSchema,
+  createChangeEmailSchema,
+  createChangePasswordSchema,
+  createForgotPasswordSchema,
+  createResetPasswordSchema,
+  createSignInSchema,
+  createSignUpSchema,
+  createVerifyEmailSchema,
 } from './auth';
+
+const messages: Record<string, string> = {
+  emailInvalid: 'Cette adresse email ne semble pas valide.',
+  passwordRequired: 'Entre ton mot de passe.',
+  passwordTooShort: 'Au moins 8 caractères.',
+  passwordTooLong: 'Ton mot de passe est trop long.',
+  nameRequired: 'Entre ton nom.',
+  nameTooLong: 'Ton nom ne peut pas dépasser 80 caractères.',
+  confirmRequired: 'Confirme ton mot de passe.',
+  confirmMismatch: 'Les mots de passe ne correspondent pas.',
+  currentRequired: 'Entre ton mot de passe actuel.',
+};
+
+const t = (key: string) => messages[key] ?? key;
+
+const changeEmailSchema = createChangeEmailSchema(t);
+const changePasswordSchema = createChangePasswordSchema(t);
+const forgotPasswordSchema = createForgotPasswordSchema(t);
+const resetPasswordSchema = createResetPasswordSchema(t);
+const signInSchema = createSignInSchema(t);
+const signUpSchema = createSignUpSchema(t);
+const verifyEmailSchema = createVerifyEmailSchema(t);
 
 describe('signUpSchema', () => {
   const valid = {

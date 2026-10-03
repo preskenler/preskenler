@@ -1,9 +1,9 @@
 /**
- * Annonces publiques de la Ville de Terra Nova (demande D06).
+ * Public announcements for the City of Terra Nova (demande D06).
  *
- * Métadonnées éditoriales fixes. Le texte affiché (titre, résumé, corps) vit
- * dans `messages/*.json` (namespace `Public.Announcements`), ce qui permet de
- * le traduire par locale.
+ * Fixed editorial metadata. The displayed text (title, excerpt, body) lives in
+ * `messages/*.json` (namespace `Public.Announcements`) so it can be translated
+ * per locale.
  */
 
 export const announcementCategories = [
