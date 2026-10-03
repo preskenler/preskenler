@@ -1,5 +1,32 @@
 # PreskEnLer
 
+## Terra Nova / Webcup integration
+
+The app consumes the Ville de Terra Nova demand feed
+(`https://24h.webcup.fr/wp-json/webcup/v1/requests`) and persists it in MySQL.
+
+| Variable             | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| `WEBCUP_API_KEY`     | API key, sent as `X-Webcup-Api-Key`. **Server-only** (no `NEXT_PUBLIC_`). |
+| `WEBCUP_API_URL`     | Override the endpoint (defaults to the official URL).                     |
+| `WEBCUP_CRON_SECRET` | Bearer secret guarding `GET /api/webcup/sync`.                            |
+
+Endpoints:
+
+- `GET /api/webcup/requests` — authenticated snapshot for the `/requests` board;
+  refreshes from the API in the background.
+- `GET /api/webcup/sync` — scheduler entry point, protected by
+  `Authorization: Bearer $WEBCUP_CRON_SECRET`.
+
+Continuous capture relies on an external scheduler. On cPanel, add a **Cron
+Job** that runs every minute:
+
+```sh
+curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webcup/sync
+```
+
+Requests are keyed on `request_code`, so repeated calls never create duplicates.
+
 ## Deployment
 
 The app is deployed to a cPanel **Setup Node.js App** (`Phusion Passenger`) as a

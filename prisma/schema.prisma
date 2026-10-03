@@ -74,3 +74,54 @@ model Verification {
   @@index([identifier(length: 191)])
   @@map("verification")
 }
+
+// Demandes diffusées par l'API de la Ville de Terra Nova. `request_code` est
+// l'identifiant métier stable utilisé pour dédupliquer les rafraîchissements.
+model WebcupRequest {
+  id               String   @id @default(cuid())
+  requestCode      String   @unique @db.VarChar(32)
+  remoteId         Int
+  requesterName    String   @db.Text
+  requesterType    String   @db.VarChar(64)
+  messagePublic    String   @db.Text
+  difficulty       String   @db.VarChar(32)
+  difficultyLevel  Int
+  xpBase           Int
+  xpTimeBonus      Int
+  xpTotal          Int
+  xpAvailable      Int
+  isInitial        Boolean  @default(false)
+  visibleSinceWave Int      @default(0)
+  arrivalType      String   @db.VarChar(32)
+  waveNumber       Int?
+  arrivalTime      String   @default("") @db.VarChar(16)
+  groupName        String?  @db.VarChar(64)
+  sortOrder        Int?
+  isAiRelated      Boolean  @default(false)
+  isAiRequest      Boolean  @default(false)
+  firstSeenAt      DateTime @default(now())
+  lastSyncedAt     DateTime @updatedAt
+
+  @@index([difficultyLevel])
+  @@index([waveNumber])
+  @@index([isInitial])
+  @@index([firstSeenAt])
+  @@map("webcup_request")
+}
+
+// État courant du flux (vagues, compteurs), une seule ligne `current`.
+model WebcupSession {
+  id                   String   @id @default("current")
+  status               String   @db.VarChar(32)
+  isRunning            Boolean  @default(false)
+  currentWave          Int      @default(0)
+  elapsedMinutes       Int      @default(0)
+  visibleRequestsCount Int      @default(0)
+  initialRequestsCount Int      @default(0)
+  waveRequestsCount    Int      @default(0)
+  nextWaveNumber       Int      @default(0)
+  minutesUntilNextWave Int      @default(0)
+  updatedAt            DateTime @updatedAt
+
+  @@map("webcup_session")
+}
