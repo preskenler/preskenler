@@ -6,7 +6,8 @@ import { redirect } from 'next/navigation';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
-import { isAdmin, isStaff, normalizeRole, roleLabels } from '@/lib/roles';
+import { hasPermission } from '@/lib/permissions';
+import { normalizeRole, roleLabels } from '@/lib/roles';
 
 export default async function StaffLayout({
   children,
@@ -20,7 +21,7 @@ export default async function StaffLayout({
   }
 
   // Citizens never reach the agent workspace.
-  if (!isStaff(session.user.role)) {
+  if (!hasPermission(session.user.role, { webcupRequest: ['list'] })) {
     redirect('/account');
   }
 
@@ -72,7 +73,7 @@ export default async function StaffLayout({
           >
             Messages
           </Link>
-          {isAdmin(role) ? (
+          {hasPermission(role, { user: ['list'] }) ? (
             <Link
               href="/users"
               className="rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"

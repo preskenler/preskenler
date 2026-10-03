@@ -29,10 +29,13 @@ Requests are keyed on `request_code`, so repeated calls never create duplicates.
 
 ## Roles
 
-Profiles are stored on the user row: `citizen`, `agent` or `admin`. Set
-`STAFF_EMAILS` (comma-separated) to bootstrap agents at sign-up; admins manage
-every profile from the staff area (`/users`). The staff routes — `/requests`,
-`/messages` and `/users` — require an agent or admin profile.
+Profiles and permissions use the Better Auth **admin plugin**: roles are
+`citizen`, `agent` or `admin` (comma-separated when combined) and access control
+lives in `src/lib/permissions.ts`. Set `STAFF_EMAILS` (comma-separated) to
+bootstrap agents at sign-up; create the first admin with
+`npx auth@latest create-admin --email … --role admin`. Admins manage every
+profile — and can ban/unban accounts — from `/users`. The staff routes
+(`/requests`, `/messages`, `/users`) are permission gated.
 
 ## Deployment
 

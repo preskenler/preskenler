@@ -1,7 +1,9 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
+import { admin as adminPlugin } from 'better-auth/plugins';
 import { sendEmail } from '@/lib/email';
+import { ac, appRoles } from '@/lib/permissions';
 import { prisma } from '@/lib/prisma';
 import { getStaffEmailAllowlist } from '@/lib/roles';
 
@@ -56,16 +58,6 @@ export const auth = betterAuth({
     },
   },
   user: {
-    additionalFields: {
-      // Read-only from the client: `input: false` stops anyone from choosing
-      // their own profile at sign-up. Roles change via the admin tooling.
-      role: {
-        type: 'string',
-        required: false,
-        defaultValue: 'citizen',
-        input: false,
-      },
-    },
     changeEmail: {
       enabled: true,
       // A verified user gets a confirmation link on their current address
@@ -90,16 +82,17 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        // Bootstrap the first agents from `STAFF_EMAILS` without needing DB
-        // access; an admin can promote further users from the staff area.
-        before: async (user) => {
-          const role = getStaffEmailAllowlist().includes(
-            user.email.toLowerCase(),
-          )
-            ? 'agent'
-            : 'citizen';
+        // Bootstrap agents from `STAFF_EMAILS`. Runs after the admin plugin has
+        // applied `defaultRole`, so the allowlisted role always wins.
+        after: async (user) => {
+          if (!getStaffEmailAllowlist().includes(user.email.toLowerCase())) {
+            return;
+          }
 
-          return { data: { ...user, role } };
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'agent' },
+          });
         },
       },
     },
@@ -110,7 +103,17 @@ export const auth = betterAuth({
     level: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
   },
   // Must be the last plugin so it can set cookies from Server Actions/Components.
-  plugins: [nextCookies()],
+  plugins: [
+    adminPlugin({
+      ac,
+      roles: appRoles,
+      defaultRole: 'citizen',
+      adminRoles: ['admin'],
+      bannedUserMessage:
+        'Ton compte a été suspendu. Contacte l’administration si tu penses qu’il s’agit d’une erreur.',
+    }),
+    nextCookies(),
+  ],
 });
 
 export type Session = typeof auth.$Infer.Session;

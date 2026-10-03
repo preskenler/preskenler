@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  hasRole,
   isAdmin,
   isRole,
   isStaff,
   normalizeRole,
+  parseRoles,
   roleLabels,
   roles,
 } from './roles';
+import { hasPermission } from './permissions';
 
 describe('roles', () => {
   it('exposes the three profiles with French labels', () => {
@@ -21,21 +24,57 @@ describe('roles', () => {
     expect(isRole(undefined)).toBe(false);
   });
 
-  it('normalizes unknown values to citizen', () => {
+  it('parses the plugin comma-separated role list', () => {
+    expect(parseRoles('citizen,agent')).toEqual(['citizen', 'agent']);
+    expect(parseRoles('agent, unknown')).toEqual(['agent']);
+    expect(parseRoles(null)).toEqual([]);
+    expect(hasRole('citizen,agent', 'agent')).toBe(true);
+    expect(hasRole('citizen', 'agent')).toBe(false);
+  });
+
+  it('picks the strongest role for display', () => {
     expect(normalizeRole('admin')).toBe('admin');
+    expect(normalizeRole('citizen,agent')).toBe('agent');
+    expect(normalizeRole('agent,admin')).toBe('admin');
     expect(normalizeRole('root')).toBe('citizen');
-    expect(normalizeRole(null)).toBe('citizen');
   });
 
   it('treats agents and admins as staff, citizens as not', () => {
     expect(isStaff('agent')).toBe(true);
-    expect(isStaff('admin')).toBe(true);
+    expect(isStaff('citizen,admin')).toBe(true);
     expect(isStaff('citizen')).toBe(false);
-    expect(isStaff('nope')).toBe(false);
   });
 
   it('detects admins only', () => {
     expect(isAdmin('admin')).toBe(true);
-    expect(isAdmin('agent')).toBe(false);
+    expect(isAdmin('citizen,agent')).toBe(false);
+  });
+});
+
+describe('hasPermission', () => {
+  it('lets agents list and update service messages', () => {
+    expect(hasPermission('agent', { serviceMessage: ['list'] })).toBe(true);
+    expect(hasPermission('agent', { serviceMessage: ['update'] })).toBe(true);
+    expect(hasPermission('agent', { webcupRequest: ['list'] })).toBe(true);
+  });
+
+  it('denies citizens the staff resources', () => {
+    expect(hasPermission('citizen', { serviceMessage: ['list'] })).toBe(false);
+    expect(hasPermission('citizen', { webcupRequest: ['list'] })).toBe(false);
+    expect(hasPermission('citizen', { user: ['list'] })).toBe(false);
+  });
+
+  it('reserves user management for admins', () => {
+    expect(hasPermission('agent', { user: ['list'] })).toBe(false);
+    expect(hasPermission('admin', { user: ['list'] })).toBe(true);
+    expect(hasPermission('admin', { user: ['set-role'] })).toBe(true);
+    expect(hasPermission('admin', { user: ['ban'] })).toBe(true);
+  });
+
+  it('combines permissions from several roles', () => {
+    expect(hasPermission('citizen,agent', { serviceMessage: ['list'] })).toBe(
+      true,
+    );
+    expect(hasPermission('citizen,admin', { user: ['set-role'] })).toBe(true);
   });
 });

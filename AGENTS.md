@@ -64,14 +64,19 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 
 ## Roles & staff area
 
-- Profiles live on `User.role` (`citizen` | `agent` | `admin`) and reach the
-  Better Auth session through `additionalFields` with `input: false`;
-  `src/lib/roles.ts` is the source of truth for checks and French labels.
-- Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins
-  change any profile from `/users`.
-- Everything under `(staff)` (`/requests`, `/messages`, `/users`) requires an
-  `agent`/`admin`; citizens are redirected to `/account`, and `/users` is
-  admin-only. Inhabitants’ contact messages are triaged at `/messages` (F22).
+- Profiles use the Better Auth **admin plugin**: `User.role`
+  (`citizen` | `agent` | `admin`, comma-separated for multiple roles) plus
+  `banned`/`banReason`/`banExpires`. `src/lib/permissions.ts` defines the
+  access-control statements (`user`, `session`, `serviceMessage`,
+  `webcupRequest`) and the three roles; `src/lib/roles.ts` holds the checks and
+  French labels.
+- Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins use
+  `/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
+  `npx auth@latest create-admin --email … --role admin`.
+- Everything under `(staff)` (`/requests`, `/messages`, `/users`) is permission
+  gated; citizens are redirected to `/account`, and `/users` requires
+  `user: ['list']` (admin only). Inhabitants’ contact messages are triaged at
+  `/messages` (F22).
 
 ## UI / conventions
 
