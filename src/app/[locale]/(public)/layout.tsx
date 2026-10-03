@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 
 import { BroadcastBanner } from '@/components/public/broadcast-banner';
+import { PublicBreadcrumbs } from '@/components/public/public-breadcrumbs';
 import { PublicHeader } from '@/components/public/public-header';
 import { auth } from '@/lib/auth';
 import { toBroadcastView } from '@/lib/broadcasts';
@@ -21,6 +22,7 @@ export default async function PublicLayout({
     <div className="flex min-h-svh flex-col">
       <PublicHeader session={session} />
       <BroadcastBanner items={broadcasts} />
+      <PublicBreadcrumbs />
       <main id="contenu" className="flex flex-1 flex-col">
         {children}
       </main>

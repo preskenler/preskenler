@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { ContactForm } from '@/components/public/contact-form';
 import { auth } from '@/lib/auth';
+import { getServiceStatusMap } from '@/lib/service-status-store';
 import { cityServices } from '@/lib/services';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,6 +27,7 @@ export default async function ContactPage({
       ? service
       : undefined;
   const t = await getTranslations('Public.Contact');
+  const availability = Object.fromEntries(await getServiceStatusMap());
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-16">
@@ -41,6 +43,7 @@ export default async function ContactPage({
         defaultName={session?.user.name ?? ''}
         defaultEmail={session?.user.email ?? ''}
         defaultService={defaultService}
+        availability={availability}
       />
     </div>
   );

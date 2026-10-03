@@ -7,6 +7,10 @@ import {
   RiMessage3Line,
   RiGroupLine,
   RiMegaphoneLine,
+  RiMapPinLine,
+  RiCalendarLine,
+  RiServerLine,
+  RiShieldCheckLine,
 } from '@remixicon/react';
 
 export type DashboardIcon = RemixiconComponentType;
@@ -36,6 +40,16 @@ export const mainNavItems: DashboardNavItem[] = [
     icon: RiMailLine,
   },
   {
+    href: '/dashboard/reports',
+    labelKey: 'reports',
+    icon: RiMapPinLine,
+  },
+  {
+    href: '/dashboard/appointments',
+    labelKey: 'appointments',
+    icon: RiCalendarLine,
+  },
+  {
     href: '/dashboard/requests',
     labelKey: 'requests',
     icon: RiListUnordered,
@@ -48,10 +62,22 @@ export const mainNavItems: DashboardNavItem[] = [
     permission: { serviceMessage: ['list'] },
   },
   {
+    href: '/dashboard/service-status',
+    labelKey: 'serviceStatus',
+    icon: RiServerLine,
+    permission: { serviceStatus: ['list'] },
+  },
+  {
     href: '/dashboard/broadcasts',
     labelKey: 'broadcasts',
     icon: RiMegaphoneLine,
     permission: { broadcast: ['list'] },
+  },
+  {
+    href: '/dashboard/security',
+    labelKey: 'security',
+    icon: RiShieldCheckLine,
+    permission: { auditLog: ['list'] },
   },
   {
     href: '/dashboard/users',

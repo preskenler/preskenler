@@ -175,6 +175,94 @@ async function seedBroadcasts() {
   return seedBroadcastFixtures.length;
 }
 
+/** Demo bookable slots for the next open weekdays (demande F39). */
+const appointmentServices = [
+  {
+    service: 'etat-civil',
+    agentName: 'Régie État civil',
+    location: 'Hôtel de ville — bureau 12',
+  },
+  {
+    service: 'voirie-mobilite',
+    agentName: 'Service Voirie',
+    location: 'Centre technique municipal',
+  },
+  {
+    service: 'action-sociale',
+    agentName: 'Service social',
+    location: 'Maison des solidarités',
+  },
+];
+
+const slotTimes = [
+  { hours: 9, minutes: 30 },
+  { hours: 14, minutes: 0 },
+];
+
+async function seedAppointmentSlots() {
+  const now = new Date();
+  const slots: {
+    service: string;
+    startsAt: Date;
+    durationMinutes: number;
+    agentName: string;
+    location: string;
+    capacity: number;
+  }[] = [];
+
+  for (let offset = 1; offset <= 10; offset += 1) {
+    const day = new Date(now);
+    day.setDate(now.getDate() + offset);
+    const weekday = day.getDay();
+    if (weekday === 0 || weekday === 6) {
+      continue;
+    }
+
+    for (const entry of appointmentServices) {
+      for (const time of slotTimes) {
+        const startsAt = new Date(day);
+        startsAt.setHours(time.hours, time.minutes, 0, 0);
+        slots.push({
+          service: entry.service,
+          startsAt,
+          durationMinutes: 30,
+          agentName: entry.agentName,
+          location: entry.location,
+          capacity: 1,
+        });
+      }
+    }
+  }
+
+  const result = await prisma.appointmentSlot.createMany({
+    data: slots,
+    skipDuplicates: true,
+  });
+
+  return result.count;
+}
+
+/** One service in maintenance so the availability flow is visible (F38). */
+async function seedServiceStatus() {
+  const expectedReturn = new Date();
+  expectedReturn.setDate(expectedReturn.getDate() + 1);
+  expectedReturn.setHours(8, 0, 0, 0);
+
+  await prisma.serviceStatus.upsert({
+    where: { service: 'eau-assainissement' },
+    update: {},
+    create: {
+      service: 'eau-assainissement',
+      status: 'maintenance',
+      message:
+        'Maintenance du réseau d’eau potable jusqu’à demain matin. Les urgences restent prises en charge.',
+      expectedReturn,
+      alternative:
+        'Pour une fuite urgente, contacte la voirie au 01 23 45 67 89.',
+    },
+  });
+}
+
 async function main() {
   const seeded = [];
 
@@ -183,9 +271,12 @@ async function main() {
   }
 
   const broadcastCount = await seedBroadcasts();
+  const slotCount = await seedAppointmentSlots();
+  await seedServiceStatus();
 
   console.table(seeded);
   console.log(`[seed] ${broadcastCount} broadcasts ready`);
+  console.log(`[seed] ${slotCount} appointment slots added`);
 }
 
 main()

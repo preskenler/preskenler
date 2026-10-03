@@ -59,9 +59,23 @@ export function SignInForm() {
     const { error } = await authClient.signIn.email(values);
 
     if (error) {
+      const status = (error as { status?: number }).status;
+
+      // Rate limiting (demande F37): a burst of attempts is rejected with a
+      // 429. Surface a clear localized message rather than Better Auth's raw
+      // English one, with the retry delay when the server provides it.
+      if (status === 429) {
+        const retryAfter = (
+          error as { headers?: { get?: (name: string) => string | null } }
+        ).headers?.get?.('X-Retry-After');
+        setError('root.server', {
+          message: t('tooManyAttempts', { seconds: retryAfter ?? 60 }),
+        });
+        return;
+      }
+
       // Better Auth forbids banned accounts with a 403 / `BANNED_USER` code;
       // surface a localized message instead of its raw default.
-      const status = (error as { status?: number }).status;
       setError('root.server', {
         message: status === 403 ? t('banned') : (error.message ?? t('error')),
       });

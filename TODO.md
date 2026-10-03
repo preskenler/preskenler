@@ -1,26 +1,27 @@
 # Demandes Terra Nova — TODO
 
-_Généré le 2026-10-03T13:09:41.740Z · API 1.0 · active · vague 5 · 36 visibles · 36 demandes (7 à faire, 29 faites)_
+_Généré le 2026-10-03T13:09:41.740Z · API 1.0 · active · vague 5 · 36 visibles · 36 demandes (0 à faire, 36 faites)_
 
 ## À faire
 
-- [ ] `D15` — **Citoyen (Citoyen)** · difficulté 1 · 270 XP · vague 2
-      > Je passe d’un service à l’autre et il m’arrive de ne plus savoir dans quelle partie de la plateforme je me trouve. J’aimerais disposer d’un repère simple pour comprendre mon emplacement et revenir facilement aux niveaux précédents.
-- [ ] `F25` — **Lucas Meyer — Citoyen (Citoyen)** · difficulté 2 · 540 XP · vague 2
-      > Bonjour, un lampadaire est cassé dans ma rue et je ne sais pas quel service contacter. La plateforme pourrait-elle me permettre de signaler directement ce type de problème en indiquant ce qui s’est passé et où il se trouve ?
-- [ ] `F28` — **Mairie de Nova Terra (Institution)** · difficulté 1 · 270 XP · vague 2
-      > Le catalogue de services commence à s’étoffer et les habitants ne doivent pas avoir à tout parcourir pour trouver les démarches les plus courantes. Nous souhaitons pouvoir mettre en avant les services prioritaires ou les plus utilisés.
-- [ ] `F37` — **Centre de cybersécurité (Alerte sécurité)** · difficulté 3 · 900 XP · vague 5
-      > Nous détectons un nombre inhabituel de tentatives de connexion sur plusieurs comptes citoyens. La protection doit être perceptible dans le fonctionnement réel de la plateforme sans rendre l’usage normal inutilement compliqué.
-- [ ] `F38` — **Citoyen (Citoyen)** · difficulté 2 · 600 XP · vague 5
-      > Un service municipal peut parfois être interrompu pour maintenance ou à cause d’un incident. Les habitants doivent pouvoir savoir qu’il est indisponible avant de commencer une démarche et comprendre quand revenir ou quoi faire à la place.
-- [ ] `F39` — **Service Administration (Institution)** · difficulté 2 · 600 XP · vague 5
-      > Les citoyens devraient pouvoir prendre rendez-vous avec un agent. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
-- [ ] `F40` — **Citoyenne (Citoyen)** · difficulté 1 · 300 XP · vague 5
-      > Je voudrais recevoir un rappel avant mon rendez-vous. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
+_Aucune demande en attente._
 
 ## Faites
 
+- [x] `D15` — **Citoyen (Citoyen)** · difficulté 1 · 270 XP · vague 2
+      > Je passe d’un service à l’autre et il m’arrive de ne plus savoir dans quelle partie de la plateforme je me trouve. J’aimerais disposer d’un repère simple pour comprendre mon emplacement et revenir facilement aux niveaux précédents.
+- [x] `F25` — **Lucas Meyer — Citoyen (Citoyen)** · difficulté 2 · 540 XP · vague 2
+      > Bonjour, un lampadaire est cassé dans ma rue et je ne sais pas quel service contacter. La plateforme pourrait-elle me permettre de signaler directement ce type de problème en indiquant ce qui s’est passé et où il se trouve ?
+- [x] `F28` — **Mairie de Nova Terra (Institution)** · difficulté 1 · 270 XP · vague 2
+      > Le catalogue de services commence à s’étoffer et les habitants ne doivent pas avoir à tout parcourir pour trouver les démarches les plus courantes. Nous souhaitons pouvoir mettre en avant les services prioritaires ou les plus utilisés.
+- [x] `F37` — **Centre de cybersécurité (Alerte sécurité)** · difficulté 3 · 900 XP · vague 5
+      > Nous détectons un nombre inhabituel de tentatives de connexion sur plusieurs comptes citoyens. La protection doit être perceptible dans le fonctionnement réel de la plateforme sans rendre l’usage normal inutilement compliqué.
+- [x] `F38` — **Citoyen (Citoyen)** · difficulté 2 · 600 XP · vague 5
+      > Un service municipal peut parfois être interrompu pour maintenance ou à cause d’un incident. Les habitants doivent pouvoir savoir qu’il est indisponible avant de commencer une démarche et comprendre quand revenir ou quoi faire à la place.
+- [x] `F39` — **Service Administration (Institution)** · difficulté 2 · 600 XP · vague 5
+      > Les citoyens devraient pouvoir prendre rendez-vous avec un agent. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
+- [x] `F40` — **Citoyenne (Citoyen)** · difficulté 1 · 300 XP · vague 5
+      > Je voudrais recevoir un rappel avant mon rendez-vous. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
 - [x] `D01` — **Haut Conseil de la Ville (Institution)** · difficulté 1 · 250 XP · initiale
       > La plateforme va accueillir les habitants de Nova Terra et chacun doit pouvoir disposer de son propre accès. Nous devons permettre à un nouvel habitant de créer simplement un compte afin d’utiliser les services numériques de la ville et de retrouver ensuite son espace personnel.
 - [x] `D03` — **Direction des Services Municipaux (Institution)** · difficulté 1 · 250 XP · initiale
