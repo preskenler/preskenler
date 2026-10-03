@@ -27,6 +27,22 @@ curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webc
 
 Requests are keyed on `request_code`, so repeated calls never create duplicates.
 
+### Suivi des demandes
+
+`npm run requests` prints every demand published by the API as a Markdown
+checklist grouped into « À faire » / « Faites ». Run it with `-- --write` to
+create or refresh `TODO.md`, which preserves the checked state of each
+`request_code` across runs:
+
+```sh
+npm run requests              # preview on stdout
+npm run requests -- --write   # update TODO.md (keeps `[x]` items)
+npm run requests -- --new     # only the demands still unchecked
+```
+
+It reads `WEBCUP_API_KEY`/`WEBCUP_API_URL` from `.env`. The key is sent as the
+`X-Webcup-Api-Key` header and never logged.
+
 ## Roles
 
 Profiles and permissions use the Better Auth **admin plugin**: roles are
