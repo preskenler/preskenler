@@ -15,7 +15,7 @@ const POLL_INTERVAL_MS = 30_000;
  */
 export function useWebcupRequests(initial: WebcupSnapshot) {
   const [snapshot, setSnapshot] = useState(initial);
-  const [error, setError] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
@@ -41,11 +41,11 @@ export function useWebcupRequests(initial: WebcupSnapshot) {
 
         if (!cancelled) {
           setSnapshot(data);
-          setError(null);
+          setHasError(false);
         }
       } catch {
         if (!cancelled) {
-          setError('Impossible de rafraîchir les demandes.');
+          setHasError(true);
         }
       } finally {
         if (!cancelled) {
@@ -62,5 +62,5 @@ export function useWebcupRequests(initial: WebcupSnapshot) {
     };
   }, []);
 
-  return { snapshot, error, isRefreshing };
+  return { snapshot, hasError, isRefreshing };
 }

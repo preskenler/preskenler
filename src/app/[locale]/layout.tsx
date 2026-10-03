@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 import { TextSizeProvider } from '@/components/accessibility/text-size-provider';
 import { textSizeScript } from '@/lib/accessibility';
+import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { routing } from '@/i18n/routing';
 
@@ -68,7 +69,10 @@ export default async function RootLayout({
         >
           <TextSizeProvider>
             <NextIntlClientProvider>
-              <TooltipProvider>{children}</TooltipProvider>
+              <TooltipProvider>
+                {children}
+                <Toaster />
+              </TooltipProvider>
             </NextIntlClientProvider>
           </TextSizeProvider>
         </ThemeProvider>

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
 }));
 
-vi.mock('next/navigation', () => ({
+vi.mock('@/i18n/navigation', () => ({
   useRouter: () => ({ push: mocks.push, refresh: mocks.refresh }),
 }));
 
@@ -26,7 +26,7 @@ describe('SignOutButton', () => {
   it('signs out and redirects to the sign-in page', async () => {
     mocks.signOut.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<SignOutButton />);
+    renderWithIntl(<SignOutButton />);
 
     await user.click(screen.getByRole('button', { name: /se déconnecter/i }));
 

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -20,17 +22,20 @@ export function RequestsBoard({
   initial: WebcupSnapshot;
   initialError?: string | null;
 }) {
-  const { snapshot, error, isRefreshing } = useWebcupRequests(initial);
+  const t = useTranslations('Agents.requests');
+  const { snapshot, hasError, isRefreshing } = useWebcupRequests(initial);
   const requests = snapshot.requests;
+  const newCount = snapshot.newCodes.length;
 
   return (
     <div className="flex flex-col gap-6">
-      {initialError || error ? (
+      {initialError || hasError ? (
         <Alert variant="destructive">
-          <AlertTitle>Flux indisponible</AlertTitle>
+          <AlertTitle>{t('unavailableTitle')}</AlertTitle>
           <AlertDescription>
-            {error ?? initialError} Les données affichées peuvent être
-            incomplètes.
+            {t('unavailableDescription', {
+              message: initialError ?? t('refreshError'),
+            })}
           </AlertDescription>
         </Alert>
       ) : null}
@@ -38,39 +43,33 @@ export function RequestsBoard({
       <SessionStatus session={snapshot.session} />
 
       <p className="sr-only" role="status" aria-live="polite">
-        {requests.length} demande{requests.length > 1 ? 's' : ''} suivie
-        {requests.length > 1 ? 's' : ''}.
-        {snapshot.newCodes.length > 0
-          ? ` ${snapshot.newCodes.length} nouvelle(s).`
-          : ''}
+        {t('status', { count: requests.length })}
+        {newCount > 0 ? ` ${t('newStatus', { count: newCount })}` : ''}
       </p>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h2 className="font-heading text-lg font-medium">
-            {requests.length} demande{requests.length > 1 ? 's' : ''} suivie
-            {requests.length > 1 ? 's' : ''}
+            {t('heading', { count: requests.length })}
           </h2>
-          {snapshot.newCodes.length > 0 ? (
-            <Badge>{snapshot.newCodes.length} nouvelle(s)</Badge>
+          {newCount > 0 ? (
+            <Badge>{t('newBadge', { count: newCount })}</Badge>
           ) : null}
         </div>
         <span className="text-xs text-muted-foreground">
           {isRefreshing
-            ? 'Actualisation…'
-            : `Actualisé à ${new Date(snapshot.fetchedAt).toLocaleTimeString(
-                'fr-FR',
-              )}`}
+            ? t('refreshing')
+            : t('refreshedAt', {
+                time: new Date(snapshot.fetchedAt).toLocaleTimeString('fr-FR'),
+              })}
         </span>
       </div>
 
       {requests.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>Aucune demande pour le moment</EmptyTitle>
-            <EmptyDescription>
-              Le flux de Terra Nova n’a pas encore livré de demande.
-            </EmptyDescription>
+            <EmptyTitle>{t('emptyTitle')}</EmptyTitle>
+            <EmptyDescription>{t('emptyDescription')}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (

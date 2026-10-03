@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,13 +22,16 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Link } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
 import {
-  resetPasswordSchema,
+  createResetPasswordSchema,
   type ResetPasswordValues,
 } from '@/lib/schemas/auth';
 
 export function ResetPasswordForm() {
+  const t = useTranslations('Auth.reset');
+  const tv = useTranslations('Validation.auth');
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
@@ -39,7 +42,7 @@ export function ResetPasswordForm() {
     clearErrors,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<ResetPasswordValues>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(createResetPasswordSchema(tv)),
     defaultValues: { password: '', confirmPassword: '' },
     mode: 'onTouched',
   });
@@ -57,9 +60,7 @@ export function ResetPasswordForm() {
 
   async function onSubmit(values: ResetPasswordValues) {
     if (!token) {
-      setError('root.server', {
-        message: 'Lien de réinitialisation invalide ou expiré.',
-      });
+      setError('root.server', { message: t('invalidToken') });
       return;
     }
 
@@ -70,9 +71,7 @@ export function ResetPasswordForm() {
 
     if (error) {
       setError('root.server', {
-        message:
-          error.message ??
-          'Réinitialisation impossible. Le lien est peut-être expiré.',
+        message: error.message ?? t('error'),
       });
     }
   }
@@ -81,15 +80,12 @@ export function ResetPasswordForm() {
     return (
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Mot de passe modifié</CardTitle>
-          <CardDescription>
-            Tu peux maintenant te connecter avec ton nouveau mot de passe. Par
-            sécurité, toutes tes sessions ont été déconnectées.
-          </CardDescription>
+          <CardTitle className="text-xl">{t('successTitle')}</CardTitle>
+          <CardDescription>{t('successDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/sign-in">Se connecter</Link>
+            <Link href="/sign-in">{t('signIn')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -100,14 +96,12 @@ export function ResetPasswordForm() {
     return (
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Lien invalide</CardTitle>
-          <CardDescription>
-            Ce lien de réinitialisation est incomplet ou a expiré.
-          </CardDescription>
+          <CardTitle className="text-xl">{t('invalidTitle')}</CardTitle>
+          <CardDescription>{t('invalidDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <FieldDescription className="text-center">
-            <Link href="/forgot-password">Demander un nouveau lien</Link>
+            <Link href="/forgot-password">{t('requestNew')}</Link>
           </FieldDescription>
         </CardContent>
       </Card>
@@ -117,17 +111,15 @@ export function ResetPasswordForm() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Nouveau mot de passe</CardTitle>
-        <CardDescription>
-          Choisis un nouveau mot de passe pour ton compte.
-        </CardDescription>
+        <CardTitle className="text-xl">{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.password ? true : undefined}>
               <FieldLabel htmlFor="reset-password-password">
-                Nouveau mot de passe
+                {t('password')}
               </FieldLabel>
               <Input
                 id="reset-password-password"
@@ -142,7 +134,7 @@ export function ResetPasswordForm() {
                 {...field('password')}
               />
               <FieldDescription id="reset-password-help">
-                Au moins 8 caractères.
+                {t('passwordHint')}
               </FieldDescription>
               <FieldError
                 id="reset-password-password-error"
@@ -152,7 +144,7 @@ export function ResetPasswordForm() {
 
             <Field data-invalid={errors.confirmPassword ? true : undefined}>
               <FieldLabel htmlFor="reset-password-confirm">
-                Confirme le mot de passe
+                {t('confirm')}
               </FieldLabel>
               <Input
                 id="reset-password-confirm"
@@ -186,7 +178,7 @@ export function ResetPasswordForm() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Réinitialiser mon mot de passe
+                {t('submit')}
               </Button>
             </Field>
           </FieldGroup>

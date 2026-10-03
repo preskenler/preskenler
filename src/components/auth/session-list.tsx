@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { RiComputerLine } from '@remixicon/react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -23,6 +23,7 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Spinner } from '@/components/ui/spinner';
+import { useRouter } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
 
 export type SessionInfo = {
@@ -45,6 +46,7 @@ function formatDate(value: string | Date) {
 }
 
 export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
+  const t = useTranslations('Account.sessions');
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pendingToken, setPendingToken] = useState<string | null>(null);
@@ -56,7 +58,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
     setPendingToken(null);
 
     if (revokeError) {
-      setError(revokeError.message ?? 'Impossible de révoquer cette session.');
+      setError(revokeError.message ?? t('revokeError'));
       return;
     }
 
@@ -70,9 +72,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
     setRevokingOthers(false);
 
     if (revokeError) {
-      setError(
-        revokeError.message ?? 'Impossible de déconnecter les autres sessions.',
-      );
+      setError(revokeError.message ?? t('revokeOthersError'));
       return;
     }
 
@@ -83,10 +83,8 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sessions actives</CardTitle>
-        <CardDescription>
-          Appareils actuellement connectés à ton compte.
-        </CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {error ? (
@@ -96,19 +94,17 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
         ) : null}
 
         {sessions.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Aucune session active.
-          </p>
+          <p className="text-sm text-muted-foreground">{t('empty')}</p>
         ) : (
           <ItemGroup>
             {sessions.map((session) => (
               <Item key={session.id} variant="outline">
                 <ItemMedia variant="icon">
-                  <RiComputerLine />
+                  <RiComputerLine aria-hidden="true" />
                 </ItemMedia>
                 <ItemContent>
                   <ItemTitle>
-                    {session.userAgent || 'Appareil inconnu'}
+                    {session.userAgent || t('unknownDevice')}
                   </ItemTitle>
                   <ItemDescription>
                     {session.ipAddress ? `${session.ipAddress} · ` : ''}
@@ -126,7 +122,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
                     {pendingToken === session.token ? (
                       <Spinner data-icon="inline-start" />
                     ) : null}
-                    Révoquer
+                    {t('revoke')}
                   </Button>
                 </ItemActions>
               </Item>
@@ -143,7 +139,7 @@ export function SessionList({ sessions }: { sessions: SessionInfo[] }) {
             disabled={revokingOthers}
           >
             {revokingOthers ? <Spinner data-icon="inline-start" /> : null}
-            Déconnecter les autres sessions
+            {t('revokeOthers')}
           </Button>
         </div>
       </CardContent>

@@ -23,7 +23,7 @@ function isAuthorized(request: Request): boolean {
  */
 export async function GET(request: Request) {
   if (!isAuthorized(request)) {
-    return Response.json({ error: 'Non autorisé.' }, { status: 401 });
+    return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
   try {
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('[webcup] scheduled sync failed', error);
     return Response.json(
-      { ok: false, error: 'Service Webcup indisponible.' },
+      { ok: false, error: 'webcup_unavailable' },
       { status: 502 },
     );
   }

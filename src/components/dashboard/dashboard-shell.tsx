@@ -1,0 +1,52 @@
+import type { CSSProperties, ReactNode } from 'react';
+import { getTranslations } from 'next-intl/server';
+
+import { AppSidebar } from '@/components/dashboard/app-sidebar';
+import { SiteHeader } from '@/components/dashboard/site-header';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import type { Session } from '@/lib/auth';
+import { normalizeRole } from '@/lib/roles';
+
+/**
+ * Shared shell for every authenticated area: the sidebar navigation is filtered
+ * per role/permission and stays mounted across citizen, agent and admin pages.
+ */
+export async function DashboardShell({
+  session,
+  children,
+}: {
+  session: Session;
+  children: ReactNode;
+}) {
+  const t = await getTranslations('Dashboard');
+  const role = normalizeRole(session.user.role);
+
+  return (
+    <SidebarProvider
+      style={
+        {
+          '--sidebar-width': 'calc(var(--spacing) * 72)',
+          '--header-height': 'calc(var(--spacing) * 12)',
+        } as CSSProperties
+      }
+    >
+      <AppSidebar
+        role={session.user.role}
+        user={{
+          name: session.user.name,
+          email: session.user.email,
+          roleLabel: t(`roles.${role}`),
+          image: session.user.image,
+        }}
+      />
+      <SidebarInset id="contenu">
+        <SiteHeader />
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
+            {children}
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}

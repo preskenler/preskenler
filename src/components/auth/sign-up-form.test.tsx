@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({
@@ -9,14 +9,11 @@ const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
 }));
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mocks.push, refresh: mocks.refresh }),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
+  useRouter: () => ({ push: mocks.push, refresh: mocks.refresh }),
 }));
 
 vi.mock('@/lib/auth-client', () => ({
@@ -43,7 +40,7 @@ describe('SignUpForm', () => {
 
   it('shows a field-level error for every invalid field and does not submit', async () => {
     const user = userEvent.setup();
-    render(<SignUpForm />);
+    renderWithIntl(<SignUpForm />);
 
     await user.click(screen.getByRole('button', { name: /créer mon compte/i }));
 
@@ -60,7 +57,7 @@ describe('SignUpForm', () => {
 
   it('associates the error with the invalid input', async () => {
     const user = userEvent.setup();
-    render(<SignUpForm />);
+    renderWithIntl(<SignUpForm />);
 
     await user.type(screen.getByLabelText('Adresse email'), 'nope');
     await user.click(screen.getByRole('button', { name: /créer mon compte/i }));
@@ -74,7 +71,7 @@ describe('SignUpForm', () => {
 
   it('submits trimmed values and redirects on success', async () => {
     mocks.signUpEmail.mockResolvedValue({ error: null });
-    render(<SignUpForm />);
+    renderWithIntl(<SignUpForm />);
 
     const user = await fillValidValues();
     await user.click(screen.getByRole('button', { name: /créer mon compte/i }));
@@ -87,7 +84,7 @@ describe('SignUpForm', () => {
         callbackURL: expect.stringContaining('/verify-email?verified=1'),
       }),
     );
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/dashboard'));
     expect(mocks.refresh).toHaveBeenCalled();
   });
 
@@ -95,7 +92,7 @@ describe('SignUpForm', () => {
     mocks.signUpEmail.mockResolvedValue({
       error: { message: 'Email déjà utilisé.' },
     });
-    render(<SignUpForm />);
+    renderWithIntl(<SignUpForm />);
 
     const user = await fillValidValues();
     await user.click(screen.getByRole('button', { name: /créer mon compte/i }));
@@ -111,7 +108,7 @@ describe('SignUpForm', () => {
         resolveRequest = resolve;
       }),
     );
-    render(<SignUpForm />);
+    renderWithIntl(<SignUpForm />);
 
     const user = await fillValidValues();
     const button = screen.getByRole('button', { name: /créer mon compte/i });
@@ -120,6 +117,6 @@ describe('SignUpForm', () => {
     await waitFor(() => expect(button).toBeDisabled());
 
     resolveRequest({ error: null });
-    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/account'));
+    await waitFor(() => expect(mocks.push).toHaveBeenCalledWith('/dashboard'));
   });
 });

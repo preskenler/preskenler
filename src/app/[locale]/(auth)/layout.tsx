@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import Link from 'next/link';
 import { RiGalleryLine } from '@remixicon/react';
+
+import { Link } from '@/i18n/navigation';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (

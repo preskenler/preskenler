@@ -7,15 +7,13 @@ import {
   isStaff,
   normalizeRole,
   parseRoles,
-  roleLabels,
   roles,
 } from './roles';
 import { hasPermission } from './permissions';
 
 describe('roles', () => {
-  it('exposes the three profiles with French labels', () => {
+  it('exposes the three profiles', () => {
     expect(roles).toEqual(['citizen', 'agent', 'admin']);
-    expect(roleLabels.citizen).toBe('Citoyen');
   });
 
   it('recognises known roles only', () => {

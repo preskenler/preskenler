@@ -7,73 +7,103 @@ import { z } from 'zod';
  * (the `*Values` types are inferred from them). Better Auth performs the
  * authoritative server-side validation; the rules below mirror its defaults so
  * the user gets the same feedback before the request is sent.
+ *
+ * Each schema is built from a translator so the messages resolve to the active
+ * locale, mirroring `createContactSchema` in `./contact.ts`.
  */
+export type ValidationTranslator = (key: string) => string;
 
-export const emailField = z
-  .string()
-  .trim()
-  .pipe(z.email({ error: 'Cette adresse email ne semble pas valide.' }));
-
-const passwordField = z
-  .string()
-  .min(8, { error: 'Au moins 8 caractères.' })
-  .max(128, { error: 'Ton mot de passe est trop long.' });
-
-export const signInSchema = z.object({
-  email: emailField,
-  password: z.string().min(1, { error: 'Entre ton mot de passe.' }),
-});
-
-export const signUpSchema = z.object({
-  name: z
+export function createEmailField(t: ValidationTranslator) {
+  return z
     .string()
     .trim()
-    .min(1, { error: 'Entre ton nom.' })
-    .max(80, { error: 'Ton nom ne peut pas dépasser 80 caractères.' }),
-  email: emailField,
-  password: passwordField,
-});
+    .pipe(z.email({ error: t('emailInvalid') }));
+}
 
-export const forgotPasswordSchema = z.object({
-  email: emailField,
-});
+function createPasswordField(t: ValidationTranslator) {
+  return z
+    .string()
+    .min(8, { error: t('passwordTooShort') })
+    .max(128, { error: t('passwordTooLong') });
+}
 
-export const resetPasswordSchema = z
-  .object({
-    password: passwordField,
-    confirmPassword: z.string().min(1, { error: 'Confirme ton mot de passe.' }),
-  })
-  .refine((values) => values.password === values.confirmPassword, {
-    path: ['confirmPassword'],
-    error: 'Les mots de passe ne correspondent pas.',
+export function createSignInSchema(t: ValidationTranslator) {
+  return z.object({
+    email: createEmailField(t),
+    password: z.string().min(1, { error: t('passwordRequired') }),
   });
+}
 
-export const changePasswordSchema = z
-  .object({
-    currentPassword: z
+export function createSignUpSchema(t: ValidationTranslator) {
+  return z.object({
+    name: z
       .string()
-      .min(1, { error: 'Entre ton mot de passe actuel.' }),
-    newPassword: passwordField,
-    confirmPassword: z.string().min(1, { error: 'Confirme ton mot de passe.' }),
-    revokeOtherSessions: z.boolean(),
-  })
-  .refine((values) => values.newPassword === values.confirmPassword, {
-    path: ['confirmPassword'],
-    error: 'Les mots de passe ne correspondent pas.',
+      .trim()
+      .min(1, { error: t('nameRequired') })
+      .max(80, { error: t('nameTooLong') }),
+    email: createEmailField(t),
+    password: createPasswordField(t),
   });
+}
 
-export const changeEmailSchema = z.object({
-  newEmail: emailField,
-});
+export function createForgotPasswordSchema(t: ValidationTranslator) {
+  return z.object({
+    email: createEmailField(t),
+  });
+}
 
-export const verifyEmailSchema = z.object({
-  email: emailField,
-});
+export function createResetPasswordSchema(t: ValidationTranslator) {
+  return z
+    .object({
+      password: createPasswordField(t),
+      confirmPassword: z.string().min(1, { error: t('confirmRequired') }),
+    })
+    .refine((values) => values.password === values.confirmPassword, {
+      path: ['confirmPassword'],
+      error: t('confirmMismatch'),
+    });
+}
 
-export type SignInValues = z.infer<typeof signInSchema>;
-export type SignUpValues = z.infer<typeof signUpSchema>;
-export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
-export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
-export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
-export type ChangeEmailValues = z.infer<typeof changeEmailSchema>;
-export type VerifyEmailValues = z.infer<typeof verifyEmailSchema>;
+export function createChangePasswordSchema(t: ValidationTranslator) {
+  return z
+    .object({
+      currentPassword: z.string().min(1, { error: t('currentRequired') }),
+      newPassword: createPasswordField(t),
+      confirmPassword: z.string().min(1, { error: t('confirmRequired') }),
+      revokeOtherSessions: z.boolean(),
+    })
+    .refine((values) => values.newPassword === values.confirmPassword, {
+      path: ['confirmPassword'],
+      error: t('confirmMismatch'),
+    });
+}
+
+export function createChangeEmailSchema(t: ValidationTranslator) {
+  return z.object({
+    newEmail: createEmailField(t),
+  });
+}
+
+export function createVerifyEmailSchema(t: ValidationTranslator) {
+  return z.object({
+    email: createEmailField(t),
+  });
+}
+
+export type SignInValues = z.infer<ReturnType<typeof createSignInSchema>>;
+export type SignUpValues = z.infer<ReturnType<typeof createSignUpSchema>>;
+export type ForgotPasswordValues = z.infer<
+  ReturnType<typeof createForgotPasswordSchema>
+>;
+export type ResetPasswordValues = z.infer<
+  ReturnType<typeof createResetPasswordSchema>
+>;
+export type ChangePasswordValues = z.infer<
+  ReturnType<typeof createChangePasswordSchema>
+>;
+export type ChangeEmailValues = z.infer<
+  ReturnType<typeof createChangeEmailSchema>
+>;
+export type VerifyEmailValues = z.infer<
+  ReturnType<typeof createVerifyEmailSchema>
+>;

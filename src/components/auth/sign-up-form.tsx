@@ -1,9 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,10 +21,16 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Link, useRouter } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { authClient } from '@/lib/auth-client';
-import { signUpSchema, type SignUpValues } from '@/lib/schemas/auth';
+import { createSignUpSchema, type SignUpValues } from '@/lib/schemas/auth';
 
 export function SignUpForm() {
+  const t = useTranslations('Auth.signUp');
+  const tv = useTranslations('Validation.auth');
+  const locale = useLocale();
+  const localePrefix = locale === routing.defaultLocale ? '' : `/${locale}`;
   const router = useRouter();
   const {
     register,
@@ -34,7 +39,7 @@ export function SignUpForm() {
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<SignUpValues>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(createSignUpSchema(tv)),
     defaultValues: { name: '', email: '', password: '' },
     mode: 'onTouched',
   });
@@ -56,38 +61,36 @@ export function SignUpForm() {
     const { error } = await authClient.signUp.email({
       ...values,
       // Land on the verification page after the user opens the emailed link.
-      callbackURL: `${window.location.origin}/verify-email?verified=1`,
+      callbackURL: `${window.location.origin}${localePrefix}/verify-email?verified=1`,
     });
 
     if (error) {
       setError('root.server', {
-        message: error.message ?? 'Création du compte impossible.',
+        message: error.message ?? t('error'),
       });
       return;
     }
 
-    router.push('/account');
+    router.push('/dashboard');
     router.refresh();
   }
 
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Créer un compte</CardTitle>
-        <CardDescription>
-          Quelques secondes suffisent pour rejoindre PreskEnLer.
-        </CardDescription>
+        <CardTitle className="text-xl">{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Field data-invalid={errors.name ? true : undefined}>
-              <FieldLabel htmlFor="sign-up-name">Nom</FieldLabel>
+              <FieldLabel htmlFor="sign-up-name">{t('name')}</FieldLabel>
               <Input
                 id="sign-up-name"
                 type="text"
                 autoComplete="name"
-                placeholder="John Doe"
+                placeholder={t('namePlaceholder')}
                 required
                 aria-invalid={errors.name ? true : undefined}
                 aria-describedby={
@@ -99,13 +102,13 @@ export function SignUpForm() {
             </Field>
 
             <Field data-invalid={errors.email ? true : undefined}>
-              <FieldLabel htmlFor="sign-up-email">Adresse email</FieldLabel>
+              <FieldLabel htmlFor="sign-up-email">{t('email')}</FieldLabel>
               <Input
                 id="sign-up-email"
                 type="email"
                 inputMode="email"
                 autoComplete="email"
-                placeholder="ton@email.com"
+                placeholder={t('emailPlaceholder')}
                 required
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={
@@ -117,7 +120,9 @@ export function SignUpForm() {
             </Field>
 
             <Field data-invalid={errors.password ? true : undefined}>
-              <FieldLabel htmlFor="sign-up-password">Mot de passe</FieldLabel>
+              <FieldLabel htmlFor="sign-up-password">
+                {t('password')}
+              </FieldLabel>
               <Input
                 id="sign-up-password"
                 type="password"
@@ -131,7 +136,7 @@ export function SignUpForm() {
                 {...field('password')}
               />
               <FieldDescription id="sign-up-password-help">
-                Au moins 8 caractères.
+                {t('passwordHint')}
               </FieldDescription>
               <FieldError
                 id="sign-up-password-error"
@@ -149,10 +154,10 @@ export function SignUpForm() {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-                Créer mon compte
+                {t('submit')}
               </Button>
               <FieldDescription className="text-center">
-                Déjà un compte ? <Link href="/sign-in">Se connecter</Link>
+                {t('haveAccount')} <Link href="/sign-in">{t('signIn')}</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

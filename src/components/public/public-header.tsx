@@ -34,7 +34,7 @@ export function PublicHeader({ session }: { session: Session | null }) {
               variant="outline"
               size="sm"
               nativeButton={false}
-              render={<Link href="/account" />}
+              render={<Link href="/dashboard" />}
             >
               {t('account')}
             </Button>

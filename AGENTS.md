@@ -15,6 +15,11 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `npm run e2e` — Playwright (chromium only). It starts `npm run dev` itself;
   set `PLAYWRIGHT_BASE_URL` to target an already-running server. One spec:
   `npx playwright test e2e/auth.spec.ts`.
+- `npm run e2e:compose` — runs the suite against the Docker Compose stack:
+  builds/starts `db` + `app`, waits for the app healthcheck, runs Playwright from
+  the host against `http://localhost:3000`, then `docker compose down` (the
+  `db_data` volume is kept). Needs Chromium once:
+  `npx playwright install chromium`.
 - `npm run lint` / `npm run format` / `npm run format:check` (Prettier: single
   quotes, trailing commas).
 - CI (`.github/workflows/next.js.yml`) order: `db:deploy` → Prisma schema-drift
@@ -66,7 +71,7 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `GET /api/webcup/sync` (Bearer `WEBCUP_CRON_SECRET`, or Vercel's `CRON_SECRET`)
   is the scheduler entry point. On cPanel add a cron job every minute:
   `curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webcup/sync`.
-- Staff board at `/agents/requests` (auth-gated) polls client-side every 30s; new
+- Staff board at `/dashboard/requests` (auth-gated) polls client-side every 30s; new
   arrivals are detected by `request_code`, never by a fixed count.
 - `npm run requests` (`scripts/fetch_request.mjs`) lists the live demands as a
   Markdown checklist for `TODO.md`; `npm run requests -- --write` refreshes the
@@ -81,13 +86,16 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   `webcupRequest`) and the three roles; `src/lib/roles.ts` holds the checks and
   French labels.
 - Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins use
-  `/admin/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
+  `/dashboard/users` (list, `setRole`, ban/unban). Bootstrap the first admin with
   `npx auth@latest create-admin --email … --role admin`.
-- Areas are separate route groups under `src/app/[locale]/`: `(public)` (portal),
-  `(auth)` (sign-in/up), `(citizen)` (`/account/*`), `(agents)` (`/agents/requests`,
-  `/agents/messages`) and `(admin)` (`/admin/users`). The agents/admin areas share `StaffShell`;
-  citizens are redirected to `/account`. Inhabitants’ contact messages are
-  triaged at `/agents/messages` (F22).
+- Areas are route groups under `src/app/[locale]/`: `(public)` (portal), `(auth)`
+  (sign-in/up) and `(dashboard)` — one authenticated shell shared by citizens, agents
+  and admins. Pages live under `/dashboard/*`: `/dashboard` (overview),
+  `/dashboard/account/*` (profile, messages, password, email, sessions),
+  `/dashboard/requests`, `/dashboard/messages` (staff triage, F22) and
+  `/dashboard/users` (admin). The sidebar is filtered by role/permission via
+  `hasPermission`; legacy URLs (`/account`, `/agents/requests`, `/admin/users`, …)
+  redirect to their `/dashboard` equivalents.
 
 ## i18n (next-intl)
 
@@ -115,8 +123,11 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   translated components use the `renderWithIntl` helper in `src/test/render.tsx`.
 - Playwright pins `locale: 'fr-FR'` so auto-detection keeps the default-locale
   (unprefixed) URLs stable.
-- Not yet localized: auth, citizen, agent and admin areas (still French and
-  `next/link`), and the auth emails in `src/lib/auth.ts`.
+- The whole authenticated area, the auth flows and the transactional auth
+  emails are localized with next-intl (`Dashboard`, `Account`, `Agents`,
+  `Admin`, `Auth`, `AuthEmails` namespaces plus `Validation.auth`). Auth emails
+  render from `src/lib/email-templates.ts`; the locale comes from the request
+  (`NEXT_LOCALE` cookie → `Accept-Language` → `fr`) via `src/lib/email-locale.ts`.
 
 ## UI / conventions
 

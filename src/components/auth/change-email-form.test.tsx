@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithIntl, screen, waitFor } from '@/test/render';
 import userEvent from '@testing-library/user-event';
 
 const mocks = vi.hoisted(() => ({ changeEmail: vi.fn() }));
 
-vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: unknown; children: ReactNode }) => (
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ href, children }: { href: unknown; children: ReactNode }) => (
     <a href={typeof href === 'string' ? href : '#'}>{children}</a>
   ),
 }));
@@ -23,7 +23,7 @@ describe('ChangeEmailForm', () => {
   });
 
   it('shows the current email when provided', () => {
-    render(<ChangeEmailForm currentEmail="old@example.com" />);
+    renderWithIntl(<ChangeEmailForm currentEmail="old@example.com" />);
 
     expect(
       screen.getByText('Adresse actuelle : old@example.com'),
@@ -32,7 +32,7 @@ describe('ChangeEmailForm', () => {
 
   it('rejects an invalid new email and does not submit', async () => {
     const user = userEvent.setup();
-    render(<ChangeEmailForm />);
+    renderWithIntl(<ChangeEmailForm />);
 
     await user.type(screen.getByLabelText('Nouvelle adresse email'), 'nope');
     await user.click(
@@ -48,7 +48,7 @@ describe('ChangeEmailForm', () => {
   it('submits the new email and shows the confirmation state', async () => {
     mocks.changeEmail.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<ChangeEmailForm />);
+    renderWithIntl(<ChangeEmailForm />);
 
     await user.type(
       screen.getByLabelText('Nouvelle adresse email'),
@@ -61,7 +61,7 @@ describe('ChangeEmailForm', () => {
     await waitFor(() =>
       expect(mocks.changeEmail).toHaveBeenCalledWith({
         newEmail: 'new@example.com',
-        callbackURL: expect.stringContaining('/account'),
+        callbackURL: expect.stringContaining('/dashboard/account'),
       }),
     );
     expect(await screen.findByText('Vérifie tes emails')).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('ChangeEmailForm', () => {
       error: { message: 'Adresse déjà utilisée.' },
     });
     const user = userEvent.setup();
-    render(<ChangeEmailForm />);
+    renderWithIntl(<ChangeEmailForm />);
 
     await user.type(
       screen.getByLabelText('Nouvelle adresse email'),

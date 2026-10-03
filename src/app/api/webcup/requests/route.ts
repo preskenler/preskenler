@@ -17,7 +17,7 @@ export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
-    return Response.json({ error: 'Non autorisé.' }, { status: 401 });
+    return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
   after(async () => {
@@ -33,9 +33,6 @@ export async function GET() {
     return Response.json(snapshot);
   } catch (error) {
     console.error('[webcup] snapshot read failed', error);
-    return Response.json(
-      { error: 'Demandes indisponibles pour le moment.' },
-      { status: 502 },
-    );
+    return Response.json({ error: 'webcup_unavailable' }, { status: 502 });
   }
 }
