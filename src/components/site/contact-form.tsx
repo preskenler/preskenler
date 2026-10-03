@@ -84,7 +84,7 @@ export function ContactForm({
 
   if (sent) {
     return (
-      <Card>
+      <Card role="status" aria-live="polite">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Message envoyé</CardTitle>
           <CardDescription>
@@ -127,9 +127,12 @@ export function ContactForm({
                 placeholder="Ton nom"
                 required
                 aria-invalid={errors.name ? true : undefined}
+                aria-describedby={
+                  errors.name ? 'contact-name-error' : undefined
+                }
                 {...field('name')}
               />
-              <FieldError errors={[errors.name]} />
+              <FieldError id="contact-name-error" errors={[errors.name]} />
             </Field>
 
             <Field data-invalid={errors.email ? true : undefined}>
@@ -142,9 +145,12 @@ export function ContactForm({
                 placeholder="ton@email.com"
                 required
                 aria-invalid={errors.email ? true : undefined}
+                aria-describedby={
+                  errors.email ? 'contact-email-error' : undefined
+                }
                 {...field('email')}
               />
-              <FieldError errors={[errors.email]} />
+              <FieldError id="contact-email-error" errors={[errors.email]} />
             </Field>
 
             <Field data-invalid={errors.service ? true : undefined}>
@@ -156,6 +162,9 @@ export function ContactForm({
                 className="w-full"
                 required
                 aria-invalid={errors.service ? true : undefined}
+                aria-describedby={
+                  errors.service ? 'contact-service-error' : undefined
+                }
                 {...field('service')}
               >
                 {services.map((service) => (
@@ -164,7 +173,10 @@ export function ContactForm({
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
-              <FieldError errors={[errors.service]} />
+              <FieldError
+                id="contact-service-error"
+                errors={[errors.service]}
+              />
             </Field>
 
             <Field data-invalid={errors.message ? true : undefined}>
@@ -175,15 +187,24 @@ export function ContactForm({
                 required
                 placeholder="Explique ta demande…"
                 aria-invalid={errors.message ? true : undefined}
+                aria-describedby={`contact-message-help${
+                  errors.message ? ' contact-message-error' : ''
+                }`}
                 {...field('message')}
               />
-              <FieldDescription>
+              <FieldDescription id="contact-message-help">
                 Pas de données sensibles dans ce message.
               </FieldDescription>
-              <FieldError errors={[errors.message]} />
+              <FieldError
+                id="contact-message-error"
+                errors={[errors.message]}
+              />
             </Field>
 
-            <FieldError errors={[errors.root?.server]} />
+            <FieldError
+              id="contact-form-error"
+              errors={[errors.root?.server]}
+            />
 
             <Field>
               <Button type="submit" size="lg" disabled={isSubmitting}>

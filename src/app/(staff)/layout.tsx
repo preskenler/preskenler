@@ -28,7 +28,10 @@ export default async function StaffLayout({
   const role = normalizeRole(session.user.role);
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-12">
+    <main
+      id="contenu"
+      className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-12"
+    >
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
@@ -60,7 +63,10 @@ export default async function StaffLayout({
           </div>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-2 text-sm">
+        <nav
+          aria-label="Navigation de l’espace agents"
+          className="flex flex-wrap items-center gap-2 text-sm"
+        >
           <Link
             href="/requests"
             className="rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"

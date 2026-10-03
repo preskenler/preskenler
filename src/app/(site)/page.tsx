@@ -43,7 +43,10 @@ function AccessCard({
   return (
     <Card size="sm">
       <CardHeader>
-        <span className="flex size-10 items-center justify-center rounded-xl bg-muted text-foreground">
+        <span
+          aria-hidden="true"
+          className="flex size-10 items-center justify-center rounded-xl bg-muted text-foreground"
+        >
           {icon}
         </span>
         <CardTitle>
@@ -111,19 +114,19 @@ export default async function HomePage() {
           href="/services"
           title="Services municipaux"
           description={`${cityServices.length} services pour t’orienter dans tes démarches.`}
-          icon={<RiCommunityLine className="size-5" />}
+          icon={<RiCommunityLine className="size-5" aria-hidden="true" />}
         />
         <AccessCard
           href="/announcements"
           title="Annonces de la ville"
           description="L’actualité et les informations pratiques de Terra Nova."
-          icon={<RiMegaphoneLine className="size-5" />}
+          icon={<RiMegaphoneLine className="size-5" aria-hidden="true" />}
         />
         <AccessCard
           href="/contact"
           title="Contacter la mairie"
           description="Envoie un message au service concerné et garde une trace."
-          icon={<RiMailSendLine className="size-5" />}
+          icon={<RiMailSendLine className="size-5" aria-hidden="true" />}
         />
       </section>
 

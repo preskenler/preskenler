@@ -37,6 +37,14 @@ export function RequestsBoard({
 
       <SessionStatus session={snapshot.session} />
 
+      <p className="sr-only" role="status" aria-live="polite">
+        {requests.length} demande{requests.length > 1 ? 's' : ''} suivie
+        {requests.length > 1 ? 's' : ''}.
+        {snapshot.newCodes.length > 0
+          ? ` ${snapshot.newCodes.length} nouvelle(s).`
+          : ''}
+      </p>
+
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h2 className="font-heading text-lg font-medium">
