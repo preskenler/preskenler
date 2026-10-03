@@ -31,6 +31,11 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   (`postinstall` does it on install).
 - Migrations: `npm run db:migrate` (dev, creates a migration), `npm run db:deploy`
   (CI/prod). CI fails on schema drift (`prisma migrate diff --exit-code`).
+- `npm run db:seed` creates demo accounts (never run automatically): citizens
+  `camille.martin@`, `yanis.bernard@`, `louise.petit@terranova.city`; agents
+  `agent.etat-civil@`, `agent.proprete@terranova.city`; and `admin@terranova.city`.
+  Shared password `PreskEnLer2026!` (override with `SEED_PASSWORD`). Defined in
+  `prisma/seed.ts`, wired through `migrations.seed` in `prisma7.config.ts`.
 - Local stack: `docker compose up` (db + app, with Compose Watch), or point
   `DATABASE_URL` at a MySQL on `localhost:3306`. Copy `.env.example` to `.env`.
 
