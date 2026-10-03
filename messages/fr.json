@@ -7,6 +7,8 @@
     "skipToContent": "Aller au contenu",
     "loadingPage": "Chargement de la page",
     "displayPreferences": "Préférences d’affichage",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
     "theme": {
       "label": "Thème",
       "light": "Clair",

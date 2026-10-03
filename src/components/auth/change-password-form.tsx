@@ -24,7 +24,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/auth/password-input';
 import { Spinner } from '@/components/ui/spinner';
 import { Link } from '@/i18n/navigation';
 import { authClient } from '@/lib/auth-client';
@@ -114,9 +114,8 @@ export function ChangePasswordForm() {
               <FieldLabel htmlFor="change-password-current">
                 {t('current')}
               </FieldLabel>
-              <Input
+              <PasswordInput
                 id="change-password-current"
-                type="password"
                 autoComplete="current-password"
                 required
                 aria-invalid={errors.currentPassword ? true : undefined}
@@ -135,9 +134,8 @@ export function ChangePasswordForm() {
 
             <Field data-invalid={errors.newPassword ? true : undefined}>
               <FieldLabel htmlFor="change-password-new">{t('new')}</FieldLabel>
-              <Input
+              <PasswordInput
                 id="change-password-new"
-                type="password"
                 autoComplete="new-password"
                 required
                 minLength={8}
@@ -160,9 +158,8 @@ export function ChangePasswordForm() {
               <FieldLabel htmlFor="change-password-confirm">
                 {t('confirm')}
               </FieldLabel>
-              <Input
+              <PasswordInput
                 id="change-password-confirm"
-                type="password"
                 autoComplete="new-password"
                 required
                 aria-invalid={errors.confirmPassword ? true : undefined}
