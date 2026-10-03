@@ -1,23 +1,23 @@
 # Demandes Terra Nova — TODO
 
-_Généré le 2026-10-03T12:08:07.794Z · API 1.0 · active · vague 4 · 32 visibles · 32 demandes (7 à faire, 25 faites)_
+_Généré le 2026-10-03T13:09:41.740Z · API 1.0 · active · vague 5 · 36 visibles · 36 demandes (7 à faire, 29 faites)_
 
 ## À faire
 
-- [ ] `D11` — **Pauline R. — Citoyenne (Citoyen)** · difficulté 2 · 540 XP · vague 2
-      > Bonjour, j’ai déjà effectué plusieurs démarches sur la plateforme et je ne sais pas toujours où elles en sont. J’aimerais retrouver au même endroit mes demandes, leur état actuel et les principales étapes déjà réalisées, sans devoir contacter la mairie.
-- [ ] `D12` — **Service d’Accueil des Nouveaux Arrivants (Institution)** · difficulté 2 · 540 XP · vague 2
-      > De nouveaux habitants arrivent régulièrement à Nova Terra et beaucoup découvrent les services municipaux pour la première fois. Lors de leur première connexion, ils doivent comprendre rapidement comment compléter leur profil, trouver un service et commencer une démarche.
 - [ ] `D15` — **Citoyen (Citoyen)** · difficulté 1 · 270 XP · vague 2
       > Je passe d’un service à l’autre et il m’arrive de ne plus savoir dans quelle partie de la plateforme je me trouve. J’aimerais disposer d’un repère simple pour comprendre mon emplacement et revenir facilement aux niveaux précédents.
 - [ ] `F25` — **Lucas Meyer — Citoyen (Citoyen)** · difficulté 2 · 540 XP · vague 2
       > Bonjour, un lampadaire est cassé dans ma rue et je ne sais pas quel service contacter. La plateforme pourrait-elle me permettre de signaler directement ce type de problème en indiquant ce qui s’est passé et où il se trouve ?
-- [ ] `F26` — **Citoyenne anonyme (Citoyen)** · difficulté 1 · 270 XP · vague 2
-      > J’ai déjà envoyé plusieurs demandes à la ville et j’aimerais pouvoir retrouver les précédentes sans avoir à les rechercher une par une. Un historique dans mon espace personnel m’aiderait à vérifier ce que j’ai déjà signalé.
-- [ ] `F27` — **Service d’Accueil (Institution)** · difficulté 2 · 540 XP · vague 2
-      > Notre service accueille des habitants qui ne maîtrisent pas tous la même langue. Au-delà des menus de l’interface, les contenus essentiels des services et des démarches doivent pouvoir être proposés dans plusieurs langues.
 - [ ] `F28` — **Mairie de Nova Terra (Institution)** · difficulté 1 · 270 XP · vague 2
       > Le catalogue de services commence à s’étoffer et les habitants ne doivent pas avoir à tout parcourir pour trouver les démarches les plus courantes. Nous souhaitons pouvoir mettre en avant les services prioritaires ou les plus utilisés.
+- [ ] `F37` — **Centre de cybersécurité (Alerte sécurité)** · difficulté 3 · 900 XP · vague 5
+      > Nous détectons un nombre inhabituel de tentatives de connexion sur plusieurs comptes citoyens. La protection doit être perceptible dans le fonctionnement réel de la plateforme sans rendre l’usage normal inutilement compliqué.
+- [ ] `F38` — **Citoyen (Citoyen)** · difficulté 2 · 600 XP · vague 5
+      > Un service municipal peut parfois être interrompu pour maintenance ou à cause d’un incident. Les habitants doivent pouvoir savoir qu’il est indisponible avant de commencer une démarche et comprendre quand revenir ou quoi faire à la place.
+- [ ] `F39` — **Service Administration (Institution)** · difficulté 2 · 600 XP · vague 5
+      > Les citoyens devraient pouvoir prendre rendez-vous avec un agent. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
+- [ ] `F40` — **Citoyenne (Citoyen)** · difficulté 1 · 300 XP · vague 5
+      > Je voudrais recevoir un rappel avant mon rendez-vous. Le parcours doit éviter les ambiguïtés sur le créneau choisi et donner à l’habitant les informations nécessaires pour préparer son rendez-vous.
 
 ## Faites
 
@@ -47,12 +47,20 @@ _Généré le 2026-10-03T12:08:07.794Z · API 1.0 · active · vague 4 · 32 vis
       > Bonjour, ma vue baisse et certaines parties de la plateforme sont difficiles à distinguer. Les informations importantes manquent parfois de contraste et l’interface devient fatigante à parcourir. J’aimerais disposer d’un affichage plus lisible sans perdre les fonctions essentielles.
 - [x] `F24` — **Sophie Nguyen — Citoyenne (Citoyen)** · difficulté 1 · 260 XP · vague 1
       > Bonjour, même avec mes lunettes, certains textes restent trop petits pour être lus confortablement. Est-ce que je pourrais augmenter la taille des caractères sans que les pages deviennent inutilisables ou que les informations se chevauchent ?
+- [x] `D11` — **Pauline R. — Citoyenne (Citoyen)** · difficulté 2 · 540 XP · vague 2
+      > Bonjour, j’ai déjà effectué plusieurs démarches sur la plateforme et je ne sais pas toujours où elles en sont. J’aimerais retrouver au même endroit mes demandes, leur état actuel et les principales étapes déjà réalisées, sans devoir contacter la mairie.
+- [x] `D12` — **Service d’Accueil des Nouveaux Arrivants (Institution)** · difficulté 2 · 540 XP · vague 2
+      > De nouveaux habitants arrivent régulièrement à Nova Terra et beaucoup découvrent les services municipaux pour la première fois. Lors de leur première connexion, ils doivent comprendre rapidement comment compléter leur profil, trouver un service et commencer une démarche.
 - [x] `D14` — **Amina Rahal — Citoyenne (Citoyen)** · difficulté 2 · 540 XP · vague 2
       > Bonjour, le français n’est pas la langue avec laquelle je suis le plus à l’aise. J’aimerais pouvoir choisir une autre langue pour comprendre les éléments essentiels de l’interface et effectuer mes démarches plus sereinement.
 - [x] `D16` — **Citoyenne (Citoyen)** · difficulté 1 · 270 XP · vague 2
       > Après avoir envoyé une demande, je ne sais pas toujours si elle a réellement été prise en compte. J’aimerais obtenir une confirmation claire immédiatement après l’envoi afin d’éviter de recommencer inutilement la démarche.
 - [x] `D17` — **Service Relation Usagers (Institution)** · difficulté 1 · 270 XP · vague 2
       > Les premières demandes citoyennes arrivent et nos agents doivent pouvoir évaluer la charge de travail en un coup d’œil. Nous avons besoin de savoir immédiatement combien de demandes attendent encore une prise en charge.
+- [x] `F26` — **Citoyenne anonyme (Citoyen)** · difficulté 1 · 270 XP · vague 2
+      > J’ai déjà envoyé plusieurs demandes à la ville et j’aimerais pouvoir retrouver les précédentes sans avoir à les rechercher une par une. Un historique dans mon espace personnel m’aiderait à vérifier ce que j’ai déjà signalé.
+- [x] `F27` — **Service d’Accueil (Institution)** · difficulté 2 · 540 XP · vague 2
+      > Notre service accueille des habitants qui ne maîtrisent pas tous la même langue. Au-delà des menus de l’interface, les contenus essentiels des services et des démarches doivent pouvoir être proposés dans plusieurs langues.
 - [x] `D18` — **Haut Conseil de la Ville (Institution)** · difficulté 3 · 840 XP · vague 3
       > La plateforme doit pouvoir diffuser rapidement un message général à tous les habitants. L’information doit être visible au bon moment et permettre aux personnes concernées de comprendre immédiatement ce qu’elles doivent savoir ou faire.
 - [x] `F29` — **Centre de surveillance environnementale (Alerte)** · difficulté 3 · 840 XP · vague 3
