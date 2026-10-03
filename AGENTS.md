@@ -86,6 +86,11 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
   navigation wrappers `src/i18n/navigation.ts`, proxy `src/proxy.ts` (Next 16
   renamed middleware to proxy). The matcher excludes `/api/*`, so Better Auth
   and the Webcup cron stay non-localized.
+- `next.config.mjs` resolves `next-intl/config` → `src/i18n/request.ts` with a
+  manual webpack/Turbopack alias instead of `createNextIntlPlugin()`, because
+  that plugin eagerly imports `@swc/core`, whose native addon the deploy host
+  can't load. Restore the plugin (and allowlist `@swc/core`) only if message
+  extraction is adopted.
 - Pages live under `src/app/[locale]/`; `api/**` and `global-error.tsx` stay at
   `src/app/`. The root layout is `src/app/[locale]/layout.tsx` and mounts
   `NextIntlClientProvider`.
