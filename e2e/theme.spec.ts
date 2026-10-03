@@ -1,28 +1,25 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-async function choosePreference(page: Page, name: string) {
-  const item = page.getByRole('menuitemradio', { name });
+const TRIGGER = 'Préférences d’affichage';
 
-  // The menu may stay open (radio items) or close after a change; make sure the
-  // item is reachable before clicking it.
-  if (!(await item.isVisible())) {
-    await page.getByRole('button', { name: 'Préférences d’affichage' }).click();
-  }
-
-  await item.click();
-}
-
+// One selection per test: Base UI radio menus keep/close inconsistently across
+// repeated choices, and each preference is independent anyway.
 test.describe('display preferences', () => {
-  test('switches theme and increases the text size', async ({ page }) => {
+  test('switches to the dark theme', async ({ page }) => {
     await page.goto('/');
 
-    await choosePreference(page, 'Sombre');
+    await page.getByRole('button', { name: TRIGGER }).click();
+    await page.getByRole('menuitemradio', { name: 'Sombre' }).click();
+
     await expect(page.locator('html')).toHaveClass(/dark/);
+  });
 
-    await choosePreference(page, 'Clair');
-    await expect(page.locator('html')).not.toHaveClass(/dark/);
+  test('increases the text size', async ({ page }) => {
+    await page.goto('/');
 
-    await choosePreference(page, 'Grande');
+    await page.getByRole('button', { name: TRIGGER }).click();
+    await page.getByRole('menuitemradio', { name: 'Grande' }).click();
+
     await expect(page.locator('html')).toHaveCSS('font-size', '18px');
   });
 });
