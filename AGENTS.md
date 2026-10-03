@@ -46,6 +46,22 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - `src/lib/schemas/` is the source of truth for form rules/types and mirrors
   Better Auth's server rules. UI copy is French; reuse the existing wording.
 
+## Terra Nova API (Webcup)
+
+- Live demand feed in `src/lib/webcup/`: `client.ts` (server-only fetch with the
+  `X-Webcup-Api-Key` header), `map.ts` (snake_case → DB normalization + new-code
+  detection), `sync.ts` (persist + read snapshots), `types.ts`. `WEBCUP_API_KEY`
+  is server-only — never prefix it with `NEXT_PUBLIC_`.
+- Persisted in MySQL as `webcup_request` / `webcup_session`, keyed on the stable
+  `request_code`; ship schema changes through `db:migrate` / `db:deploy`.
+- `GET /api/webcup/requests` (authenticated) returns the persisted snapshot and
+  refreshes from the API in the background via `after()`.
+- `GET /api/webcup/sync` (Bearer `WEBCUP_CRON_SECRET`, or Vercel's `CRON_SECRET`)
+  is the scheduler entry point. On cPanel add a cron job every minute:
+  `curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webcup/sync`.
+- Staff board at `/requests` (auth-gated) polls client-side every 30s; new
+  arrivals are detected by `request_code`, never by a fixed count.
+
 ## UI / conventions
 
 - shadcn/ui uses the `base-nova` style on **Base UI** (`@base-ui/react`), not
