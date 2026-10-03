@@ -3,11 +3,14 @@ import { headers } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 
 import { ActivityChart } from '@/components/dashboard/activity-chart';
+import { AppointmentReminder } from '@/components/dashboard/appointment-reminder';
 import { AttentionCard } from '@/components/dashboard/attention-card';
 import { DashboardTable } from '@/components/dashboard/data-table';
 import { OnboardingChecklist } from '@/components/dashboard/onboarding-checklist';
 import { StatCards } from '@/components/dashboard/stat-cards';
 import { Badge } from '@/components/ui/badge';
+import { getUpcomingWithin } from '@/lib/appointments';
+import { getUserAppointments } from '@/lib/appointment-store';
 import { auth } from '@/lib/auth';
 import { toBroadcastView } from '@/lib/broadcasts';
 import { getActiveBroadcasts } from '@/lib/broadcast-store';
@@ -176,6 +179,11 @@ export default async function DashboardPage() {
 
   const citizen = await getCitizenDashboard(user.id);
   const alerts = (await getActiveBroadcasts()).map(toBroadcastView);
+  // In-app appointment reminder (demande F40): surface the next booking within
+  // 72 hours without waiting for the email channel.
+  const upcomingAppointments = getUpcomingWithin(
+    await getUserAppointments(user.id),
+  );
 
   return (
     <>
@@ -185,6 +193,8 @@ export default async function DashboardPage() {
       />
 
       <AttentionCard pendingMessages={citizen.pending} alerts={alerts} />
+
+      <AppointmentReminder appointments={upcomingAppointments} />
 
       <StatCards
         cards={[

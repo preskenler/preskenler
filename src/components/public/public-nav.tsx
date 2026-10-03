@@ -10,6 +10,8 @@ const links = [
   { href: '/transport', key: 'transport' },
   { href: '/announcements', key: 'announcements' },
   { href: '/alerts', key: 'alerts' },
+  { href: '/reports', key: 'reports' },
+  { href: '/appointments', key: 'appointments' },
   { href: '/contact', key: 'contact' },
 ] as const;
 

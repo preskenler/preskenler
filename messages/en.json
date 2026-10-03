@@ -29,7 +29,9 @@
       "announcements": "Announcements",
       "contact": "Contact",
       "transport": "Transport",
-      "alerts": "Alerts"
+      "alerts": "Alerts",
+      "reports": "Report",
+      "appointments": "Appointments"
     },
     "Header": {
       "account": "My account",
@@ -134,6 +136,21 @@
         "placeholder": "Search for a service…",
         "all": "All",
         "noResults": "No service matches “{query}”."
+      },
+      "featured": {
+        "title": "Most requested services",
+        "description": "The most common procedures, within reach.",
+        "badge": "Popular",
+        "priorityBadge": "Priority"
+      },
+      "availability": {
+        "available": "Available",
+        "maintenance": "Under maintenance",
+        "incident": "Ongoing incident",
+        "notice": "This service is temporarily unavailable.",
+        "expectedReturn": "Back on {date}.",
+        "alternative": "In the meantime: {alternative}",
+        "contactBlocked": "This service is currently unavailable. Choose another service or try again later."
       }
     },
     "Announcements": {
@@ -301,6 +318,102 @@
       "ai": "AI-assisted tailored recommendations",
       "viewAll": "All alerts",
       "dismiss": "Dismiss this message"
+    },
+    "Breadcrumb": {
+      "ariaLabel": "Breadcrumb",
+      "home": "Home"
+    },
+    "Reports": {
+      "metaTitle": "Report a problem — PreskEnLer",
+      "title": "Report a problem",
+      "description": "Report a broken street lamp, a damaged pavement or uncollected waste. Tell us what happened and where.",
+      "form": {
+        "name": "Your name",
+        "namePlaceholder": "First Last",
+        "email": "Email address",
+        "emailPlaceholder": "you@email.com",
+        "category": "Type of problem",
+        "categoryPlaceholder": "Choose a category",
+        "location": "Location",
+        "locationPlaceholder": "12 rue des Fondateurs, outside the school",
+        "description": "What happened?",
+        "descriptionPlaceholder": "Describe the problem (since when, what it looks like…).",
+        "descriptionHelp": "The more precise your report, the faster it is handled.",
+        "submit": "Send the report",
+        "submitting": "Sending…",
+        "error": "The report could not be sent. Please try again shortly."
+      },
+      "sent": {
+        "title": "Report sent",
+        "description": "Your report has been forwarded to the relevant service.",
+        "reference": "Tracking number",
+        "referenceHint": "Keep this number to track your report.",
+        "track": "Track my reports",
+        "again": "Report another problem"
+      },
+      "categories": {
+        "streetlight": "Street lighting",
+        "road": "Roads",
+        "waste": "Cleaning and waste",
+        "water": "Water and sanitation",
+        "green-space": "Green spaces",
+        "other": "Other"
+      },
+      "statuses": {
+        "new": "New",
+        "in_progress": "In progress",
+        "resolved": "Resolved"
+      }
+    },
+    "Appointments": {
+      "metaTitle": "Book an appointment — PreskEnLer",
+      "title": "Book an appointment",
+      "description": "Choose a service and a time slot: you will get a precise confirmation with everything you need to prepare.",
+      "steps": {
+        "service": "1. Service",
+        "slot": "2. Time slot",
+        "details": "3. Your details"
+      },
+      "form": {
+        "service": "Service",
+        "servicePlaceholder": "Choose a service",
+        "slot": "Time slot",
+        "slotPlaceholder": "Choose a date and time",
+        "noSlots": "No slot available for this service.",
+        "name": "Your name",
+        "email": "Email address",
+        "phone": "Phone (optional)",
+        "reason": "Reason for the appointment",
+        "reasonPlaceholder": "Briefly describe your request.",
+        "submit": "Confirm the appointment",
+        "submitting": "Confirming…",
+        "error": "The appointment could not be booked. The slot may be full, please choose another one.",
+        "slotUnavailable": "This slot is no longer available. Choose another one.",
+        "changeSlot": "Change slot"
+      },
+      "summary": {
+        "label": "Your appointment",
+        "service": "Service",
+        "when": "Date and time",
+        "duration": "Duration",
+        "durationMinutes": "{minutes} minutes",
+        "location": "Location",
+        "agent": "Agent",
+        "reference": "Appointment number",
+        "prepare": "Prepare your appointment"
+      },
+      "preparation": {
+        "title": "How to prepare",
+        "id": "Bring an ID document.",
+        "documents": "Gather the documents relevant to your procedure.",
+        "arriveEarly": "Arrive a few minutes early.",
+        "cancel": "You can cancel from your account if needed."
+      },
+      "confirmed": {
+        "title": "Appointment confirmed",
+        "description": "Here is the summary of your appointment.",
+        "viewAll": "View my appointments"
+      }
     }
   },
   "Errors": {
@@ -355,6 +468,83 @@
       "invalid": "Please check the form information.",
       "unauthorized": "You are not allowed to broadcast a message.",
       "server": "Broadcast failed for now. Try again later."
+    },
+    "report": {
+      "name": {
+        "required": "Enter your name.",
+        "max120": "Your name is too long."
+      },
+      "email": {
+        "invalid": "This email address does not look valid."
+      },
+      "category": {
+        "required": "Choose the type of problem."
+      },
+      "location": {
+        "min": "Specify where the problem is.",
+        "max200": "The location is too long."
+      },
+      "description": {
+        "min": "Describe the problem in a few words.",
+        "max2000": "The description is too long."
+      }
+    },
+    "appointment": {
+      "slot": {
+        "required": "Choose a time slot."
+      },
+      "name": {
+        "required": "Enter your name.",
+        "max120": "Your name is too long."
+      },
+      "email": {
+        "invalid": "This email address does not look valid."
+      },
+      "phone": {
+        "max32": "The phone number is too long."
+      },
+      "reason": {
+        "min": "Give a reason for the appointment.",
+        "max1000": "The reason is too long."
+      },
+      "service": {
+        "required": "Choose a service."
+      },
+      "startsAt": {
+        "required": "Choose a date and time."
+      },
+      "duration": {
+        "min": "At least 10 minutes.",
+        "max": "At most 180 minutes."
+      },
+      "agentName": {
+        "max120": "The agent name is too long."
+      },
+      "location": {
+        "max200": "The location is too long."
+      },
+      "capacity": {
+        "min": "At least 1 seat.",
+        "max": "At most 20 seats."
+      }
+    },
+    "serviceStatus": {
+      "service": {
+        "required": "Choose a service.",
+        "max64": "Service name too long."
+      },
+      "status": {
+        "required": "Choose a status."
+      },
+      "message": {
+        "max500": "The message is too long."
+      },
+      "expectedReturn": {
+        "max32": "Invalid date."
+      },
+      "alternative": {
+        "max500": "The alternative is too long."
+      }
     }
   },
   "Auth": {
@@ -371,7 +561,8 @@
       "noAccount": "No account yet?",
       "signUp": "Create account",
       "error": "Unable to sign in. Check your credentials.",
-      "banned": "Your account has been suspended. Contact the administration if you believe this is a mistake."
+      "banned": "Your account has been suspended. Contact the administration if you believe this is a mistake.",
+      "tooManyAttempts": "Too many sign-in attempts. Try again in {seconds} second(s)."
     },
     "signUp": {
       "metaTitle": "Create account — PreskEnLer",
@@ -477,7 +668,11 @@
       "portal": "Portal",
       "signOut": "Sign out",
       "delete": "Delete my account",
-      "broadcasts": "Alerts & messages"
+      "broadcasts": "Alerts & messages",
+      "reports": "Reports",
+      "appointments": "Appointments",
+      "serviceStatus": "Service status",
+      "security": "Security"
     },
     "accountDialog": {
       "title": "My account",
@@ -634,6 +829,104 @@
       "reactivate": "Reactivate",
       "delete": "Delete",
       "empty": "No message yet."
+    },
+    "breadcrumb": {
+      "ariaLabel": "Breadcrumb",
+      "home": "Dashboard"
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "Problems reported by residents, newest first.",
+      "summary": "{pending, plural, =0 {No report pending} one {# report pending} other {# reports pending}} · {total} total",
+      "mine": "My reports",
+      "empty": "No report yet.",
+      "emptyMine": "You have not sent any report yet.",
+      "createdAt": "Reported on {date}",
+      "location": "Location",
+      "reference": "Tracking no. {reference}",
+      "markInProgress": "Mark in progress",
+      "markResolved": "Mark resolved",
+      "reopen": "Reopen",
+      "newReport": "Report a problem"
+    },
+    "appointments": {
+      "title": "Appointments",
+      "mine": "My appointments",
+      "description": "Appointments booked by residents and the slots on offer.",
+      "empty": "No appointment yet.",
+      "emptyMine": "You have not booked any appointment yet.",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "cancel": "Cancel",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "booked": "Confirmed",
+      "reference": "No. {reference}",
+      "when": "{date} · {duration} min",
+      "agent": "With {agent}",
+      "location": "Location: {location}",
+      "bookButton": "Book an appointment",
+      "slots": {
+        "title": "Proposed slots",
+        "description": "Publish slots that residents can book.",
+        "service": "Service",
+        "startsAt": "Date and time",
+        "duration": "Duration (minutes)",
+        "agentName": "Agent (optional)",
+        "location": "Location (optional)",
+        "capacity": "Seats",
+        "submit": "Add the slot",
+        "created": "Slot added.",
+        "duplicate": "This slot already exists.",
+        "delete": "Delete",
+        "empty": "No slot published.",
+        "remaining": "{remaining} / {capacity} seat(s)",
+        "bookedCount": "{count, plural, =0 {No booking} one {# booking} other {# bookings}}"
+      },
+      "reminder": {
+        "title": "Appointment reminder",
+        "description": "Your appointment is coming up: {date}.",
+        "action": "View my appointment"
+      }
+    },
+    "serviceStatus": {
+      "title": "Service status",
+      "description": "Tell residents when a service is unavailable and what to do instead.",
+      "available": "Available",
+      "maintenance": "Under maintenance",
+      "incident": "Incident",
+      "service": "Service",
+      "statusLabel": "Status",
+      "message": "Message shown to residents",
+      "messagePlaceholder": "E.g.: the service is interrupted until further notice.",
+      "expectedReturn": "Expected return",
+      "alternative": "Alternative",
+      "alternativePlaceholder": "E.g.: contact waste services about the bins.",
+      "save": "Save",
+      "saved": "Status saved."
+    },
+    "security": {
+      "title": "Security",
+      "description": "Monitor unusual sign-in attempts across the platform.",
+      "window": "Observation window",
+      "hours": "last {hours} hours",
+      "summary": "{total} attempt(s) · {failures} failure(s)",
+      "accountsTitle": "Accounts to watch",
+      "accountsEmpty": "No account exceeds the attempt threshold.",
+      "addressesTitle": "Addresses to watch",
+      "addressesEmpty": "No address hits several accounts.",
+      "recentTitle": "Latest attempts",
+      "recentEmpty": "No attempt recorded.",
+      "failures": "{count, plural, one {# failure} other {# failures}}",
+      "accounts": "{count, plural, one {# account} other {# accounts}}",
+      "outcome": {
+        "success": "Success",
+        "failure": "Failure"
+      },
+      "account": "Account",
+      "address": "IP address",
+      "when": "When",
+      "result": "Result"
     }
   },
   "Account": {

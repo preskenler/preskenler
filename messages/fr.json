@@ -29,7 +29,9 @@
       "announcements": "Annonces",
       "contact": "Contact",
       "transport": "Transports",
-      "alerts": "Alertes"
+      "alerts": "Alertes",
+      "reports": "Signaler",
+      "appointments": "Rendez-vous"
     },
     "Header": {
       "account": "Mon compte",
@@ -134,6 +136,21 @@
         "placeholder": "Rechercher un service…",
         "all": "Tous",
         "noResults": "Aucun service ne correspond à « {query} »."
+      },
+      "featured": {
+        "title": "Services les plus demandés",
+        "description": "Les démarches les plus courantes, à portée de main.",
+        "badge": "Populaire",
+        "priorityBadge": "Prioritaire"
+      },
+      "availability": {
+        "available": "Disponible",
+        "maintenance": "En maintenance",
+        "incident": "Incident en cours",
+        "notice": "Ce service est temporairement indisponible.",
+        "expectedReturn": "Retour prévu le {date}.",
+        "alternative": "En attendant : {alternative}",
+        "contactBlocked": "Ce service est actuellement indisponible. Choisis un autre service ou réessaie plus tard."
       }
     },
     "Announcements": {
@@ -301,6 +318,102 @@
       "ai": "Recommandations adaptées assistées par IA",
       "viewAll": "Toutes les alertes",
       "dismiss": "Masquer ce message"
+    },
+    "Breadcrumb": {
+      "ariaLabel": "Fil d’Ariane",
+      "home": "Accueil"
+    },
+    "Reports": {
+      "metaTitle": "Signaler un problème — PreskEnLer",
+      "title": "Signaler un problème",
+      "description": "Signale un lampadaire cassé, un trottoir abîmé ou des déchets non ramassés. Indique ce qui s’est passé et où.",
+      "form": {
+        "name": "Ton nom",
+        "namePlaceholder": "Prénom Nom",
+        "email": "Adresse email",
+        "emailPlaceholder": "ton@email.com",
+        "category": "Type de problème",
+        "categoryPlaceholder": "Choisis une catégorie",
+        "location": "Lieu",
+        "locationPlaceholder": "12 rue des Fondateurs, devant l’école",
+        "description": "Que s’est-il passé ?",
+        "descriptionPlaceholder": "Décris le problème (depuis quand, à quoi ça ressemble…).",
+        "descriptionHelp": "Plus ton signalement est précis, plus il sera traité vite.",
+        "submit": "Envoyer le signalement",
+        "submitting": "Envoi…",
+        "error": "Le signalement n’a pas pu être envoyé. Réessaie dans un instant."
+      },
+      "sent": {
+        "title": "Signalement envoyé",
+        "description": "Ton signalement a bien été transmis au service concerné.",
+        "reference": "Numéro de suivi",
+        "referenceHint": "Garde ce numéro pour suivre ton signalement.",
+        "track": "Suivre mes signalements",
+        "again": "Signaler un autre problème"
+      },
+      "categories": {
+        "streetlight": "Éclairage public",
+        "road": "Voirie",
+        "waste": "Propreté et déchets",
+        "water": "Eau et assainissement",
+        "green-space": "Espaces verts",
+        "other": "Autre"
+      },
+      "statuses": {
+        "new": "Nouveau",
+        "in_progress": "En cours",
+        "resolved": "Résolu"
+      }
+    },
+    "Appointments": {
+      "metaTitle": "Prendre rendez-vous — PreskEnLer",
+      "title": "Prendre rendez-vous",
+      "description": "Choisis un service et un créneau : tu recevras une confirmation précise avec les informations pour préparer ton rendez-vous.",
+      "steps": {
+        "service": "1. Service",
+        "slot": "2. Créneau",
+        "details": "3. Tes informations"
+      },
+      "form": {
+        "service": "Service",
+        "servicePlaceholder": "Choisis un service",
+        "slot": "Créneau",
+        "slotPlaceholder": "Choisis une date et une heure",
+        "noSlots": "Aucun créneau disponible pour ce service.",
+        "name": "Ton nom",
+        "email": "Adresse email",
+        "phone": "Téléphone (facultatif)",
+        "reason": "Motif du rendez-vous",
+        "reasonPlaceholder": "Décris brièvement ta demande.",
+        "submit": "Confirmer le rendez-vous",
+        "submitting": "Confirmation…",
+        "error": "Le rendez-vous n’a pas pu être pris. Le créneau est peut-être complet, choisis-en un autre.",
+        "slotUnavailable": "Ce créneau n’est plus disponible. Choisis-en un autre.",
+        "changeSlot": "Changer de créneau"
+      },
+      "summary": {
+        "label": "Ton rendez-vous",
+        "service": "Service",
+        "when": "Date et heure",
+        "duration": "Durée",
+        "durationMinutes": "{minutes} minutes",
+        "location": "Lieu",
+        "agent": "Agent",
+        "reference": "Numéro de rendez-vous",
+        "prepare": "Préparer ton rendez-vous"
+      },
+      "preparation": {
+        "title": "Comment préparer ton rendez-vous",
+        "id": "Apporte une pièce d’identité.",
+        "documents": "Rassemble les documents utiles à ta démarche.",
+        "arriveEarly": "Présente-toi quelques minutes avant l’heure.",
+        "cancel": "Tu peux annuler depuis ton espace personnel si besoin."
+      },
+      "confirmed": {
+        "title": "Rendez-vous confirmé",
+        "description": "Voici le récapitulatif de ton rendez-vous.",
+        "viewAll": "Voir mes rendez-vous"
+      }
     }
   },
   "Errors": {
@@ -355,6 +468,83 @@
       "invalid": "Merci de vérifier les informations du formulaire.",
       "unauthorized": "Tu n’as pas l’autorisation de diffuser un message.",
       "server": "Diffusion impossible pour le moment. Réessaie plus tard."
+    },
+    "report": {
+      "name": {
+        "required": "Indique ton nom.",
+        "max120": "Ton nom est trop long."
+      },
+      "email": {
+        "invalid": "Cette adresse email ne semble pas valide."
+      },
+      "category": {
+        "required": "Choisis le type de problème."
+      },
+      "location": {
+        "min": "Précise le lieu du problème.",
+        "max200": "Le lieu est trop long."
+      },
+      "description": {
+        "min": "Décris le problème en quelques mots.",
+        "max2000": "La description est trop longue."
+      }
+    },
+    "appointment": {
+      "slot": {
+        "required": "Choisis un créneau."
+      },
+      "name": {
+        "required": "Indique ton nom.",
+        "max120": "Ton nom est trop long."
+      },
+      "email": {
+        "invalid": "Cette adresse email ne semble pas valide."
+      },
+      "phone": {
+        "max32": "Le numéro de téléphone est trop long."
+      },
+      "reason": {
+        "min": "Indique le motif du rendez-vous.",
+        "max1000": "Le motif est trop long."
+      },
+      "service": {
+        "required": "Choisis un service."
+      },
+      "startsAt": {
+        "required": "Choisis une date et une heure."
+      },
+      "duration": {
+        "min": "Au moins 10 minutes.",
+        "max": "Au plus 180 minutes."
+      },
+      "agentName": {
+        "max120": "Le nom de l’agent est trop long."
+      },
+      "location": {
+        "max200": "Le lieu est trop long."
+      },
+      "capacity": {
+        "min": "Au moins 1 place.",
+        "max": "Au plus 20 places."
+      }
+    },
+    "serviceStatus": {
+      "service": {
+        "required": "Choisis un service.",
+        "max64": "Nom de service trop long."
+      },
+      "status": {
+        "required": "Choisis un état."
+      },
+      "message": {
+        "max500": "Le message est trop long."
+      },
+      "expectedReturn": {
+        "max32": "Date invalide."
+      },
+      "alternative": {
+        "max500": "La solution de remplacement est trop longue."
+      }
     }
   },
   "Auth": {
@@ -371,7 +561,8 @@
       "noAccount": "Pas encore de compte ?",
       "signUp": "Créer un compte",
       "error": "Connexion impossible. Vérifie tes identifiants.",
-      "banned": "Ton compte a été suspendu. Contacte l’administration si tu penses qu’il s’agit d’une erreur."
+      "banned": "Ton compte a été suspendu. Contacte l’administration si tu penses qu’il s’agit d’une erreur.",
+      "tooManyAttempts": "Trop de tentatives de connexion. Réessaie dans {seconds} seconde(s)."
     },
     "signUp": {
       "metaTitle": "Créer un compte — PreskEnLer",
@@ -477,7 +668,11 @@
       "portal": "Portail",
       "signOut": "Se déconnecter",
       "delete": "Supprimer mon compte",
-      "broadcasts": "Alertes & messages"
+      "broadcasts": "Alertes & messages",
+      "reports": "Signalements",
+      "appointments": "Rendez-vous",
+      "serviceStatus": "État des services",
+      "security": "Sécurité"
     },
     "accountDialog": {
       "title": "Mon compte",
@@ -634,6 +829,104 @@
       "reactivate": "Réactiver",
       "delete": "Supprimer",
       "empty": "Aucun message pour le moment."
+    },
+    "breadcrumb": {
+      "ariaLabel": "Fil d’Ariane",
+      "home": "Tableau de bord"
+    },
+    "reports": {
+      "title": "Signalements",
+      "description": "Les problèmes signalés par les habitants, du plus récent au plus ancien.",
+      "summary": "{pending, plural, =0 {Aucun signalement en attente} one {# signalement en attente} other {# signalements en attente}} · {total} au total",
+      "mine": "Mes signalements",
+      "empty": "Aucun signalement pour le moment.",
+      "emptyMine": "Tu n’as encore envoyé aucun signalement.",
+      "createdAt": "Signalé le {date}",
+      "location": "Lieu",
+      "reference": "Suivi n° {reference}",
+      "markInProgress": "Marquer en cours",
+      "markResolved": "Marquer résolu",
+      "reopen": "Rouvrir",
+      "newReport": "Signaler un problème"
+    },
+    "appointments": {
+      "title": "Rendez-vous",
+      "mine": "Mes rendez-vous",
+      "description": "Les rendez-vous pris par les habitants et les créneaux proposés.",
+      "empty": "Aucun rendez-vous pour le moment.",
+      "emptyMine": "Tu n’as encore pris aucun rendez-vous.",
+      "upcoming": "À venir",
+      "past": "Passés",
+      "cancel": "Annuler",
+      "cancelled": "Annulé",
+      "completed": "Terminé",
+      "booked": "Confirmé",
+      "reference": "N° {reference}",
+      "when": "{date} · {duration} min",
+      "agent": "Avec {agent}",
+      "location": "Lieu : {location}",
+      "bookButton": "Prendre rendez-vous",
+      "slots": {
+        "title": "Créneaux proposés",
+        "description": "Publie des créneaux que les habitants peuvent réserver.",
+        "service": "Service",
+        "startsAt": "Date et heure",
+        "duration": "Durée (minutes)",
+        "agentName": "Agent (facultatif)",
+        "location": "Lieu (facultatif)",
+        "capacity": "Places",
+        "submit": "Ajouter le créneau",
+        "created": "Créneau ajouté.",
+        "duplicate": "Ce créneau existe déjà.",
+        "delete": "Supprimer",
+        "empty": "Aucun créneau publié.",
+        "remaining": "{remaining} / {capacity} place(s)",
+        "bookedCount": "{count, plural, =0 {Aucun rdv} one {# rdv} other {# rdv}}"
+      },
+      "reminder": {
+        "title": "Rappel de rendez-vous",
+        "description": "Ton rendez-vous approche : {date}.",
+        "action": "Voir mon rendez-vous"
+      }
+    },
+    "serviceStatus": {
+      "title": "État des services",
+      "description": "Indique aux habitants quand un service est indisponible et ce qu’ils peuvent faire à la place.",
+      "available": "Disponible",
+      "maintenance": "En maintenance",
+      "incident": "Incident",
+      "service": "Service",
+      "statusLabel": "État",
+      "message": "Message affiché aux habitants",
+      "messagePlaceholder": "Ex. : le service est interrompu jusqu’à nouvel ordre.",
+      "expectedReturn": "Retour prévu",
+      "alternative": "Solution de remplacement",
+      "alternativePlaceholder": "Ex. : contacte la propreté pour les déchets.",
+      "save": "Enregistrer",
+      "saved": "État enregistré."
+    },
+    "security": {
+      "title": "Sécurité",
+      "description": "Surveille les tentatives de connexion inhabituelles sur la plateforme.",
+      "window": "Fenêtre d’observation",
+      "hours": "{hours} dernières heures",
+      "summary": "{total} tentative(s) · {failures} échec(s)",
+      "accountsTitle": "Comptes à surveiller",
+      "accountsEmpty": "Aucun compte ne dépasse le seuil de tentatives.",
+      "addressesTitle": "Adresses à surveiller",
+      "addressesEmpty": "Aucune adresse ne touche plusieurs comptes.",
+      "recentTitle": "Dernières tentatives",
+      "recentEmpty": "Aucune tentative enregistrée.",
+      "failures": "{count, plural, one {# échec} other {# échecs}}",
+      "accounts": "{count, plural, one {# compte} other {# comptes}}",
+      "outcome": {
+        "success": "Réussi",
+        "failure": "Échec"
+      },
+      "account": "Compte",
+      "address": "Adresse IP",
+      "when": "Quand",
+      "result": "Résultat"
     }
   },
   "Account": {

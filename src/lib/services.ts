@@ -21,6 +21,11 @@ export type CityService = {
   slug: string;
   category: CityServiceCategory;
   email: string;
+  /**
+   * Highlighted at the top of the catalogue (demande F28): the most common
+   * procedures residents should not have to hunt for.
+   */
+  featured?: boolean;
 };
 
 export const cityServices: CityService[] = [
@@ -38,6 +43,7 @@ export const cityServices: CityService[] = [
     slug: 'etat-civil',
     category: 'administration',
     email: 'etat-civil@terranova.city',
+    featured: true,
   },
   {
     slug: 'relations-citoyennes',
@@ -53,6 +59,7 @@ export const cityServices: CityService[] = [
     slug: 'proprete-dechets',
     category: 'cadre-de-vie',
     email: 'proprete@terranova.city',
+    featured: true,
   },
   {
     slug: 'eau-assainissement',
@@ -63,6 +70,7 @@ export const cityServices: CityService[] = [
     slug: 'voirie-mobilite',
     category: 'services-techniques',
     email: 'voirie@terranova.city',
+    featured: true,
   },
   {
     slug: 'action-sociale',
@@ -75,3 +83,12 @@ export const cityServices: CityService[] = [
     email: 'culture@terranova.city',
   },
 ];
+
+/** Services flagged as priorities by the city (demande F28). */
+export function getFeaturedServices(): CityService[] {
+  return cityServices.filter((service) => service.featured);
+}
+
+export function getCityService(slug: string): CityService | null {
+  return cityServices.find((service) => service.slug === slug) ?? null;
+}

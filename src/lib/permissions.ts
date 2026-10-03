@@ -16,6 +16,10 @@ export const statement = {
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
   broadcast: ['list', 'create', 'update', 'delete'],
+  problemReport: ['list', 'update'],
+  serviceStatus: ['list', 'update'],
+  appointment: ['list', 'create', 'update', 'delete'],
+  auditLog: ['list'],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -33,6 +37,10 @@ export const agent = ac.newRole({
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
   broadcast: ['list', 'create', 'update', 'delete'],
+  problemReport: ['list', 'update'],
+  serviceStatus: ['list', 'update'],
+  appointment: ['list', 'create', 'update', 'delete'],
+  auditLog: ['list'],
 });
 
 /** Administrators: full user/session management plus the staff area. */
@@ -41,6 +49,10 @@ export const admin = ac.newRole({
   serviceMessage: ['list', 'update'],
   webcupRequest: ['list'],
   broadcast: ['list', 'create', 'update', 'delete'],
+  problemReport: ['list', 'update'],
+  serviceStatus: ['list', 'update'],
+  appointment: ['list', 'create', 'update', 'delete'],
+  auditLog: ['list'],
 });
 
 export const appRoles = { citizen, agent, admin };

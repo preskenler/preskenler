@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
 
 import { AppSidebar } from '@/components/dashboard/app-sidebar';
+import { DashboardBreadcrumbs } from '@/components/dashboard/dashboard-breadcrumbs';
 import { SiteHeader } from '@/components/dashboard/site-header';
 import { BroadcastBanner } from '@/components/public/broadcast-banner';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
@@ -57,6 +58,7 @@ export async function DashboardShell({
         <SiteHeader notifications={notifications} />
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
+            <DashboardBreadcrumbs />
             <BroadcastBanner items={broadcasts.map(toBroadcastView)} />
             {children}
           </div>

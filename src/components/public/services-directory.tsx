@@ -1,9 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { RiSearchLine } from '@remixicon/react';
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,7 +16,15 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/i18n/navigation';
+import type { ServiceAvailabilityStatus } from '@/lib/service-status';
 import { cn } from '@/lib/utils';
+
+export type ServiceAvailability = {
+  status: ServiceAvailabilityStatus;
+  message: string | null;
+  expectedReturn: string | null;
+  alternative: string | null;
+};
 
 export type ServiceDirectoryItem = {
   slug: string;
@@ -22,11 +32,17 @@ export type ServiceDirectoryItem = {
   email: string;
   name: string;
   description: string;
+  availability: ServiceAvailability | null;
 };
 
 export type ServiceDirectoryCategory = {
   key: string;
   label: string;
+};
+
+export type HighlightedService = {
+  slug: string;
+  badge: 'priority' | 'popular';
 };
 
 /** Accent- and case-insensitive comparison so "sante" matches "Santé". */
@@ -37,21 +53,128 @@ function normalize(value: string) {
     .toLowerCase();
 }
 
+/** A single catalogue card, shared by the highlighted and grouped sections. */
+function ServiceCard({
+  service,
+  badge,
+}: {
+  service: ServiceDirectoryItem;
+  badge?: HighlightedService['badge'];
+}) {
+  const t = useTranslations('Public.Services');
+  const format = useFormatter();
+  const availability = service.availability;
+  const unavailable = availability && availability.status !== 'available';
+
+  return (
+    <Card key={service.slug} size="sm">
+      <CardHeader>
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle>{service.name}</CardTitle>
+          {badge ? (
+            <Badge variant={badge === 'priority' ? 'default' : 'secondary'}>
+              {badge === 'priority'
+                ? t('featured.priorityBadge')
+                : t('featured.badge')}
+            </Badge>
+          ) : null}
+        </div>
+        <CardDescription>{service.description}</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        {unavailable && availability ? (
+          <Alert
+            variant={
+              availability.status === 'incident' ? 'destructive' : 'default'
+            }
+          >
+            <AlertTitle>{t(`availability.${availability.status}`)}</AlertTitle>
+            <AlertDescription>
+              <p>{availability.message ?? t('availability.notice')}</p>
+              {availability.expectedReturn ? (
+                <p>
+                  {t('availability.expectedReturn', {
+                    date: format.dateTime(
+                      new Date(availability.expectedReturn),
+                      { dateStyle: 'long', timeStyle: 'short' },
+                    ),
+                  })}
+                </p>
+              ) : null}
+              {availability.alternative ? (
+                <p>
+                  {t('availability.alternative', {
+                    alternative: availability.alternative,
+                  })}
+                </p>
+              ) : null}
+            </AlertDescription>
+          </Alert>
+        ) : null}
+        <div className="flex flex-wrap items-center gap-3">
+          <Button
+            size="sm"
+            nativeButton={false}
+            render={<Link href={`/contact?service=${service.slug}`} />}
+          >
+            {t('contactService')}
+          </Button>
+          <a
+            href={`mailto:${service.email}`}
+            className={cn(
+              'text-sm text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {service.email}
+          </a>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 /**
- * Searchable services directory (demande F32): residents can find the right
- * service — especially health services — without scanning the whole catalogue.
+ * Searchable services directory (demandes F32 & F28): residents find the right
+ * service without scanning the whole catalogue, and the most requested ones are
+ * highlighted up top.
  */
 export function ServicesDirectory({
   items,
   categories,
+  highlighted = [],
 }: {
   items: ServiceDirectoryItem[];
   categories: ServiceDirectoryCategory[];
+  highlighted?: HighlightedService[];
 }) {
   const t = useTranslations('Public.Services');
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const needle = normalize(query.trim());
+  const isBrowsing = activeCategory === 'all' && !needle;
+
+  const bySlug = useMemo(
+    () => new Map(items.map((item) => [item.slug, item])),
+    [items],
+  );
+
+  const highlightedItems = useMemo(
+    () =>
+      highlighted
+        .map((entry) => {
+          const service = bySlug.get(entry.slug);
+          return service ? { service, badge: entry.badge } : null;
+        })
+        .filter(
+          (
+            entry,
+          ): entry is {
+            service: ServiceDirectoryItem;
+            badge: 'priority' | 'popular';
+          } => entry !== null,
+        ),
+    [highlighted, bySlug],
+  );
 
   const filtered = useMemo(() => {
     return items.filter((item) => {
@@ -70,6 +193,24 @@ export function ServicesDirectory({
 
   return (
     <div className="flex flex-col gap-8">
+      {highlightedItems.length > 0 && isBrowsing ? (
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-heading text-xl font-medium">
+              {t('featured.title')}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {t('featured.description')}
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {highlightedItems.map(({ service, badge }) => (
+              <ServiceCard key={service.slug} service={service} badge={badge} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <div className="flex flex-col gap-4">
         <div className="relative max-w-md">
           <RiSearchLine
@@ -132,31 +273,7 @@ export function ServicesDirectory({
               </h2>
               <div className="grid gap-4 md:grid-cols-2">
                 {services.map((service) => (
-                  <Card key={service.slug} size="sm">
-                    <CardHeader>
-                      <CardTitle>{service.name}</CardTitle>
-                      <CardDescription>{service.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-wrap items-center gap-3">
-                      <Button
-                        size="sm"
-                        nativeButton={false}
-                        render={
-                          <Link href={`/contact?service=${service.slug}`} />
-                        }
-                      >
-                        {t('contactService')}
-                      </Button>
-                      <a
-                        href={`mailto:${service.email}`}
-                        className={cn(
-                          'text-sm text-muted-foreground hover:text-foreground',
-                        )}
-                      >
-                        {service.email}
-                      </a>
-                    </CardContent>
-                  </Card>
+                  <ServiceCard key={service.slug} service={service} />
                 ))}
               </div>
             </section>

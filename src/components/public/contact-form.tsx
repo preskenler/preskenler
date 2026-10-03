@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
 
 import { submitServiceMessage } from '@/app/[locale]/(public)/contact/actions';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -29,6 +30,7 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { createContactSchema, type ContactValues } from '@/lib/schemas/contact';
+import type { ServiceAvailability } from '@/components/public/services-directory';
 import type { CityService } from '@/lib/services';
 
 export function ContactForm({
@@ -36,21 +38,26 @@ export function ContactForm({
   defaultName,
   defaultEmail,
   defaultService,
+  availability = {},
 }: {
   services: CityService[];
   defaultName: string;
   defaultEmail: string;
   defaultService?: string;
+  availability?: Record<string, ServiceAvailability>;
 }) {
   const t = useTranslations('Validation');
   const tContact = useTranslations('Public.Contact.form');
   const tServices = useTranslations('Public.Services');
+  const tAvailability = useTranslations('Public.Services.availability');
+  const format = useFormatter();
   const [sent, setSent] = useState(false);
   const {
     register,
     handleSubmit,
     setError,
     clearErrors,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ContactValues>({
     resolver: zodResolver(createContactSchema(t)),
@@ -62,6 +69,10 @@ export function ContactForm({
     },
     mode: 'onTouched',
   });
+
+  const selectedAvailability = availability[watch('service')];
+  const selectedUnavailable =
+    selectedAvailability && selectedAvailability.status !== 'available';
 
   // Clear the server error as soon as the user edits a field.
   function field(name: keyof ContactValues): UseFormRegisterReturn {
@@ -177,6 +188,43 @@ export function ContactForm({
                 errors={[errors.service]}
               />
             </Field>
+
+            {selectedUnavailable && selectedAvailability ? (
+              <Alert
+                variant={
+                  selectedAvailability.status === 'incident'
+                    ? 'destructive'
+                    : 'default'
+                }
+              >
+                <AlertTitle>
+                  {tAvailability(selectedAvailability.status)}
+                </AlertTitle>
+                <AlertDescription>
+                  <p>
+                    {selectedAvailability.message ?? tAvailability('notice')}
+                  </p>
+                  {selectedAvailability.expectedReturn ? (
+                    <p>
+                      {tAvailability('expectedReturn', {
+                        date: format.dateTime(
+                          new Date(selectedAvailability.expectedReturn),
+                          { dateStyle: 'long', timeStyle: 'short' },
+                        ),
+                      })}
+                    </p>
+                  ) : null}
+                  {selectedAvailability.alternative ? (
+                    <p>
+                      {tAvailability('alternative', {
+                        alternative: selectedAvailability.alternative,
+                      })}
+                    </p>
+                  ) : null}
+                  <p>{tAvailability('contactBlocked')}</p>
+                </AlertDescription>
+              </Alert>
+            ) : null}
 
             <Field data-invalid={errors.message ? true : undefined}>
               <FieldLabel htmlFor="contact-message">

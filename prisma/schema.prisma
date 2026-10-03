@@ -27,6 +27,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
   messages      ServiceMessage[]
+  reports       ProblemReport[]
+  appointments  Appointment[]
 
   @@unique([email])
   @@map("user")
@@ -174,4 +176,108 @@ model Broadcast {
   @@index([active, publishedAt])
   @@index([level])
   @@map("broadcast")
+}
+
+// Problems reported by residents on the public infrastructure — a broken
+// street lamp, a pothole, uncollected waste… (demande F25). `reference` is the
+// human-readable confirmation code shown right after submission (demande D16).
+model ProblemReport {
+  id          String   @id @default(cuid())
+  reference   String   @unique @db.VarChar(24)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name        String   @db.VarChar(120)
+  email       String   @db.VarChar(191)
+  service     String   @db.VarChar(64)
+  category    String   @db.VarChar(64)
+  location    String   @db.VarChar(200)
+  description String   @db.Text
+  status      String   @default("new") @db.VarChar(16)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([service])
+  @@index([createdAt])
+  @@map("problem_report")
+}
+
+// Availability of a municipal service (demande F38). Keyed on the stable
+// service slug from `src/lib/services.ts`; a row only exists once staff have
+// changed the default "available" state.
+model ServiceStatus {
+  id             String    @id @default(cuid())
+  service        String    @unique @db.VarChar(64)
+  status         String    @default("available") @db.VarChar(16)
+  message        String?   @db.Text
+  expectedReturn DateTime?
+  alternative    String?   @db.Text
+  updatedById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("service_status")
+}
+
+// Bookable appointment slots with an agent (demande F39). Staff publish slots;
+// citizens pick one, so the chosen créneau is never ambiguous.
+model AppointmentSlot {
+  id              String        @id @default(cuid())
+  service         String        @db.VarChar(64)
+  startsAt        DateTime
+  durationMinutes Int           @default(30)
+  agentName       String?       @db.VarChar(120)
+  location        String?       @db.VarChar(200)
+  capacity        Int           @default(1)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  appointments    Appointment[]
+
+  @@unique([service, startsAt])
+  @@index([startsAt])
+  @@index([service])
+  @@map("appointment_slot")
+}
+
+// A citizen's booking of a slot. `reminderSentAt` marks the reminder (F40).
+model Appointment {
+  id             String          @id @default(cuid())
+  reference      String          @unique @db.VarChar(24)
+  userId         String?
+  user           User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  slotId         String
+  slot           AppointmentSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  name           String          @db.VarChar(120)
+  email          String          @db.VarChar(191)
+  phone          String?         @db.VarChar(32)
+  reason         String          @db.Text
+  status         String          @default("booked") @db.VarChar(16)
+  reminderSentAt DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([slotId])
+  @@index([reminderSentAt])
+  @@map("appointment")
+}
+
+// Security trail for sign-in activity (demande F37). The cybersecurity centre
+// uses it to spot unusual attempts across several accounts.
+model AuthAuditLog {
+  id        String   @id @default(cuid())
+  event     String   @db.VarChar(32)
+  outcome   String   @db.VarChar(16)
+  userId    String?
+  email     String   @db.VarChar(191)
+  ipAddress String?  @db.VarChar(64)
+  userAgent String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ipAddress, createdAt])
+  @@index([createdAt])
+  @@map("auth_audit_log")
 }

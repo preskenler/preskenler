@@ -1,7 +1,9 @@
 import { betterAuth } from 'better-auth';
+import { APIError } from 'better-auth/api';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { admin as adminPlugin } from 'better-auth/plugins';
+import { recordAuthAuditEvent } from '@/lib/auth-audit';
 import { sendEmail } from '@/lib/email';
 import { resolveEmailLocale } from '@/lib/email-locale';
 import {
@@ -86,6 +88,74 @@ export const auth = betterAuth({
           });
         },
       },
+    },
+  },
+  // Demande F37: keep sign-in protection perceptible. Tight limits on the
+  // sensitive endpoints with an explicit window, so a burst of attempts is
+  // slowed down while normal use stays comfortable.
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
+    storage: 'memory',
+    customRules: {
+      '/sign-in/email': { window: 60, max: 5 },
+      '/sign-up/email': { window: 60, max: 4 },
+      '/request-password-reset': { window: 60, max: 3 },
+    },
+  },
+  // Demande F37: audit every email sign-in attempt so the cybersecurity centre
+  // can spot an unusual number of failures across accounts. Best-effort only.
+  hooks: {
+    // Better Auth 1.7.6 reads `result.headers` unguarded in `runAfterHooks`, so
+    // a user hook that returns `undefined` crashes every subsequent `auth.api.*`
+    // call. Always return an object.
+    after: async (rawCtx) => {
+      // `hooks.after` is typed as a generic middleware input in better-call,
+      // but Better Auth calls it with the resolved endpoint context.
+      const ctx = rawCtx as unknown as {
+        path?: string;
+        body?: { email?: unknown };
+        context?: { returned?: unknown };
+        request?: Request;
+        headers?: Headers;
+      };
+
+      if (ctx.path !== '/sign-in/email') {
+        return {};
+      }
+
+      const email = typeof ctx.body?.email === 'string' ? ctx.body.email : '';
+      if (!email) {
+        return {};
+      }
+
+      const returned = ctx.context?.returned;
+      const failed =
+        returned instanceof APIError ||
+        (typeof returned === 'object' &&
+          returned !== null &&
+          'body' in returned &&
+          ('status' in returned || 'statusCode' in returned));
+
+      const headers = ctx.request?.headers ?? ctx.headers;
+      const forwarded = headers?.get('x-forwarded-for');
+      const ipAddress =
+        forwarded?.split(',')[0]?.trim() ?? headers?.get('x-real-ip') ?? null;
+      const user = !failed
+        ? (returned as { user?: { id?: string } } | undefined)?.user
+        : undefined;
+
+      await recordAuthAuditEvent({
+        event: 'sign-in',
+        outcome: failed ? 'failure' : 'success',
+        email,
+        userId: user?.id ?? null,
+        ipAddress,
+        userAgent: headers?.get('user-agent') ?? null,
+      });
+
+      return {};
     },
   },
   logger: {

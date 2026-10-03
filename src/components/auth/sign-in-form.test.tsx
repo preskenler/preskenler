@@ -77,4 +77,24 @@ describe('SignInForm', () => {
     ).toBeInTheDocument();
     expect(mocks.push).not.toHaveBeenCalled();
   });
+
+  it('shows a localized message when rate limited', async () => {
+    mocks.signInEmail.mockResolvedValue({
+      error: {
+        status: 429,
+        message: 'Too many requests. Please try again later.',
+      },
+    });
+    renderWithIntl(<SignInForm />);
+
+    const user = await fillValidValues();
+    await user.click(screen.getByRole('button', { name: /se connecter/i }));
+
+    expect(
+      await screen.findByText(
+        'Trop de tentatives de connexion. Réessaie dans 60 seconde(s).',
+      ),
+    ).toBeInTheDocument();
+    expect(mocks.push).not.toHaveBeenCalled();
+  });
 });
