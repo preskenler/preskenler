@@ -3,6 +3,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { sendEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
+import { getStaffEmailAllowlist } from '@/lib/roles';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -55,6 +56,16 @@ export const auth = betterAuth({
     },
   },
   user: {
+    additionalFields: {
+      // Read-only from the client: `input: false` stops anyone from choosing
+      // their own profile at sign-up. Roles change via the admin tooling.
+      role: {
+        type: 'string',
+        required: false,
+        defaultValue: 'citizen',
+        input: false,
+      },
+    },
     changeEmail: {
       enabled: true,
       // A verified user gets a confirmation link on their current address
@@ -73,6 +84,23 @@ export const auth = betterAuth({
             "Si tu n'es pas à l'origine de cette demande, ignore cet email.",
           ].join('\n'),
         });
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        // Bootstrap the first agents from `STAFF_EMAILS` without needing DB
+        // access; an admin can promote further users from the staff area.
+        before: async (user) => {
+          const role = getStaffEmailAllowlist().includes(
+            user.email.toLowerCase(),
+          )
+            ? 'agent'
+            : 'citizen';
+
+          return { data: { ...user, role } };
+        },
       },
     },
   },

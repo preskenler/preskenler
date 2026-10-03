@@ -62,6 +62,17 @@ Auth + Prisma 7 on MySQL/MariaDB, Tailwind v4, and shadcn/ui.
 - Staff board at `/requests` (auth-gated) polls client-side every 30s; new
   arrivals are detected by `request_code`, never by a fixed count.
 
+## Roles & staff area
+
+- Profiles live on `User.role` (`citizen` | `agent` | `admin`) and reach the
+  Better Auth session through `additionalFields` with `input: false`;
+  `src/lib/roles.ts` is the source of truth for checks and French labels.
+- Set `STAFF_EMAILS` (comma-separated) to grant `agent` at sign-up; admins
+  change any profile from `/users`.
+- Everything under `(staff)` (`/requests`, `/messages`, `/users`) requires an
+  `agent`/`admin`; citizens are redirected to `/account`, and `/users` is
+  admin-only. Inhabitants’ contact messages are triaged at `/messages` (F22).
+
 ## UI / conventions
 
 - shadcn/ui uses the `base-nova` style on **Base UI** (`@base-ui/react`), not

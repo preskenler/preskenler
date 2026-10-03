@@ -27,6 +27,13 @@ curl -fsS -H "Authorization: Bearer $WEBCUP_CRON_SECRET" https://<host>/api/webc
 
 Requests are keyed on `request_code`, so repeated calls never create duplicates.
 
+## Roles
+
+Profiles are stored on the user row: `citizen`, `agent` or `admin`. Set
+`STAFF_EMAILS` (comma-separated) to bootstrap agents at sign-up; admins manage
+every profile from the staff area (`/users`). The staff routes — `/requests`,
+`/messages` and `/users` — require an agent or admin profile.
+
 ## Deployment
 
 The app is deployed to a cPanel **Setup Node.js App** (`Phusion Passenger`) as a
